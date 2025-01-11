@@ -69,12 +69,12 @@ class Carrera extends Controller
             if ($id == "") {
                 $data = $this->model->insertarCarrera($carrera, $imgNombre);
                 if ($data == "ok") {
-                    $msg = array('msg' => 'Carrera registrada', 'icono' => 'success');
+                    $msg = array('msg' => 'Carrera registrado', 'icono' => 'success');
                     if (!empty($name)) {
                         move_uploaded_file($tmpName, $destino);
                     }
                 } else if ($data == "existe") {
-                    $msg = array('msg' => 'La carrera ya existe', 'icono' => 'warning');
+                    $msg = array('msg' => 'El carrera ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
                 }
@@ -91,7 +91,7 @@ class Carrera extends Controller
                     if (!empty($name)) {
                         move_uploaded_file($tmpName, $destino);
                     }
-                    $msg = array('msg' => 'Carrera modificada', 'icono' => 'success');
+                    $msg = array('msg' => 'Carrera modificado', 'icono' => 'success');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');
                 }
@@ -110,7 +110,7 @@ class Carrera extends Controller
     {
         $data = $this->model->estadoCarrera(0, $id);
         if ($data == 1) {
-            $msg = array('msg' => 'Carrera dada de baja', 'icono' => 'success');
+            $msg = array('msg' => 'Carrera dado de baja', 'icono' => 'success');
         } else {
             $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
         }

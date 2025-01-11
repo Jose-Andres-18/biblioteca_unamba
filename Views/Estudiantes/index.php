@@ -49,7 +49,7 @@
                                 <label for="codigo">Código</label>
                                 <input type="hidden" id="id" name="id">
                                 <input id="codigo" class="form-control" type="text" name="codigo" required placeholder="Código del estudiante" 
-                                    pattern="^\d{6}$" maxlength="6"
+                                    pattern="^\d{6}$" maxlength="6" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     title="El código debe tener exactamente 6 dígitos numéricos.">
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label for="dni">DNI</label>
                                 <input id="dni" class="form-control" type="text" name="dni" required placeholder="DNI" 
-                                    pattern="^\d{8}$" maxlength="8"
+                                    pattern="^\d{8}$" maxlength="8" inputmode="numeric"  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     title="El DNI debe tener exactamente 8 dígitos numéricos.">
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             <div class="form-group">
                                 <label for="telefono">Télefono</label>
                                 <input id="telefono" class="form-control" type="text" name="telefono" required placeholder="Teléfono"
-                                    pattern="^9\d{8}$" maxlength="9"
+                                    pattern="^9\d{8}$" maxlength="9" inputmode="numeric"  oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
                                     title="El Número de celular es invalido.">
                             </div>
                         </div>

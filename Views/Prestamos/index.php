@@ -42,25 +42,20 @@
                     <div class="form-group">
                         <label for="libro">Libro</label><br>
                         <select id="libro" class="form-control libro" name="libro" onchange="verificarLibro()" required style="width: 100%;">
-
                         </select>
-                        <div *ngIf="(libro.touched || libro.dirty) && libro.errors && libro.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
                     </div>
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label for="estudiante">Estudiante</label><br>
                                 <select name="estudiante" id="estudiante" class="form-control estudiante" required style="width: 100%;">
-
                                 </select>
-                                <div *ngIf="(estudiante.touched || estudiante.dirty) && estudiante.errors && estudiante.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="cantidad">Cant</label>
-                                <input id="cantidad" class="form-control" min="1" type="number" name="cantidad" min="1" required onkeyup="verificarLibro()">
-                                <div *ngIf="(cantidad.touched || cantidad.dirty) && cantidad.errors && cantidad.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
+                                <input id="cantidad" class="form-control" value="1" min="1" max="1" type="number" name="cantidad" required onkeyup="verificarLibro()" oninput="this.value = this.value.replace(/[^1-1]/g, '')">
                                 <strong id="msg_error"></strong>
                             </div>
                         </div>

@@ -36,7 +36,7 @@
             <!--Notification Menu-->
             <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i class="fa fa-bell-o fa-lg"></i></a>
                 <ul class="app-notification dropdown-menu dropdown-menu-right">
-                    <li class="app-notification__title">Libros no entregados.</li>
+                    <li class="app-notification__title">Libros no devueltos.</li>
                     <div class="app-notification__content">
                         <li id="nombre_estudiante">
                             
@@ -66,7 +66,7 @@
         <ul class="app-menu">
             <li><a class="app-menu__item" href="<?php echo base_url; ?>Prestamos"><i class="app-menu__icon fa fa-hourglass-start"></i><span class="app-menu__label">Prestamos</span></a></li>
             <li><a class="app-menu__item" href="<?php echo base_url; ?>Estudiantes"><i class="app-menu__icon fa fa-graduation-cap"></i><span class="app-menu__label">Estudiantes</span></a></li>
-            <!--<li><a class="app-menu__item" href="<?php echo base_url; ?>Carrera"><i class="app-menu__icon fa fa-list-alt"></i><span class="app-menu__label">Carrera Profesional</span></a></li>-->
+            <li><a class="app-menu__item" href="<?php echo base_url; ?>Carrera"><i class="app-menu__icon fa fa-list-alt"></i><span class="app-menu__label">Carrera Profesional</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">Libros</span><i class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a class="treeview-item" href="<?php echo base_url; ?>Autor"><i class="icon fa fa-address-book-o"></i> Autor</a></li>

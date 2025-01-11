@@ -64,7 +64,7 @@ class Estudiantes extends Controller
         }
 
         // Validar que el número de celular sea numérico y tenga 9 dígitos
-        if (!preg_match('/^\d{9}$/', $telefono)) {
+        if (!preg_match('/^9\d{8}$/', $telefono)) {
             $msg = array('msg' => 'El número de celular debe ser numérico y tener 9 dígitos', 'icono' => 'warning');
             echo json_encode($msg, JSON_UNESCAPED_UNICODE);
             die();

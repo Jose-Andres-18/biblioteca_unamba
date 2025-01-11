@@ -61,14 +61,14 @@
             </a>
         </div>
     </div>
-    <!--<div class="col-md-6 col-lg-3">
+    <div class="col-md-6 col-lg-3">
         <div class="widget-small info coloured-icon"><i class="icon fa fa-list-alt fa-3x"></i>
             <a class="info" href="<?php echo base_url; ?>Carrera">
                 <h4>Carrera Profesional</h4>
                 <p><b><?php echo $data['carrera']['total'] ?></b></p>
             </a>
         </div>
-    </div>-->
+    </div>
     <div class="col-md-6 col-lg-3">
         <div class="widget-small primary coloured-icon"><i class="icon fa fa-cogs fa-3x"></i>
             <a class="info" href="<?php echo base_url; ?>Configuracion">

@@ -55,6 +55,7 @@ class Libros extends Controller
         $name = $img['name'];
         $fecha = date("YmdHis");
         $tmpName = $img['tmp_name'];
+
         if (empty($titulo) || empty($autor) || empty($editorial) || empty($materia) || empty($cantidad)) {
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
         } else {

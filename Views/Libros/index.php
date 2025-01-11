@@ -50,7 +50,6 @@
                             <label for="titulo"><b>Título</b></label>
                             <input type="hidden" id="id" name="id">
                             <input id="titulo" class="form-control" type="text" name="titulo" placeholder="Título del libro" required>
-                            <div *ngIf="(titulo.touched || titulo.dirty) && titulo.errors && titulo.hasError('required')" class="divError"><i>Este campo es requerido.</i></div> 
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -58,8 +57,6 @@
                             <label for="autor">Autor</label><br>
                             <select id="autor" class="form-control autor" name="autor" required style="width: 100%;">
                             </select>
-                            <div *ngIf="(autor.touched || autor.dirty) && autor.errors && autor.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
-
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -67,7 +64,6 @@
                             <label for="editorial">Editorial</label><br>
                             <select id="editorial" class="form-control editorial" name="editorial" required style="width: 100%;">
                             </select>
-                            <div *ngIf="(editorial.touched || editorial.dirty) && editorial.errors && editorial.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -75,29 +71,24 @@
                             <label for="materia">Materia</label><br>
                             <select id="materia" class="form-control materia" name="materia" required style="width: 100%;">
                             </select>
-                            <div *ngIf="(materia.touched || materia.dirty) && materia.errors && materia.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="cantidad">Cantidad</label>
-                            <input id="cantidad" class="form-control" type="text" name="cantidad" placeholder= "Cantidad" required>
-                            <div *ngIf="(cantidad.touched || cantidad.dirty) && cantidad.errors && cantidad.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
-
+                            <input id="cantidad" class="form-control" type="number" name="cantidad" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder= "Cantidad" min="1" step="1" required>
                        </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="num_pagina">Cantidad de página</label>
-                            <input id="num_pagina" class="form-control" type="number" name="num_pagina" placeholder="Cantidad Página" required min="1" [(ngModel)]="numPagina" #num_pagina="ngModel">
-                            <div *ngIf="(num_pagina.touched || num_pagina.dirty) && num_pagina.errors && num_pagina.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
+                            <input id="num_pagina" class="form-control" type="number" name="num_pagina" placeholder="Cantidad Página" required min="1" [(ngModel)]="numPagina" #num_pagina="ngModel" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="anio_edicion">Año Edición</label>
-                            <input id="anio_edicion" class="form-control" type="date" name="anio_edicion" value="<?php echo date("Y-m-d"); ?>" required>
-                            <div *ngIf="(anio_edicion.touched || anio_edicion.dirty) && anio_edicion.errors && anio_edicion.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
+                            <input id="anio_edicion" class="form-control" type="date" name="anio_edicion" value="<?php echo date("Y-m-d"); ?>" max="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </div>
                     <div class="col-md-5">

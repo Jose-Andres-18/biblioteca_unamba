@@ -1,4 +1,4 @@
-let tblUsuarios, tblEst, tblMateria, tblAutor, tblEditorial, tblLibros, tblPrestar;
+let tblUsuarios, tblEst, tblMateria, tblAutor, tblCarrera, tblEditorial, tblLibros, tblPrestar;
 document.addEventListener("DOMContentLoaded", function(){
     document.querySelector("#modalPass").addEventListener("click", function () {
         document.querySelector('#frmCambiarPass').reset();
@@ -52,7 +52,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 text: '<button class="btn btn-info"><i class="fa fa-print"></i></button>'
             }
         ]
-            
+    
+    //TABLA USUARIOS
     tblUsuarios = $('#tblUsuarios').DataTable({
         ajax: {
             url: base_url + "Usuarios/listar",
@@ -78,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function(){
         buttons
     });
     //Fin de la tabla usuarios
+    //TABLA ESTUDIANTES
     tblEst = $('#tblEst').DataTable({
         ajax: {
             url: base_url + "Estudiantes/listar",
@@ -100,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function(){
             buttons
     });
     //Fin de la tabla Estudiantes
+    //TABLA MATERIA
     tblMateria = $('#tblMateria').DataTable({
         ajax: {
             url: base_url + "Materia/listar",
@@ -125,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function(){
         buttons
     });
     //Fin de la tabla Materias
+    // TABLA AUTOR
     tblAutor = $('#tblAutor').DataTable({
         ajax: {
             url: base_url + "Autor/listar",
@@ -153,6 +157,36 @@ document.addEventListener("DOMContentLoaded", function(){
             buttons
     });
     //Fin de la tabla Autor
+    //TABLA CARRERA
+    tblCarrera = $('#tblCarrera').DataTable({
+        ajax: {
+            url: base_url + "Carrera/listar",
+            dataSrc: ''
+        },
+        columns: [{
+                'data': 'id'
+            },
+            {
+                'data': 'imagen'
+            },
+            {
+                'data': 'carrera'
+            },
+            {
+                'data': 'estado'
+            },
+            {
+                'data': 'acciones'
+            }
+        ],
+        language,
+        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons
+    });
+    //Fin de la tabla Carrera
+    //TABLA EDITORIAL
     tblEditorial= $('#tblEditorial').DataTable({
         ajax: {
             url: base_url + "Editorial/listar",
@@ -178,6 +212,7 @@ document.addEventListener("DOMContentLoaded", function(){
             buttons
     });
     //Fin de la tabla editorial
+    //TABLA LIBROS
     tblLibros = $('#tblLibros').DataTable({
         ajax: {
             url: base_url + "Libros/listar",
@@ -221,6 +256,7 @@ document.addEventListener("DOMContentLoaded", function(){
             buttons
     });
     //fin Libros
+    //TABLA PRESTAR
     tblPrestar = $('#tblPrestar').DataTable({
         ajax: {
             url: base_url + "Prestamos/listar",
@@ -267,6 +303,8 @@ document.addEventListener("DOMContentLoaded", function(){
             [0, "desc"]
         ]
     });
+    //SPRING U ALGO ASI
+    //ESTUDIANTE
     $('.estudiante').select2({
         placeholder: 'Buscar Estudiante',
         minimumInputLength: 2,
@@ -287,6 +325,7 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
+    //LIBRO
     $('.libro').select2({
         placeholder: 'Buscar Libro',
             minimumInputLength: 2,
@@ -307,6 +346,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 cache: true
             }
     });
+    //AUTOR
     $('.autor').select2({
         placeholder: 'Buscar Autor',
         minimumInputLength: 2,
@@ -327,6 +367,7 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
+    //EDITORIAL
     $('.editorial').select2({
         placeholder: 'Buscar Editorial',
         minimumInputLength: 2,
@@ -347,6 +388,7 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
+    //MATERIA
     $('.materia').select2({
         placeholder: 'Buscar Materia',
         minimumInputLength: 2,
@@ -367,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
-
+    //ENCONTRAR POR ID
     if (document.getElementById('nombre_estudiante')) {
         const http = new XMLHttpRequest();
         const url = base_url + 'Configuracion/verificar';
@@ -392,7 +434,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 })
-
+//FUNCION USUARIO
 function frmUsuario() {
     document.getElementById("title").textContent = "Nuevo Usuario";
     document.getElementById("btnAccion").textContent = "Registrar";
@@ -498,6 +540,7 @@ function btnReingresarUser(id) {
     })
 }
 //Fin Usuarios
+//FUNCION ESTUDIANTE
 function frmEstudiante() {
     document.getElementById("title").textContent = "Nuevo Estuadiante";
     document.getElementById("btnAccion").textContent = "Registrar";
@@ -612,6 +655,7 @@ function btnReingresarEst(id) {
     })
 }
 //Fin Estudiante
+//FUNCION MATERIA
 function frmMateria() {
     document.getElementById("title").textContent = "Nueva Materia";
     document.getElementById("btnAccion").textContent = "Registrar";
@@ -715,6 +759,7 @@ function btnReingresarMat(id) {
     })
 }
 //Fin Materia
+//FUNCION AUTOR
 function frmAutor() {
     document.getElementById("title").textContent= "Nuevo Autor";
     document.getElementById("btnAccion").textContent= "Registrar";
@@ -825,6 +870,118 @@ function btnReingresarAutor(id) {
     })
 }
 //Fin Autor
+//FUNCION CARRERA
+function frmCarrera() {
+    document.getElementById("title").textContent= "Nuevo Carrera";
+    document.getElementById("btnAccion").textContent= "Registrar";
+    document.getElementById("frmCarrera").reset();
+    document.getElementById("id").value = "";
+    deleteImg();
+    $("#nuevoCarrera").modal("show");
+}
+
+function registrarCarrera(e) {
+    e.preventDefault();
+    const autor = document.getElementById("autor");
+    if (autor.value == "") {
+        alertas('El nombre es requerido', 'warning');
+    } else {
+        const url = base_url + "Carrera/registrar";
+        const frm = document.getElementById("frmCarrera");
+        const http = new XMLHttpRequest();
+        http.open("POST", url, true);
+        http.send(new FormData(frm));
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const res = JSON.parse(this.responseText);
+                $("#nuevoCarrera").modal("hide");
+                frm.reset();
+                tblCarrera.ajax.reload();
+                alertas(res.msg, res.icono);
+            }
+        }
+    }
+}
+
+function btnEditarCarrera(id) {
+    document.getElementById("title").textContent = "Actualizar Carrera";
+    document.getElementById("btnAccion").textContent = "Modificar";
+    const url = base_url + "Carrera/editar/" + id;
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            document.getElementById("id").value = res.id;
+            document.getElementById("autor").value = res.autor;
+            document.getElementById("foto_actual").value = res.imagen;
+            document.getElementById("img-preview").src = base_url + 'Assets/img/autor/' + res.imagen;
+            document.getElementById("icon-image").classList.add("d-none");
+            document.getElementById("icon-cerrar").innerHTML = `
+            <button class="btn btn-danger" onclick="deleteImg()">
+            <i class="fa fa-times-circle"></i></button>`;
+            $("#nuevoCarrera").modal("show");
+        }
+    }
+}
+
+function btnEliminarCarrera(id) {
+    Swal.fire({
+        title: 'Esta seguro de eliminar?',
+        text: "El Carrera no se eliminará de forma permanente, solo cambiará el estado a inactivo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si!',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Carrera/eliminar/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const res = JSON.parse(this.responseText);
+                    tblCarrera.ajax.reload();
+                    alertas(res.msg, res.icono);
+                }
+            }
+
+        }
+    })
+}
+
+function btnReingresarCarrera(id) {
+    Swal.fire({
+        title: 'Esta seguro de reingresar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si!',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Carrera/reingresar/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const res = JSON.parse(this.responseText);
+                    tblCarrera.ajax.reload();
+                    alertas(res.msg, res.icono);
+                }
+            }
+
+        }
+    })
+}
+//Fin Carrera
+//FUNCION EDITORIAL
 function frmEditorial() {
     document.getElementById("title").textContent = "Nuevo Editorial";
     document.getElementById("btnAccion").textContent = "Registrar";
@@ -927,6 +1084,7 @@ function btnReingresarEdi(id) {
     })
 }
 //Fin editorial
+//FUNCION LIBROS
 function frmLibros() {
     document.getElementById("title").textContent = "Nuevo Libro";
     document.getElementById("btnAccion").textContent = "Registrar";
@@ -1050,6 +1208,7 @@ function btnReingresarLibro(id) {
         }
     })
 }
+//FUNCION PREVIEW
 function preview(e) {
     var input = document.getElementById('imagen');
     var filePath = input.value;
@@ -1069,6 +1228,7 @@ function preview(e) {
     }
 
 }
+//FUNCION ELIMINAR IMAGEN
 function deleteImg() {
     document.getElementById("icon-cerrar").innerHTML = '';
     document.getElementById("icon-image").classList.remove("d-none");
@@ -1076,6 +1236,7 @@ function deleteImg() {
     document.getElementById("imagen").value = '';
     document.getElementById("foto_actual").value = '';
 }
+//FUNCION CONFIGURAR
 function frmConfig(e) {
     e.preventDefault();
     const nombre = document.getElementById("nombre");
@@ -1098,10 +1259,12 @@ function frmConfig(e) {
         }
     }
 }
+//FUNCION PRESTAR
 function frmPrestar() {
     document.getElementById("frmPrestar").reset();
     $("#prestar").modal("show");
 }
+//FUNCION ENTREGAR
 function btnEntregar(id) {
     Swal.fire({
         title: 'Recibir de libro?',
@@ -1128,6 +1291,7 @@ function btnEntregar(id) {
         }
     })
 }
+//FUNCION REGSITRAR PRESTAMOS
 function registroPrestamos(e){
     e.preventDefault();
     const libro = document.getElementById("libro").value;
@@ -1159,6 +1323,7 @@ function registroPrestamos(e){
         }
     }
 }
+//FUNCIONES DE ROLES
 function btnRolesUser(id) {
     const http = new XMLHttpRequest();
     const url = base_url + "Usuarios/permisos/" + id;
@@ -1171,6 +1336,7 @@ function btnRolesUser(id) {
         }
     }
 }
+//FUNCION REGISTRAR PERMISOS
 function registrarPermisos(e) {
     e.preventDefault();
     const http = new XMLHttpRequest();
@@ -1190,6 +1356,7 @@ function registrarPermisos(e) {
         }
     }
 }
+//FUNCION MODIFICAR CLAVE
 function modificarClave(e) {
     e.preventDefault();
     var formClave = document.querySelector("#frmCambiarPass");
@@ -1249,6 +1416,7 @@ if (document.getElementById("reportePrestamo")) {
         }
     }
 }
+//FUNCION ALERTAS
 function alertas(msg, icono) {
     Swal.fire({
         position: 'top-end',
@@ -1258,6 +1426,7 @@ function alertas(msg, icono) {
         timer: 3000
     })
 }
+//FUNCION VERIFICAR LIBRO
 function verificarLibro(e) {
     const libro = document.getElementById('libro').value;
     const cant = document.getElementById('cantidad').value;
