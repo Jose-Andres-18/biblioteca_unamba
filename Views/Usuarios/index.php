@@ -62,8 +62,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary" type="button" onclick="registrarUser(event);" id="btnAccion">Registrar</button>
-                                    <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                                    <button class="btn btn-primary" type="button" onclick="registrarUser(event);" id="btnAccion">
+                                        <span class="material-icons">check</span>
+                                    </button>
+                                    <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                        <span class="material-icons">close</span>
+                                    </button>
                                 </form>
                             </div>
                         </div>

@@ -7,31 +7,25 @@ class PrestamosModel extends Query
     }
     public function getPrestamos()
     {
-        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id";
+        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id";
         $res = $this->selectAll($sql);
         return $res;
     }
-    public function insertarPrestamo($estudiante,$libro, $cantidad, string $fecha_prestamo, string $fecha_devolucion, string $observacion)
+    public function insertarPrestamo($estudiante, $libro, string $fecha_prestamo, string $fecha_devolucion, string $observacion, $usuario)
     {
-        $verificar = "SELECT * FROM prestamo WHERE id_libro = '$libro' AND id_estudiante = $estudiante AND estado = 1";
-        $existe = $this->select($verificar);
-        if (empty($existe)) {
-            $query = "INSERT INTO prestamo(id_estudiante, id_libro, fecha_prestamo, fecha_devolucion, cantidad, observacion) VALUES (?,?,?,?,?,?)";
-            $datos = array($estudiante, $libro, $fecha_prestamo, $fecha_devolucion, $cantidad, $observacion);
-            $data = $this->insert($query, $datos);
-            if ($data > 0) {
-                $lib = "SELECT * FROM libro WHERE id = $libro";
-                $resLibro = $this->select($lib);
-                $total = $resLibro['cantidad'] - $cantidad;
-                $libroUpdate = "UPDATE libro SET cantidad = ? WHERE id = ?";
-                $datosLibro = array($total, $libro);
-                $this->save($libroUpdate, $datosLibro);
-                $res = $data;
-            } else {
-                $res = 0;
-            }
+        $query = "INSERT INTO prestamo(id_estudiante, id_libro, fecha_prestamo, fecha_devolucion, cantidad, observacion, id_usuario) VALUES (?,?,?,?,?,?,?)";
+        $datos = array($estudiante, $libro, $fecha_prestamo, $fecha_devolucion, 1, $observacion, $usuario);
+        $data = $this->insert($query, $datos);
+        if ($data > 0) {
+            $lib = "SELECT * FROM libro WHERE id = $libro";
+            $resLibro = $this->select($lib);
+            $total = $resLibro['cantidad'] - 1;
+            $libroUpdate = "UPDATE libro SET cantidad = ? WHERE id = ?";
+            $datosLibro = array($total, $libro);
+            $this->save($libroUpdate, $datosLibro);
+            $res = $data;
         } else {
-            $res = "existe";
+            $res = 0;
         }
         return $res;
     }
@@ -56,6 +50,13 @@ class PrestamosModel extends Query
         }
         return $res;
     }
+    public function verificarPrestamoPendiente($estudiante)
+    {
+        $query = "SELECT * FROM prestamo WHERE id_estudiante = ? AND estado = 1";
+        $datos = array($estudiante);
+        $result = $this->select($query, $datos);
+        return !empty($result);
+    }
     public function selectDatos()
     {
         $sql = "SELECT * FROM configuracion";
@@ -70,7 +71,7 @@ class PrestamosModel extends Query
     }
     public function selectPrestamoDebe()
     {
-        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.estado = 1 ORDER BY e.nombre ASC";
+        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.obsep.cantidadrvacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.estado = 1 ORDER BY e.nombre ASC";
         $res = $this->selectAll($sql);
         return $res;
     }
@@ -86,7 +87,7 @@ class PrestamosModel extends Query
     }
     public function getPrestamoLibro($id_prestamo)
     {
-        $sql = "SELECT e.id, e.codigo, e.nombre, e.carrera, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.id = $id_prestamo";
+        $sql = "SELECT e.id, e.codigo, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.id = $id_prestamo";
         $res = $this->select($sql);
         return $res;
     }

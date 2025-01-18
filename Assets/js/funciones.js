@@ -167,9 +167,6 @@ document.addEventListener("DOMContentLoaded", function(){
                 'data': 'id'
             },
             {
-                'data': 'imagen'
-            },
-            {
                 'data': 'carrera'
             },
             {
@@ -225,19 +222,20 @@ document.addEventListener("DOMContentLoaded", function(){
                 'data': 'titulo'
             },
             {
-                'data': 'cantidad'
-            },            
-            {
                 'data': 'autor'
             },            
             {
                 'data': 'editorial'
             },
-	    {
+	        {
                 'data': 'materia'
             },
             {
                 'data': 'foto'
+            },
+            
+            {
+                'data': 'isbn'
             },
             {
                 'data': 'descripcion'
@@ -274,12 +272,8 @@ document.addEventListener("DOMContentLoaded", function(){
             {
                 'data': 'fecha_prestamo'
             },
-
             {
                 'data': 'fecha_devolucion'
-            },
-            {
-                'data': 'cantidad'
             },
             {
                 'data': 'observacion'
@@ -367,6 +361,27 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
+    //CARRERA
+    $('.carrera').select2({
+        placeholder: 'Buscar Carrera',
+        minimumInputLength: 2,
+        ajax: {
+            url: base_url + 'Carrera/buscarCarrera',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        }
+    });
     //EDITORIAL
     $('.editorial').select2({
         placeholder: 'Buscar Editorial',
@@ -410,6 +425,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
     //ENCONTRAR POR ID
+
     if (document.getElementById('nombre_estudiante')) {
         const http = new XMLHttpRequest();
         const url = base_url + 'Configuracion/verificar';
@@ -435,9 +451,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 })
 //FUNCION USUARIO
+
 function frmUsuario() {
     document.getElementById("title").textContent = "Nuevo Usuario";
-    document.getElementById("btnAccion").textContent = "Registrar";
     document.getElementById("claves").classList.remove("d-none");
     document.getElementById("frmUsuario").reset();
     document.getElementById("id").value = "";
@@ -872,19 +888,18 @@ function btnReingresarAutor(id) {
 //Fin Autor
 //FUNCION CARRERA
 function frmCarrera() {
-    document.getElementById("title").textContent= "Nuevo Carrera";
-    document.getElementById("btnAccion").textContent= "Registrar";
+    document.getElementById("title").textContent = "Nueva Carrera";
+    document.getElementById("btnAccion").textContent = "Registrar";
     document.getElementById("frmCarrera").reset();
     document.getElementById("id").value = "";
-    deleteImg();
     $("#nuevoCarrera").modal("show");
 }
 
 function registrarCarrera(e) {
     e.preventDefault();
-    const autor = document.getElementById("autor");
-    if (autor.value == "") {
-        alertas('El nombre es requerido', 'warning');
+    const carrera = document.getElementById("carrera");
+    if (carrera.value == "") {
+        alertas('La carrera es requerido', 'warning');
     } else {
         const url = base_url + "Carrera/registrar";
         const frm = document.getElementById("frmCarrera");
@@ -903,8 +918,8 @@ function registrarCarrera(e) {
     }
 }
 
-function btnEditarCarrera(id) {
-    document.getElementById("title").textContent = "Actualizar Carrera";
+function btnEditarCar(id) {
+    document.getElementById("title").textContent = "Actualizar caja";
     document.getElementById("btnAccion").textContent = "Modificar";
     const url = base_url + "Carrera/editar/" + id;
     const http = new XMLHttpRequest();
@@ -914,22 +929,16 @@ function btnEditarCarrera(id) {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
             document.getElementById("id").value = res.id;
-            document.getElementById("autor").value = res.autor;
-            document.getElementById("foto_actual").value = res.imagen;
-            document.getElementById("img-preview").src = base_url + 'Assets/img/autor/' + res.imagen;
-            document.getElementById("icon-image").classList.add("d-none");
-            document.getElementById("icon-cerrar").innerHTML = `
-            <button class="btn btn-danger" onclick="deleteImg()">
-            <i class="fa fa-times-circle"></i></button>`;
+            document.getElementById("carrera").value = res.carrera;
             $("#nuevoCarrera").modal("show");
         }
     }
 }
 
-function btnEliminarCarrera(id) {
+function btnEliminarCar(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
-        text: "El Carrera no se eliminará de forma permanente, solo cambiará el estado a inactivo!",
+        text: "La carrera no se eliminará de forma permanente, solo cambiará el estado a inactivo!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -954,7 +963,7 @@ function btnEliminarCarrera(id) {
     })
 }
 
-function btnReingresarCarrera(id) {
+function btnReingresarCar(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
         icon: 'warning',
@@ -1100,11 +1109,12 @@ function registrarLibro(e) {
     const autor = document.getElementById("autor");
     const editorial = document.getElementById("editorial");
     const materia = document.getElementById("materia");
+    const isbn = document.getElementById("isbn");
     const cantidad = document.getElementById("cantidad");
     const num_pagina = document.getElementById("num_pagina");
 
     if (titulo.value == '' || autor.value == '' || editorial.value == ''
-    || materia.value == '' || cantidad.value == '' || num_pagina.value == '') {
+    || materia.value == '' || cantidad.value == '' || num_pagina.value == '' || isbn.value == '') {
         alertas('Todo los campos son requeridos', 'warning');
     } else {
         const url = base_url + "Libros/registrar";
@@ -1139,6 +1149,7 @@ function btnEditarLibro(id) {
               document.getElementById("autor").value = res.id_autor;
               document.getElementById("editorial").value = res.id_editorial;
               document.getElementById("materia").value = res.id_materia;
+              document.getElementById("isbn").value = res.isbn;
               document.getElementById("cantidad").value = res.cantidad;
               document.getElementById("num_pagina").value = res.num_pagina;
               document.getElementById("anio_edicion").value = res.anio_edicion;
@@ -1296,10 +1307,9 @@ function registroPrestamos(e){
     e.preventDefault();
     const libro = document.getElementById("libro").value;
     const estudiante = document.getElementById("estudiante").value;
-    const cantidad = document.getElementById("cantidad").value;
     const fecha_prestamo = document.getElementById("fecha_prestamo").value;
     const fecha_devolucion = document.getElementById("fecha_devolucion").value;
-    if (libro == '' || estudiante == '' || cantidad == '' || fecha_prestamo == '' || fecha_devolucion == '') {
+    if (libro == '' || estudiante == '' || fecha_prestamo == '' || fecha_devolucion == '') {
         alertas('Todo los campos son requeridos', 'warning');
     } else {
         const frm = document.getElementById("frmPrestar");
@@ -1311,14 +1321,12 @@ function registroPrestamos(e){
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
                 tblPrestar.ajax.reload();
-                $("#prestar").modal("hide");
                 alertas(res.msg, res.icono);
                 if (res.icono == 'success') {
-                    setTimeout(() => {
-                        window.open(base_url + 'Prestamos/ticked/'+ res.id, '_blank');
-                    }, 3000);
+                    $("#prestar").modal("hide");
+                    //ticket automatico desactivado
+                    
                 }
-                
             }
         }
     }

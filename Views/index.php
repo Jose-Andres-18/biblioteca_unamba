@@ -17,14 +17,11 @@
         <div class="cover"></div>
     </section>
     <section class="login-content">
-    <div class="logo" >
-            <h1>Biblioteca UNAMBA  <img src="Assets/img/logos.png"  alt="User Image" width="100"></h1>
-
-            
+        <div class="logo" >
+            <h1>Biblioteca Unamba <img src="Assets/img/logos.png"  alt="User Image" width="100"></h1>
         </div>
         <div class="logo">
             <h2>Bienvenido</h2>
-            
         </div>
         <div class="login-box">
             <form class="login-form" id="frmLogin" onsubmit="frmLogin(event);">

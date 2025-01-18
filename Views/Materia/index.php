@@ -1,7 +1,7 @@
 <?php include "Views/Templates/header.php"; ?>
 <div class="app-title">
     <div>
-        <h1><i class="fa fa-dashboard"></i> Materia</h1>
+        <h1><i class="fa fa-dashboard"></i> Materias</h1>
     </div>
 </div>
 <button class="btn btn-primary mb-2" type="button" onclick="frmMateria()"><i class="fa fa-plus"></i>Agregar Materia</button>
@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 <label for="materia">Nombre</label>
                                 <input type="hidden" id="id" name="id">
-                                <input id="materia" class="form-control" type="text" name="materia" required placeholder="Nombre de Carrera">
+                                <input id="materia" class="form-control" type="text" name="materia" required placeholder="Nombre de Materia">
                             </div>
                         </div>
 

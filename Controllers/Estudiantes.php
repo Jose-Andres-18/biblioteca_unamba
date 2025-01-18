@@ -74,14 +74,14 @@ class Estudiantes extends Controller
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
         } else {
             if ($id == "") {
-                    $data = $this->model->insertarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono);
-                    if ($data == "ok") {
-                        $msg = array('msg' => 'Estudiante registrado', 'icono' => 'success');
-                    } else if ($data == "existe") {
-                        $msg = array('msg' => 'El estudiante ya existe', 'icono' => 'warning');
-                    } else {
-                        $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
-                    }
+                $data = $this->model->insertarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono);
+                if ($data == "ok") {
+                    $msg = array('msg' => 'Estudiante registrado', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'El estudiante ya existe', 'icono' => 'warning');
+                } else {
+                    $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
+                }
             } else {
                 $data = $this->model->actualizarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono, $id);
                 if ($data == "modificado") {

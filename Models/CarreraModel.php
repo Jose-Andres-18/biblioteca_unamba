@@ -11,13 +11,13 @@ class CarreraModel extends Query
         $res = $this->selectAll($sql);
         return $res;
     }
-    public function insertarCarrera($carrera, $img)
+    public function insertarCarrera($carrera)
     {
         $verificar = "SELECT * FROM carrera WHERE carrera = '$carrera'";
         $existe = $this->select($verificar);
         if (empty($existe)) {
-            $query = "INSERT INTO carrera(carrera, imagen) VALUES (?, ?)";
-            $datos = array($carrera, $img);
+            $query = "INSERT INTO carrera(carrera) VALUES (?)";
+            $datos = array($carrera);
             $data = $this->save($query, $datos);
             if ($data == 1) {
                 $res = "ok";
@@ -35,10 +35,10 @@ class CarreraModel extends Query
         $res = $this->select($sql);
         return $res;
     }
-    public function actualizarCarrera($carrera, $img, $id)
+    public function actualizarCarrera($carrera, $id)
     {
-        $query = "UPDATE carrera SET carrera = ?, imagen = ? WHERE id = ?";
-        $datos = array($carrera, $img ,$id);
+        $query = "UPDATE carrera SET carrera = ? WHERE id = ?";
+        $datos = array($carrera, $id);
         $data = $this->save($query, $datos);
         if ($data == 1) {
             $res = "modificado";

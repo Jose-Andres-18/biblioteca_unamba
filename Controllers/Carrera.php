@@ -23,17 +23,16 @@ class Carrera extends Controller
     {
         $data = $this->model->getCarrera();
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['imagen'] = '<img class="img-thumbnail" src="' . base_url . "Assets/img/carrera/" . $data[$i]['imagen'] . '" width="80">';
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarCarrera(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarCarrera(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                <button class="btn btn-primary" type="button" onclick="btnEditarCar(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-danger" type="button" onclick="btnEliminarCar(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarCarrera(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-success" type="button" onclick="btnReingresarCar(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
                 <div/>';
             }
         }
@@ -43,54 +42,22 @@ class Carrera extends Controller
     public function registrar()
     {
         $carrera = strClean($_POST['carrera']);
-        $img = $_FILES['imagen'];
-        $name = $img['name'];
         $id = strClean($_POST['id']);
-        $fecha = date("YmdHis");
-        $tmpName = $img['tmp_name'];
         if (empty($carrera)) {
             $msg = array('msg' => 'El nombre es requerido', 'icono' => 'warning');
         } else {
-            if (!empty($name)) {
-                $extension = pathinfo($name, PATHINFO_EXTENSION);
-                $formatos_permitidos =  array('png', 'jpeg', 'jpg');
-                $extension = pathinfo($name, PATHINFO_EXTENSION);
-                if (!in_array($extension, $formatos_permitidos)) {
-                    $msg = array('msg' => 'Archivo no permitido', 'icono' => 'warning');
-                } else {
-                    $imgNombre = $fecha . ".jpg";
-                    $destino = "Assets/img/carrera/" . $imgNombre;
-                }
-            } else if (!empty($_POST['foto_actual']) && empty($name)) {
-                $imgNombre = $_POST['foto_actual'];
-            } else {
-                $imgNombre = "logo.png";
-            }
             if ($id == "") {
-                $data = $this->model->insertarCarrera($carrera, $imgNombre);
+                $data = $this->model->insertarCarrera($carrera);
                 if ($data == "ok") {
                     $msg = array('msg' => 'Carrera registrado', 'icono' => 'success');
-                    if (!empty($name)) {
-                        move_uploaded_file($tmpName, $destino);
-                    }
                 } else if ($data == "existe") {
-                    $msg = array('msg' => 'El carrera ya existe', 'icono' => 'warning');
+                    $msg = array('msg' => 'La carrera ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
                 }
             } else {
-
-                $imgDelete = $this->model->editCarrera($id);
-                if ($imgDelete['imagen'] != 'logo.png') {
-                    if (file_exists("Assets/img/carrera/" . $imgDelete['imagen'])) {
-                        unlink("Assets/img/carrera/" . $imgDelete['imagen']);
-                    }
-                }
-                $data = $this->model->actualizarCarrera($carrera, $imgNombre, $id);
+                $data = $this->model->actualizarCarrera($carrera, $id);
                 if ($data == "modificado") {
-                    if (!empty($name)) {
-                        move_uploaded_file($tmpName, $destino);
-                    }
                     $msg = array('msg' => 'Carrera modificado', 'icono' => 'success');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');

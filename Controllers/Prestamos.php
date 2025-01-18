@@ -43,25 +43,29 @@ class Prestamos extends Controller
     {
         $libro = strClean($_POST['libro']);
         $estudiante = strClean($_POST['estudiante']);
-        $cantidad = strClean($_POST['cantidad']);
+        $cantidad = 1;
         $fecha_prestamo = strClean($_POST['fecha_prestamo']);
         $fecha_devolucion = strClean($_POST['fecha_devolucion']);
         $observacion = strClean($_POST['observacion']);
-        if (empty($libro) || empty($estudiante) || empty($cantidad) || empty($fecha_prestamo) || empty($fecha_devolucion)) {
+        $usuario = strClean($_SESSION['id_usuario']);
+        if (empty($libro) || empty($estudiante) || empty($fecha_prestamo) || empty($fecha_devolucion)) {
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
         } else {
-            $verificar_cant = $this->model->getCantLibro($libro);
-            if ($verificar_cant['cantidad'] >= $cantidad) {
-                $data = $this->model->insertarPrestamo($estudiante,$libro, $cantidad, $fecha_prestamo, $fecha_devolucion, $observacion);
-                if ($data > 0) {
-                    $msg = array('msg' => 'Libro Prestado', 'icono' => 'success', 'id' => $data);
-                } else if ($data == "existe") {
-                    $msg = array('msg' => 'El libro ya esta prestado', 'icono' => 'warning');
+            $prestamoPendiente = $this->model->verificarPrestamoPendiente($estudiante);
+            if ($prestamoPendiente) {
+                $msg = array('msg' => 'El estudiante tiene un préstamo pendiente.', 'icono' => 'warning');
+            } else {
+                $verificar_cant = $this->model->getCantLibro($libro);
+                if ($verificar_cant['cantidad'] >= $cantidad) {
+                    $data = $this->model->insertarPrestamo($estudiante, $libro, $fecha_prestamo, $fecha_devolucion, $observacion, $usuario);
+                    if (is_numeric($data) && $data > 0) {
+                        $msg = array('msg' => 'Libro Prestado', 'icono' => 'success', 'id' => $data);
+                    } else {
+                        $msg = array('msg' => 'Error al prestar', 'icono' => 'error');
+                    }        
                 } else {
-                    $msg = array('msg' => 'Error al prestar', 'icono' => 'error');
+                    $msg = array('msg' => 'Stock no disponible', 'icono' => 'warning');
                 }
-            }else{
-                $msg = array('msg' => 'Stock no disponible', 'icono' => 'warning');
             }
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
@@ -175,10 +179,8 @@ class Prestamos extends Controller
         $pdf->Cell(72, 5, "Estudiante", 1, 1, 'C', 1);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->Cell(35, 5, 'Nombre.', 1, 0, 'L');
-        $pdf->Cell(37, 5, 'Carrera.', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 8);
         $pdf->Cell(35, 5, $prestamo['nombre'], 1, 0, 'L');
-        $pdf->Cell(37, 5, $prestamo['carrera'], 1, 1, 'L');
         $pdf->Ln();
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(72, 5, 'Fecha Prestamo', 0, 1, 'C');

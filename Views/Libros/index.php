@@ -15,11 +15,12 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Titulo</th>
-                                <th>Cantidad</th>
                                 <th>Autor</th>
                                 <th>Editorial</th>
                                 <th>Materia</th>
                                 <th>Foto</th>
+                                <th>ISBN</th>
+                                
                                 <th>Descripción</th>
                                 <th>Estado</th>
                                 <th></th>
@@ -71,6 +72,13 @@
                             <label for="materia">Materia</label><br>
                             <select id="materia" class="form-control materia" name="materia" required style="width: 100%;">
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="isbn">ISBN</label><br>
+                            <input type="hidden" id="id" name="id">
+                            <input id="isbn" class="form-control" type="text" name="isbn" placeholder="ISBN del libro" required>
                         </div>
                     </div>
                     <div class="col-md-3">

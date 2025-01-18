@@ -16,7 +16,6 @@
                         <th>Estudiante</th>
                         <th>Fecha Prestamo</th>
                         <th>Fecha Devolución</th>
-                        <th>Cantidad</th>
                         <th>Observación</th>
                         <th>Estado</th>
                         <th></th>
@@ -40,35 +39,31 @@
             <div class="modal-body">
                 <form id="frmPrestar" onsubmit="registroPrestamos(event)">
                     <div class="form-group">
-                        <label for="libro">Libro</label><br>
+                        <label id="cantidad" for="libro">Libro</label><br>
                         <select id="libro" class="form-control libro" name="libro" onchange="verificarLibro()" required style="width: 100%;">
+                        </select>
+                        <strong id="msg_error"></strong>
+                    </div>
+                    <div class="form-group">
+                        <label for="estudiante">Estudiante</label><br>
+                        <select name="estudiante" id="estudiante" class="form-control estudiante" required style="width: 100%;">
+                        <option value="">Seleccione un estudiante</option>
                         </select>
                     </div>
                     <div class="row">
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label for="estudiante">Estudiante</label><br>
-                                <select name="estudiante" id="estudiante" class="form-control estudiante" required style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="cantidad">Cant</label>
-                                <input id="cantidad" class="form-control" value="1" min="1" max="1" type="number" name="cantidad" required onkeyup="verificarLibro()" oninput="this.value = this.value.replace(/[^1-1]/g, '')">
-                                <strong id="msg_error"></strong>
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha_prestamo">Fecha de Prestamo</label>
-                                <input id="fecha_prestamo" class="form-control" type="date" name="fecha_prestamo" value="<?php echo date('Y-m-d'); ?>" readonly>
+                                <input id="fecha_prestamo" name="fecha_prestamo" class="form-control" type="date" 
+                                value="<?php echo date('Y-m-d'); ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                         <div class="form-group">
                             <label for="fecha_devolucion">Fecha de Devolución</label>
-                            <input id="fecha_devolucion" class="form-control" type="date" name="fecha_devolucion" value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" required>
+                            <input id="fecha_devolucion" name="fecha_devolucion" class="form-control" type="date" 
+                            value="<?php echo date('Y-m-d'); ?>" 
+                            min="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </div>
                     </div>
@@ -76,11 +71,34 @@
                         <label for="observacion">Observación</label>
                         <textarea id="observacion" class="form-control" placeholder="Observación" name="observacion" rows="3"></textarea>
                     </div>
-                    <button class="btn btn-primary" type="submit" id="btnAccion">Prestar</button>
-                    <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                    <button class="btn btn-primary" type="submit" id="btnAccion">
+                        <span class="material-icons">check</span>
+                    </button>
+                    <button class="btn btn-danger" type="button" data-dismiss="modal" id="btnCancelar">
+                        <span class="material-icons">close</span>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <?php include "Views/Templates/footer.php"; ?>
+<!--
+<script>
+    // Limpiar el formulario
+    function limpiarFormulario() {
+        document.getElementById("libro").selectedIndex = 0;
+        document.getElementById("estudiante").selectedIndex = 0;
+        document.getElementById("msg_error").textContent = "";
+    }
+
+    document.getElementById("btnCancelar").addEventListener("click", function() {
+        limpiarFormulario();
+    });
+
+    document.getElementById("btnAccion").addEventListener("click", function() {
+        limpiarFormulario();
+    });
+</script>
+-->

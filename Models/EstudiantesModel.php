@@ -7,13 +7,13 @@ class EstudiantesModel extends Query{
     public function getEstudiantes()
     {
         $sql = "SELECT * FROM estudiante";
-        //SELECT e.*, c.carrera FROM estudiante e INNER JOIN carrera c ON e.carrera = c.id;
+        //$sql = "SELECT e.*, c.carrera FROM estudiante e INNER JOIN carrera c ON e.id_carrera = c.id";
         $res = $this->selectAll($sql);
         return $res;
     }
     public function insertarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono)
     {
-        $verificar = "SELECT * FROM estudiante WHERE codigo = '$codigo'";
+        $verificar = "SELECT * FROM estudiante WHERE codigo = '$codigo' OR dni = '$dni'";
         $existe = $this->select($verificar);
         
         // Validar que el código tenga exactamente 6 dígitos numéricos
@@ -85,18 +85,5 @@ class EstudiantesModel extends Query{
             $tiene = true;
         }
         return $tiene;
-    }/*
-    //Integrado por nuria
-    public function getEditorial()
-    {
-        $sql = "SELECT * FROM carrera";
-        $res = $this->selectAll($sql);
-        return $res;
     }
-    public function buscarCarrera($valor)
-    {
-        $sql = "SELECT idCarrera, nombre AS text FROM carrera WHERE nombre LIKE '%" . $valor . "%' LIMIT 10";
-        $data = $this->selectAll($sql);
-        return $data;
-    }*/
 }

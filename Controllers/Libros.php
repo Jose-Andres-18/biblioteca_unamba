@@ -46,6 +46,7 @@ class Libros extends Controller
         $autor = strClean($_POST['autor']);
         $editorial = strClean($_POST['editorial']);
         $materia = strClean($_POST['materia']);
+        $isbn = strClean($_POST['isbn']);
         $cantidad = strClean($_POST['cantidad']);
         $num_pagina = strClean($_POST['num_pagina']);
         $anio_edicion = strClean($_POST['anio_edicion']);
@@ -56,7 +57,7 @@ class Libros extends Controller
         $fecha = date("YmdHis");
         $tmpName = $img['tmp_name'];
 
-        if (empty($titulo) || empty($autor) || empty($editorial) || empty($materia) || empty($cantidad)) {
+        if (empty($titulo) || empty($autor) || empty($editorial) || empty($materia) || empty($cantidad) || empty($isbn)) {
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
         } else {
             if (!empty($name)) {
@@ -75,7 +76,7 @@ class Libros extends Controller
                 $imgNombre = "logo.png";
             }
             if ($id == "") {
-                $data = $this->model->insertarLibros($titulo, $autor, $editorial, $materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre);
+                $data = $this->model->insertarLibros($titulo, $autor, $editorial, $materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn);
                 if ($data == "ok") {
                     if (!empty($name)) {
                         move_uploaded_file($tmpName, $destino);

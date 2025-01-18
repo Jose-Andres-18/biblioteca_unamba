@@ -64,23 +64,17 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
-                                <input id="nombre" class="form-control" type="text" name="nombre" required placeholder="Nombre completo">
+                                <input id="nombre" class="form-control" type="text" name="nombre" required placeholder="Nombre completo" oninput="this.value = this.value.replace(/[^a-záéíóúA-ZÁÉÍÓÚÑñ\s]/g, '')">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="carrera">Carrera</label>
+                                <label for="carrera">Carrera</label><br>
+                                <!--<select name="carrera" id="carrera" class="form-control carrera" required style="width: 100%;"></select>-->
                                 <input id="carrera" class="form-control" type="text" name="carrera" required placeholder="Carrera">
+                                
                             </div>
                         </div>
-                        <!--<div class="col-md-12">
-                            <div class="form-group">
-                                <label for="carrera">Carrera Profesional</label><br>
-                                <select id="carrera" class="form-control carrera" name="carrera" required style="width: 100%;">
-                                </select>
-                                <div *ngIf="(carrera.touched || carrera.dirty) && carrera.errors && carrera.hasError('required')" class="divError"><i>Este campo es requerido.</i></div>
-                            </div>
-                        </div>-->
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="telefono">Télefono</label>
