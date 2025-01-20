@@ -305,7 +305,7 @@ ALTER TABLE `configuracion`
 
 -- AUTO_INCREMENT de la tabla `permisos`
 ALTER TABLE `permisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 -- AUTO_INCREMENT de la tabla `usuarios`
 ALTER TABLE `usuarios`
@@ -381,16 +381,7 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
+select *from prestamo;
+SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.estado = 1 ORDER BY e.nombre ASC;
 
-
-(7, 'Javascript', 10, 1, 1, 2, '2016-12-23', 569, 'JavaScript: es una guia completa para programadores y un manual de referencia para JavaScript. Es particularmente util para desarrolladores que trabajan con los navegadores web compatibles con los estandares mas recientes, como Internet Explorer 6, Netscape 6 y Mozilla.', 'logo.png', '9780743273565', 1),
-INSERT INTO `libro` (`id`, `titulo`, `cantidad`, `id_autor`, `id_editorial`, 
-`id_materia`, `anio_edicion`, `num_pagina`, `descripcion`, `imagen`, `isbn`, `estado`) VALUES
-(8, 'Python Avanzado', 12, 2, 3, 3, '2019-03-12', 890, 'Un libro avanzado para aprender Python, cubriendo temas desde estructuras de datos hasta inteligencia artificial.', 'logo.png', '9780123740597', 1),
-(9, 'Programación Web', 6, 2, 2, 2, '2018-07-01', 1012, 'Una guía completa sobre el desarrollo web, cubriendo desde HTML, CSS hasta JavaScript y servidores web.', 'logo.png', '9781491921107', 0),
-(10, 'Redes de Computadoras', 15, 1, 1, 2, '2015-11-15', 1154, 'Este libro profundiza en las redes de computadoras, incluyendo protocolos, arquitectura y seguridad en la red.', 'logo.png', '9780132921501', 1);
-
-(11, 'Bases de Datos', 9, 3, 3, 2, '2020-06-18', 763, 'Una guía detallada sobre bases de datos relacionales y no relacionales, SQL, y el diseño de bases de datos.', 'databases.png', '9781303030624', 1),
-(12, 'Inteligencia Artificial', 3, 2, 3, 7, '2022-10-09', 1324, 'Explora los fundamentos y aplicaciones de la inteligencia artificial, incluyendo aprendizaje automático y redes neuronales.', 'ai.png', '9780262033842', 0),
-(13, 'Algoritmos y Estructuras de Datos', 11, 1, 1, 2, '2017-08-25', 980, 'Una introducción a los algoritmos y estructuras de datos fundamentales, adecuados tanto para novatos como para expertos.', 'algorithms.png', '9780387098012', 1);
 

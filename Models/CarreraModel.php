@@ -70,4 +70,5 @@ class CarreraModel extends Query
         $data = $this->selectAll($sql);
         return $data;
     }
+
 }

@@ -26,13 +26,13 @@ class Carrera extends Controller
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarCar(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarCar(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                <button class="btn btn-primary" type="button" onclick="btnEditarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-danger" type="button" onclick="btnEliminarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarCar(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-success" type="button" onclick="btnReingresarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
                 <div/>';
             }
         }
@@ -51,7 +51,7 @@ class Carrera extends Controller
                 if ($data == "ok") {
                     $msg = array('msg' => 'Carrera registrado', 'icono' => 'success');
                 } else if ($data == "existe") {
-                    $msg = array('msg' => 'La carrera ya existe', 'icono' => 'warning');
+                    $msg = array('msg' => 'El carrera ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
                 }

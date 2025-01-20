@@ -67,11 +67,25 @@
                                 <input id="nombre" class="form-control" type="text" name="nombre" required placeholder="Nombre completo" oninput="this.value = this.value.replace(/[^a-záéíóúA-ZÁÉÍÓÚÑñ\s]/g, '')">
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apellido_pa">Apellido Paterno</label>
+                                <input id="apellido_pa" class="form-control" type="text" name="apellido_pa" required placeholder="Apellido completo"oninput="this.value=this.value.replace(/[^a-zA-Z]/g,'')">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apellido_ma">Apellido Materno</label>
+                                <input id="apellido_ma" class="form-control" type="text" name="apellido_ma" required placeholder="Apellido completo"oninput="this.value=this.value.replace(/[^a-zA-Z]/g,'')">
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="carrera">Carrera</label><br>
-                                <!--<select name="carrera" id="carrera" class="form-control carrera" required style="width: 100%;"></select>-->
-                                <input id="carrera" class="form-control" type="text" name="carrera" required placeholder="Carrera">
+                                <select id="carrera" class="form-control carrera" name="carrera" required style="width: 100%;">
+                                
+                                </select>
+                                <!--<input id="carrera" class="form-control" type="text" name="carrera" required placeholder="Carrera">-->
                                 
                             </div>
                         </div>
@@ -87,6 +101,24 @@
                             <div class="form-group">
                                 <label for="direccion">Dirección</label>
                                 <input id="direccion" class="form-control" type="text" name="direccion" required placeholder="Dirección">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label for="genero">Género</label><br>
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="genero" id="genero_masculino" value="1" required>
+                                <label class="form-check-label" for="genero_masculino">
+                                    Masculino
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="genero" id="genero_femenino" value="0" required>
+                                    <label class="form-check-label" for="genero_femenino_femenino">
+                                        Femenino
+                                    </label>
+                                </div>
+                            </div>
                             </div>
                         </div>
                         <div class="col-md-12">

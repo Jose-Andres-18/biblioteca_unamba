@@ -1,4 +1,4 @@
-let tblUsuarios, tblEst, tblMateria, tblAutor, tblCarrera, tblEditorial, tblLibros, tblPrestar;
+let tblUsuarios, tblEst, tblMateria, tblAutor, tblEditorial, tblLibros, tblPrestar;
 document.addEventListener("DOMContentLoaded", function(){
     document.querySelector("#modalPass").addEventListener("click", function () {
         document.querySelector('#frmCambiarPass').reset();
@@ -157,32 +157,6 @@ document.addEventListener("DOMContentLoaded", function(){
             buttons
     });
     //Fin de la tabla Autor
-    //TABLA CARRERA
-    tblCarrera = $('#tblCarrera').DataTable({
-        ajax: {
-            url: base_url + "Carrera/listar",
-            dataSrc: ''
-        },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'carrera'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
-        ],
-        language,
-        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons
-    });
-    //Fin de la tabla Carrera
     //TABLA EDITORIAL
     tblEditorial= $('#tblEditorial').DataTable({
         ajax: {
@@ -284,6 +258,34 @@ document.addEventListener("DOMContentLoaded", function(){
             {
                 'data': 'acciones'
             }
+        ],
+        language,
+        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        buttons,
+        "resonsieve": true,
+        "bDestroy": true,
+        "iDisplayLength": 10,
+        "order": [
+            [0, "desc"]
+        ]
+    });
+    //TABLA CARRERA
+    tblCarrera = $('#tblCarrera').DataTable({
+        ajax: {
+            url: base_url + "Carrera/listar",
+            dataSrc: ''
+        },
+        columns: [{
+            'data': 'id'
+        },
+        {
+            'data': 'carrera'
+        },
+        {
+            'data': 'estado'
+        }
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -425,7 +427,6 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
     //ENCONTRAR POR ID
-
     if (document.getElementById('nombre_estudiante')) {
         const http = new XMLHttpRequest();
         const url = base_url + 'Configuracion/verificar';
@@ -451,7 +452,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 })
 //FUNCION USUARIO
-
 function frmUsuario() {
     document.getElementById("title").textContent = "Nuevo Usuario";
     document.getElementById("claves").classList.remove("d-none");
@@ -559,7 +559,7 @@ function btnReingresarUser(id) {
 //FUNCION ESTUDIANTE
 function frmEstudiante() {
     document.getElementById("title").textContent = "Nuevo Estuadiante";
-    document.getElementById("btnAccion").textContent = "Registrar";
+    document.getElementById("btnAccion").textContent = "Registrarrrr";
     document.getElementById("frmEstudiante").reset();
     document.getElementById("id").value = "";
     $("#nuevoEstudiante").modal("show");
@@ -570,11 +570,14 @@ function registrarEstudiante(e) {
     const codigo = document.getElementById("codigo");
     const dni = document.getElementById("dni");
     const nombre = document.getElementById("nombre");
+    const apellido_pa = document.getElementById("apellido_pa");
+    const apellido_ma = document.getElementById("apellido_ma");
+    const genero = document.querySelector('input[name="genero"]:checked');
     const carrera = document.getElementById("carrera");
     const telefono = document.getElementById("telefono");
     const direccion = document.getElementById("direccion");
     if (codigo.value == "" || dni.value == "" || nombre.value == ""
-    || telefono.value == "" || direccion.value == "" || carrera.value == "") {
+    || telefono.value == "" || direccion.value == "" || carrera.value == "" || apellido_pa .value == "" || apellido_ma.value == "" || !genero) {
         alertas('Todo los campos son requeridos', 'warning');
     } else {
         const url = base_url + "Estudiantes/registrar";
@@ -608,9 +611,41 @@ function btnEditarEst(id) {
             document.getElementById("codigo").value = res.codigo;
             document.getElementById("dni").value = res.dni;
             document.getElementById("nombre").value = res.nombre;
+            document.getElementById("apellido_pa").value = res.apellido_pa;
+            document.getElementById("apellido_ma").value = res.apellido_ma;
             document.getElementById("carrera").value = res.carrera;
             document.getElementById("telefono").value = res.telefono;
             document.getElementById("direccion").value = res.direccion;
+            if (res.genero == "1") {
+                document.getElementById("genero_masculino").checked = true;
+            } else if (res.genero == "0") {
+                document.getElementById("genero_femenino").checked = true;
+            }
+            const httpCarreras = new XMLHttpRequest();
+            httpCarreras.open("GET", urlCarreras, true);
+            httpCarreras.send();
+
+            httpCarreras.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const carreras = JSON.parse(this.responseText);
+                    const carreraSelect = document.getElementById("carrera");
+                    console.log(carreras);
+
+                    // Limpiar opciones previas
+                    carreraSelect.innerHTML = "";
+
+                    // Agregar opciones de carreras
+                    carreras.forEach((carrera) => {
+                        const option = document.createElement("option");
+                        option.value = carrera.id;
+                        option.textContent = carrera.carrera; // Asume que el backend envía 'nombre_carrera'
+                        if (carrera.id == res.id_carrera) {
+                            option.selected = true; // Marcar la carrera del estudiante como seleccionada
+                        }
+                        carreraSelect.appendChild(option);
+                    });
+                }
+            };
             $("#nuevoEstudiante").modal("show");
         }
     }
@@ -886,110 +921,6 @@ function btnReingresarAutor(id) {
     })
 }
 //Fin Autor
-//FUNCION CARRERA
-function frmCarrera() {
-    document.getElementById("title").textContent = "Nueva Carrera";
-    document.getElementById("btnAccion").textContent = "Registrar";
-    document.getElementById("frmCarrera").reset();
-    document.getElementById("id").value = "";
-    $("#nuevoCarrera").modal("show");
-}
-
-function registrarCarrera(e) {
-    e.preventDefault();
-    const carrera = document.getElementById("carrera");
-    if (carrera.value == "") {
-        alertas('La carrera es requerido', 'warning');
-    } else {
-        const url = base_url + "Carrera/registrar";
-        const frm = document.getElementById("frmCarrera");
-        const http = new XMLHttpRequest();
-        http.open("POST", url, true);
-        http.send(new FormData(frm));
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                const res = JSON.parse(this.responseText);
-                $("#nuevoCarrera").modal("hide");
-                frm.reset();
-                tblCarrera.ajax.reload();
-                alertas(res.msg, res.icono);
-            }
-        }
-    }
-}
-
-function btnEditarCar(id) {
-    document.getElementById("title").textContent = "Actualizar caja";
-    document.getElementById("btnAccion").textContent = "Modificar";
-    const url = base_url + "Carrera/editar/" + id;
-    const http = new XMLHttpRequest();
-    http.open("GET", url, true);
-    http.send();
-    http.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const res = JSON.parse(this.responseText);
-            document.getElementById("id").value = res.id;
-            document.getElementById("carrera").value = res.carrera;
-            $("#nuevoCarrera").modal("show");
-        }
-    }
-}
-
-function btnEliminarCar(id) {
-    Swal.fire({
-        title: 'Esta seguro de eliminar?',
-        text: "La carrera no se eliminará de forma permanente, solo cambiará el estado a inactivo!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const url = base_url + "Carrera/eliminar/" + id;
-            const http = new XMLHttpRequest();
-            http.open("GET", url, true);
-            http.send();
-            http.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    const res = JSON.parse(this.responseText);
-                    tblCarrera.ajax.reload();
-                    alertas(res.msg, res.icono);
-                }
-            }
-
-        }
-    })
-}
-
-function btnReingresarCar(id) {
-    Swal.fire({
-        title: 'Esta seguro de reingresar?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const url = base_url + "Carrera/reingresar/" + id;
-            const http = new XMLHttpRequest();
-            http.open("GET", url, true);
-            http.send();
-            http.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    const res = JSON.parse(this.responseText);
-                    tblCarrera.ajax.reload();
-                    alertas(res.msg, res.icono);
-                }
-            }
-
-        }
-    })
-}
-//Fin Carrera
 //FUNCION EDITORIAL
 function frmEditorial() {
     document.getElementById("title").textContent = "Nuevo Editorial";
@@ -1302,7 +1233,7 @@ function btnEntregar(id) {
         }
     })
 }
-//FUNCION REGSITRAR PRESTAMOS
+//FUNCION REGISTRAR PRESTAMOS
 function registroPrestamos(e){
     e.preventDefault();
     const libro = document.getElementById("libro").value;
@@ -1324,13 +1255,66 @@ function registroPrestamos(e){
                 alertas(res.msg, res.icono);
                 if (res.icono == 'success') {
                     $("#prestar").modal("hide");
-                    //ticket automatico desactivado
-                    
+                    limpiarCampos();
                 }
             }
         }
     }
 }
+document.getElementById("btnCancelar").addEventListener("click", function () {
+    limpiarCampos();
+});
+//FUNCION LIMPIAR CAMPOS
+function limpiarCampos(){
+    try {
+        if ($('.libro').data('select2')) {
+            $('.libro').select2('destroy');
+        }
+        if($('.estudiante').data('select2')){
+            $('.estudiante').select2('destroy');
+        }
+        $('.libro').val(null);
+        $('.libro').select2({
+            placeholder: 'Buscar Libro',
+            minimumInputLength: 2,
+            ajax: {
+                url: base_url + 'Libros/buscarLibro',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return { lb: params.term || '' };
+                },
+                processResults: function (data) {
+                    return { results: data };
+                },
+                cache: true
+            }
+        });
+        $('.estudiante').val(null);
+        $('.estudiante').select2({
+            placeholder: 'Buscar Estudiante',
+            minimumInputLength: 2,
+            ajax: {
+                url: base_url + 'Estudiantes/buscarEstudiante',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return { est: params.term };
+                },
+                processResults: function (data) {
+                    return { results: data };
+                },
+                cache: true
+            }
+        });
+        document.getElementById("libro").selectedIndex = 0;
+        document.getElementById("estudiante").selectedIndex = 0;
+        document.getElementById("msg_error").textContent = "";
+    } catch (error) {
+        console.error("Error al limpiar Select2: ", error);
+    }
+}
+
 //FUNCIONES DE ROLES
 function btnRolesUser(id) {
     const http = new XMLHttpRequest();

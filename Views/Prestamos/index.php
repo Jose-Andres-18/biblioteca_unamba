@@ -84,21 +84,3 @@
     </div>
 </div>
 <?php include "Views/Templates/footer.php"; ?>
-<!--
-<script>
-    // Limpiar el formulario
-    function limpiarFormulario() {
-        document.getElementById("libro").selectedIndex = 0;
-        document.getElementById("estudiante").selectedIndex = 0;
-        document.getElementById("msg_error").textContent = "";
-    }
-
-    document.getElementById("btnCancelar").addEventListener("click", function() {
-        limpiarFormulario();
-    });
-
-    document.getElementById("btnAccion").addEventListener("click", function() {
-        limpiarFormulario();
-    });
-</script>
--->

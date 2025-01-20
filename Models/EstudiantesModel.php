@@ -11,7 +11,7 @@ class EstudiantesModel extends Query{
         $res = $this->selectAll($sql);
         return $res;
     }
-    public function insertarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono)
+    public function insertarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono)
     {
         $verificar = "SELECT * FROM estudiante WHERE codigo = '$codigo' OR dni = '$dni'";
         $existe = $this->select($verificar);
@@ -32,8 +32,8 @@ class EstudiantesModel extends Query{
         }
         
         if (empty($existe)) {
-            $query = "INSERT INTO estudiante(codigo,dni,nombre,carrera,direccion,telefono) VALUES (?,?,?,?,?,?)";
-            $datos = array($codigo, $dni, $nombre, $carrera, $direccion, $telefono);
+            $query = "INSERT INTO estudiante(codigo,dni,nombre,apellido_pa,apellido_ma,genero,carrera,direccion,telefono) VALUES (?,?,?,?,?,?,?,?,?)";
+            $datos = array($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono);
             $data = $this->save($query, $datos);
             if ($data == 1) {
                 $res = "ok";
@@ -51,10 +51,10 @@ class EstudiantesModel extends Query{
         $res = $this->select($sql);
         return $res;
     }
-    public function actualizarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono, $id)
+    public function actualizarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono, $id)
     {
-        $query = "UPDATE estudiante SET codigo = ?, dni = ?, nombre = ?, carrera = ?, direccion = ?, telefono = ?  WHERE id = ?";
-        $datos = array($codigo, $dni, $nombre, $carrera, $direccion, $telefono, $id);
+        $query = "UPDATE estudiante SET codigo = ?, dni = ?, nombre = ?, apellido_pa = ?, apellido_ma = ?, genero = ?, carrera = ?, direccion = ?, telefono = ?  WHERE id = ?";
+        $datos = array($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono, $id);
         $data = $this->save($query, $datos);
         if ($data == 1) {
             $res = "modificado";

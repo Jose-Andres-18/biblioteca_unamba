@@ -44,6 +44,9 @@ class Estudiantes extends Controller
         $codigo = strClean($_POST['codigo']);
         $dni = strClean($_POST['dni']);
         $nombre = strClean($_POST['nombre']);
+        $apellido_pa = strClean($_POST['apellido_pa']);
+        $apellido_ma = strClean($_POST['apellido_ma']);
+        $genero = strClean($_POST['genero']);
         $carrera = strClean($_POST['carrera']);
         $direccion = strClean($_POST['direccion']);
         $telefono = strClean($_POST['telefono']);
@@ -70,11 +73,11 @@ class Estudiantes extends Controller
             die();
         }
         
-        if (empty($codigo) || empty($dni) || empty($nombre) || empty($carrera)) {
+        if (empty($codigo) || empty($dni) || empty($nombre) || empty($apellido_pa) || empty($apellido_ma) || empty($carrera)) {
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
         } else {
             if ($id == "") {
-                $data = $this->model->insertarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono);
+                $data = $this->model->insertarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono);
                 if ($data == "ok") {
                     $msg = array('msg' => 'Estudiante registrado', 'icono' => 'success');
                 } else if ($data == "existe") {
@@ -83,7 +86,7 @@ class Estudiantes extends Controller
                     $msg = array('msg' => 'Error al registrar', 'icono' => 'error');
                 }
             } else {
-                $data = $this->model->actualizarEstudiante($codigo, $dni, $nombre, $carrera, $direccion, $telefono, $id);
+                $data = $this->model->actualizarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono, $id);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Estudiante modificado', 'icono' => 'success');
                 } else {
