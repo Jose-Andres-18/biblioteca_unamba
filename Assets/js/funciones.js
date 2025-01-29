@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function(){
             "next": "Siguiente",
             "previous": "Anterior"
         }
-
     }
     const  buttons = [{
                 //Botón para Excel
@@ -89,11 +88,21 @@ document.addEventListener("DOMContentLoaded", function(){
             {'data': 'codigo'},
             {'data': 'dni'},
             {'data': 'nombre'},
-            {'data':'carrera'},
+            {
+                'data': null, 
+                'render': function(data, type, row) {
+                    return row.apellido_pa + ' ' + row.apellido_ma;
+                }
+            },
+            {'data': 'carrera'},
             {'data': 'direccion'},
             {'data': 'telefono'},
             {'data': 'estado'},
             {'data': 'acciones'}
+        ],
+        columnDefs: [
+            { width: '20%', targets: 5 }, // Columna "carrera" más corta
+            { width: '12%', targets: 9 }  // Columna "acciones" más grande
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -108,18 +117,10 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Materia/listar",
             dataSrc: ''
         },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'materia'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
+        columns: [{'data': 'id'},
+            {'data': 'materia'},
+            {'data': 'estado'},
+            {'data': 'acciones'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -134,21 +135,11 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Autor/listar",
             dataSrc: ''
         },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'imagen'
-            },
-            {
-                'data': 'autor'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
+        columns: [{'data': 'id'},
+            {'data': 'imagen'},
+            {'data': 'autor'},
+            {'data': 'estado'},
+            {'data': 'acciones'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -163,18 +154,10 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Editorial/listar",
             dataSrc: ''
         },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'editorial'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
+        columns: [{'data': 'id'},
+            {'data': 'editorial'},
+            {'data': 'estado'},
+            {'data': 'acciones'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -189,37 +172,16 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Libros/listar",
             dataSrc: ''
         },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'titulo'
-            },
-            {
-                'data': 'autor'
-            },            
-            {
-                'data': 'editorial'
-            },
-	        {
-                'data': 'materia'
-            },
-            {
-                'data': 'foto'
-            },
-            
-            {
-                'data': 'isbn'
-            },
-            {
-                'data': 'descripcion'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
+        columns: [{'data': 'id'},
+            {'data': 'titulo'},
+            {'data': 'autor'},            
+            {'data': 'editorial'},
+	        {'data': 'materia'},
+            {'data': 'foto'},
+            {'data': 'isbn'},
+            {'data': 'descripcion'},
+            {'data': 'estado'},
+            {'data': 'acciones'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -234,30 +196,14 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Prestamos/listar",
             dataSrc: ''
         },
-        columns: [{
-                'data': 'id'
-            },
-            {
-                'data': 'titulo'
-            },
-            {
-                'data': 'nombre'
-            },
-            {
-                'data': 'fecha_prestamo'
-            },
-            {
-                'data': 'fecha_devolucion'
-            },
-            {
-                'data': 'observacion'
-            },
-            {
-                'data': 'estado'
-            },
-            {
-                'data': 'acciones'
-            }
+        columns: [{'data': 'id'},
+            {'data': 'titulo'},
+            {'data': 'nombre'},
+            {'data': 'fecha_prestamo'},
+            {'data': 'fecha_devolucion'},
+            {'data': 'observacion'},
+            {'data': 'estado'},
+            {'data': 'acciones'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -277,15 +223,9 @@ document.addEventListener("DOMContentLoaded", function(){
             url: base_url + "Carrera/listar",
             dataSrc: ''
         },
-        columns: [{
-            'data': 'id'
-        },
-        {
-            'data': 'carrera'
-        },
-        {
-            'data': 'estado'
-        }
+        columns: [{'data': 'id'},
+        {'data': 'carrera'},
+        {'data': 'estado'}
         ],
         language,
         dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
@@ -299,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function(){
             [0, "desc"]
         ]
     });
-    //SPRING U ALGO ASI
+    //SPRING O SELECT
     //ESTUDIANTE
     $('.estudiante').select2({
         placeholder: 'Buscar Estudiante',
@@ -450,6 +390,142 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
     }
+    const btnCancelarPrestamo = document.getElementById("btnCancelarPrestamo");
+    if (btnCancelarPrestamo) {
+        btnCancelarPrestamo.addEventListener("click", function () {
+            //limpiarCamposPrestamo();
+        });
+    }
+    const btnCancelarLibro = document.getElementById("btnCancelarLibro");
+    if (btnCancelarLibro) {
+        btnCancelarLibro.addEventListener("click", function () {
+            //limpiarCamposLibro();
+        });
+    }
+    // FUNCIONES LIMPIAR CAMPOS
+    // Función para limpiar los campos del módulo Prestamo
+    /*function limpiarCamposPrestamo() {
+        try {
+            if ($('.libro').data('select2')) {
+                $('.libro').select2('destroy');
+            }
+            if ($('.estudiante').data('select2')) {
+                $('.estudiante').select2('destroy');
+            }
+            $('.libro').val(null).select2({
+                placeholder: 'Buscar Libro',
+                    minimumInputLength: 2,
+                    ajax: {
+                        url: base_url + 'Libros/buscarLibro',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {lb: params.term};
+                        },
+                        processResults: function (data) {
+                            return {results: data};
+                        },
+                        cache: true
+                    }
+            });
+            $('.estudiante').val(null).select2({
+                placeholder: 'Buscar Estudiante',
+                minimumInputLength: 2,
+                ajax: {
+                    url: base_url + 'Estudiantes/buscarEstudiante',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { est: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    },
+                    cache: true
+                }
+            });
+            document.getElementById("msg_error").textContent = "";
+        } catch (error) {
+            console.log("Error al limpiar Select2 en Prestamo: "+error);
+        }
+    }*/
+    // Función para limpiar los campos del Módulo Libro
+    /*function limpiarCamposLibro() {
+        try {
+            if ($('.autor').data('select2')) {
+                $('.autor').select2('destroy');
+            }
+            if ($('.editorial').data('select2')) {
+                $('.editorial').select2('destroy');
+            }
+            if ($('.materia').data('select2')) {
+                $('.materia').select2('destroy');
+            }
+            $('.autor').val(null).trigger('change').select2({
+                placeholder: 'Buscar Autor',
+                minimumInputLength: 2,
+                ajax: {
+                    url: base_url + 'Autor/buscarAutor',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+            $('.editorial').val(null).select2({
+                placeholder: 'Buscar Editorial',
+                minimumInputLength: 2,
+                ajax: {
+                    url: base_url + 'Editorial/buscarEditorial',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+            $('.materia').val(null).select2({
+                placeholder: 'Buscar Materia',
+                minimumInputLength: 2,
+                ajax: {
+                    url: base_url + 'Materia/buscarMateria',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+            document.getElementById("msg_error").textContent = "";
+        } catch (error) {
+            console.error("Error al limpiar Select2 en Libro: ", error);
+        }
+    }*/
 })
 //FUNCION USUARIO
 function frmUsuario() {
@@ -459,6 +535,7 @@ function frmUsuario() {
     document.getElementById("id").value = "";
     $("#nuevo_usuario").modal("show");
 }
+//FUNCION REGISTRAR USUARIO
 function registrarUser(e) {
     e.preventDefault();
     const usuario = document.getElementById("usuario");
@@ -484,9 +561,10 @@ function registrarUser(e) {
         }
     }
 }
+//FUNCION EDITAR USUARIO
 function btnEditarUser(id) {
     document.getElementById("title").textContent = "Actualizar usuario";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Usuarios/editar/"+id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -502,6 +580,7 @@ function btnEditarUser(id) {
         }
     }
 }
+//FUNCION ELIMINAR USUARIO
 function btnEliminarUser(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -529,6 +608,7 @@ function btnEliminarUser(id) {
         }
     })
 }
+//FUNCION REINGRESAR USUARIO
 function btnReingresarUser(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -559,12 +639,11 @@ function btnReingresarUser(id) {
 //FUNCION ESTUDIANTE
 function frmEstudiante() {
     document.getElementById("title").textContent = "Nuevo Estuadiante";
-    document.getElementById("btnAccion").textContent = "Registrarrrr";
     document.getElementById("frmEstudiante").reset();
     document.getElementById("id").value = "";
     $("#nuevoEstudiante").modal("show");
 }
-
+//FUNCION REGISTRAR ESTUDIANTE
 function registrarEstudiante(e) {
     e.preventDefault();
     const codigo = document.getElementById("codigo");
@@ -596,11 +675,12 @@ function registrarEstudiante(e) {
         }
     }
 }
-
+//FUNCION EDITAR ESTUDIANTE
 function btnEditarEst(id) {
     document.getElementById("title").textContent = "Actualizar estudiante";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Estudiantes/editar/" + id;
+    const urlCarreras = base_url + "Carrra/listar";
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
     http.send();
@@ -613,7 +693,7 @@ function btnEditarEst(id) {
             document.getElementById("nombre").value = res.nombre;
             document.getElementById("apellido_pa").value = res.apellido_pa;
             document.getElementById("apellido_ma").value = res.apellido_ma;
-            document.getElementById("carrera").value = res.carrera;
+           // document.getElementById("carrera").value = res.carrera;
             document.getElementById("telefono").value = res.telefono;
             document.getElementById("direccion").value = res.direccion;
             if (res.genero == "1") {
@@ -650,7 +730,7 @@ function btnEditarEst(id) {
         }
     }
 }
-
+//FUNCION ELIMINAR ESTUDIANTE
 function btnEliminarEst(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -678,7 +758,7 @@ function btnEliminarEst(id) {
         }
     })
 }
-
+//FUNCION REINGRESAR ESTUDIANTE
 function btnReingresarEst(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -709,12 +789,11 @@ function btnReingresarEst(id) {
 //FUNCION MATERIA
 function frmMateria() {
     document.getElementById("title").textContent = "Nueva Materia";
-    document.getElementById("btnAccion").textContent = "Registrar";
     document.getElementById("frmMateria").reset();
     document.getElementById("id").value = "";
     $("#nuevoMateria").modal("show");
 }
-
+//FUNCION REGISTRAR MATERIA
 function registrarMateria(e) {
     e.preventDefault();
     const materia = document.getElementById("materia");
@@ -737,10 +816,10 @@ function registrarMateria(e) {
         }
     }
 }
-
+//FUNCION EDITAR MATERIA
 function btnEditarMat(id) {
     document.getElementById("title").textContent = "Actualizar caja";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Materia/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -754,7 +833,7 @@ function btnEditarMat(id) {
         }
     }
 }
-
+//FUNCION ELIMINAR MATERIA
 function btnEliminarMat(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -782,7 +861,7 @@ function btnEliminarMat(id) {
         }
     })
 }
-
+//FUNCION REINGRESAR MATERIA
 function btnReingresarMat(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -813,13 +892,12 @@ function btnReingresarMat(id) {
 //FUNCION AUTOR
 function frmAutor() {
     document.getElementById("title").textContent= "Nuevo Autor";
-    document.getElementById("btnAccion").textContent= "Registrar";
     document.getElementById("frmAutor").reset();
     document.getElementById("id").value = "";
     deleteImg();
     $("#nuevoAutor").modal("show");
 }
-
+//FUNCION REGISTRAR AUTOR
 function registrarAutor(e) {
     e.preventDefault();
     const autor = document.getElementById("autor");
@@ -842,10 +920,10 @@ function registrarAutor(e) {
         }
     }
 }
-
+//FUNCION EDITAR AUTOR
 function btnEditarAutor(id) {
     document.getElementById("title").textContent = "Actualizar Autor";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Autor/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -865,7 +943,7 @@ function btnEditarAutor(id) {
         }
     }
 }
-
+//FUNCION ELIMINAR AUTOR
 function btnEliminarAutor(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -893,7 +971,7 @@ function btnEliminarAutor(id) {
         }
     })
 }
-
+//FUNCION REINGRESAR AUTOR
 function btnReingresarAutor(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -924,12 +1002,11 @@ function btnReingresarAutor(id) {
 //FUNCION EDITORIAL
 function frmEditorial() {
     document.getElementById("title").textContent = "Nuevo Editorial";
-    document.getElementById("btnAccion").textContent = "Registrar";
     document.getElementById("frmEditorial").reset();
     document.getElementById("id").value = "";
     $("#nuevoEditorial").modal("show");
 }
-
+//FUNCION REGITRAR EDITORIAL
 function registrarEditorial(e) {
     e.preventDefault();
     const editorial = document.getElementById("editorial");
@@ -951,10 +1028,10 @@ function registrarEditorial(e) {
         }
     }
 }
-
+//FUNCION EDITAR EDITORIAL
 function btnEditarEdi(id) {
     document.getElementById("title").textContent = "Actualizar Editorial";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Editorial/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -968,7 +1045,7 @@ function btnEditarEdi(id) {
         }
     }
 }
-
+//FUNCION ELIMINAR EDITORIAL
 function btnEliminarEdi(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -996,7 +1073,7 @@ function btnEliminarEdi(id) {
         }
     })
 }
-
+//FUNCION REINGRESAR EDITORIAL
 function btnReingresarEdi(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -1027,13 +1104,12 @@ function btnReingresarEdi(id) {
 //FUNCION LIBROS
 function frmLibros() {
     document.getElementById("title").textContent = "Nuevo Libro";
-    document.getElementById("btnAccion").textContent = "Registrar";
     document.getElementById("frmLibro").reset();
     document.getElementById("id").value = "";
     $("#nuevoLibro").modal("show");
     deleteImg();
 }
-
+//FUNCION REGISTRAR LIBRO
 function registrarLibro(e) {
     e.preventDefault();
     const titulo = document.getElementById("titulo");
@@ -1064,10 +1140,10 @@ function registrarLibro(e) {
         }
     }
 }
-
+//FUNCION EDITAR LIBRO
 function btnEditarLibro(id) {
     document.getElementById("title").textContent = "Actualizar Libro";
-    document.getElementById("btnAccion").textContent = "Modificar";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Libros/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -1095,7 +1171,7 @@ function btnEditarLibro(id) {
         }
     }
 }
-
+//FUNCION ELIMINAR LIBRO
 function btnEliminarLibro(id) {
     Swal.fire({
         title: 'Esta seguro de eliminar?',
@@ -1123,7 +1199,7 @@ function btnEliminarLibro(id) {
         }
     })
 }
-
+//FUNCION REINGRESAR LIBRO
 function btnReingresarLibro(id) {
     Swal.fire({
         title: 'Esta seguro de reingresar?',
@@ -1150,6 +1226,7 @@ function btnReingresarLibro(id) {
         }
     })
 }
+//OTRAS FUNCIONES
 //FUNCION PREVIEW
 function preview(e) {
     var input = document.getElementById('imagen');
@@ -1255,70 +1332,29 @@ function registroPrestamos(e){
                 alertas(res.msg, res.icono);
                 if (res.icono == 'success') {
                     $("#prestar").modal("hide");
-                    limpiarCampos();
+                    //limpiarCamposPrestamo();
                 }
             }
         }
     }
 }
-document.getElementById("btnCancelar").addEventListener("click", function () {
-    limpiarCampos();
-});
-//FUNCION LIMPIAR CAMPOS
-function limpiarCampos(){
-    try {
-        if ($('.libro').data('select2')) {
-            $('.libro').select2('destroy');
-        }
-        if($('.estudiante').data('select2')){
-            $('.estudiante').select2('destroy');
-        }
-        $('.libro').val(null);
-        $('.libro').select2({
-            placeholder: 'Buscar Libro',
-            minimumInputLength: 2,
-            ajax: {
-                url: base_url + 'Libros/buscarLibro',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return { lb: params.term || '' };
-                },
-                processResults: function (data) {
-                    return { results: data };
-                },
-                cache: true
-            }
-        });
-        $('.estudiante').val(null);
-        $('.estudiante').select2({
-            placeholder: 'Buscar Estudiante',
-            minimumInputLength: 2,
-            ajax: {
-                url: base_url + 'Estudiantes/buscarEstudiante',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return { est: params.term };
-                },
-                processResults: function (data) {
-                    return { results: data };
-                },
-                cache: true
-            }
-        });
-        document.getElementById("libro").selectedIndex = 0;
-        document.getElementById("estudiante").selectedIndex = 0;
-        document.getElementById("msg_error").textContent = "";
-    } catch (error) {
-        console.error("Error al limpiar Select2: ", error);
-    }
-}
-
-//FUNCIONES DE ROLES
+//FUNCIONES DE ROLES DE USUARIO
 function btnRolesUser(id) {
     const http = new XMLHttpRequest();
     const url = base_url + "Usuarios/permisos/" + id;
+    http.open("GET", url);
+    http.send();
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("frmPermisos").innerHTML = this.responseText;
+            $("#permisos").modal("show");
+        }
+    }
+}
+//FUNCIONES DE ROLES CARRERAS
+function btnRolesCarrera(id) {
+    const http = new XMLHttpRequest();
+    const url = base_url + "Libros/carreras/" + id;
     http.open("GET", url);
     http.send();
     http.onreadystatechange = function () {
@@ -1438,3 +1474,190 @@ function verificarLibro(e) {
         }
     }
 }
+
+
+
+/*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
+//DNI
+/*document.getElementById("dni").addEventListener("input", function () {
+    const dni = this.value;
+    const dniError = document.getElementById("dni-error");
+    const regex = /^[0-9]{8}$/; // 8 dígitos numéricos
+
+    if (dni === "") {
+        dniError.textContent = "El DNI es requerido.";
+    } else if (!regex.test(dni)) {
+        dniError.textContent = "El DNI debe tener exactamente 8 dígitos numéricos.";
+    } else {
+        dniError.textContent = ""; // Limpiar error
+    }
+});
+
+// Evento para filtrar la entrada de teclas: solo números
+document.getElementById("dni").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[0-9]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+    }
+});
+
+//CODIGO
+document.getElementById("codigo").addEventListener("input", function () {
+    const codigo = this.value;
+    const codigoError = document.getElementById("codigo-error");
+    const regex = /^[0-9]{6}$/; // Solo números y exactamente 6 dígitos
+
+    if (codigo === "") {
+        codigoError.textContent = "El código es requerido.";
+    } else if (!regex.test(codigo)) {
+        codigoError.textContent = "El código debe ser de 6 dígitos numéricos.";
+    } else {
+        codigoError.textContent = ""; // Limpiar el mensaje de error
+    }
+});
+
+// Evento para filtrar la entrada de teclas: solo números
+document.getElementById("codigo").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[0-9]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+    }
+});
+*/
+
+//NOMBRE 
+/*
+document.getElementById("nombre").addEventListener("input", function () {
+    const nombre = this.value;
+    const nombreError = document.getElementById("nombre-error");
+    const regex = /^[a-zA-Z\s]+$/; // Solo letras y espacios permitidos
+
+    if (nombre === "") {
+        nombreError.textContent = "El nombre es requerido.";
+    } else if (!regex.test(nombre)) {
+        nombreError.textContent = "El nombre solo puede contener letras y espacios.";
+    } else {
+        nombreError.textContent = ""; // Limpiar el mensaje de error
+    }
+});
+
+// Evento para permitir solo letras y espacios
+document.getElementById("nombre").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[a-zA-Z\s]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+    }
+});
+ //APELLIDO PATERNO 
+
+// Validación para el apellido (solo letras permitidas)
+document.getElementById("apellido_pa").addEventListener("input", function () {
+    const apellido = this.value;
+    const apellidoError = document.getElementById("apellido-error");
+    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+
+    if (apellido === "") {
+        apellidoError.textContent = "El apellido es requerido.";
+    } else if (!regex.test(apellido)) {
+        apellidoError.textContent = "El apellido solo puede contener letras.";
+    } else {
+        apellidoError.textContent = ""; // Limpiar el mensaje de error
+    }
+});
+
+// Evento para permitir solo letras
+document.getElementById("apellido_pa").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+    }
+});
+
+ // APELLIDO MATERNO 
+
+
+ // Validación para el apellido (solo letras permitidas)
+document.getElementById("apellido_ma").addEventListener("input", function () {
+    const apellido = this.value;
+    const apellidoError = document.getElementById("apellido-error");
+    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+
+    if (apellido === "") {
+        apellidoError.textContent = "El apellido es requerido.";
+    } else if (!regex.test(apellido)) {
+        apellidoError.textContent = "El apellido solo puede contener letras.";
+    } else {
+        apellidoError.textContent = ""; // Limpiar el mensaje de error
+    }
+});
+
+// Evento para permitir solo letras
+document.getElementById("apellido_ma").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+    }
+});
+*/
+/*
+//TELEFONO
+document.getElementById("telefono").addEventListener("input", function () {
+    const telefono = this.value;
+    const telefonoError = document.getElementById("telefono-error");
+    const regex = /^[1-9][0-9]{8}$/; // Solo números, exactamente 9 dígitos, no puede empezar con 0
+
+    if (telefono === "") {
+        telefonoError.textContent = "El número de teléfono es requerido.";
+    } else if (!regex.test(telefono)) {
+        telefonoError.textContent = "El teléfono debe tener exactamente 9 dígitos.";
+    } else {
+        telefonoError.textContent = ""; // Limpiar el mensaje de error
+    }
+});
+
+// Evento para filtrar la entrada de teclas: solo números
+document.getElementById("telefono").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[0-9]$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+    }
+});
+*/
+/*
+//ISBN
+document.getElementById("isbn").addEventListener("input", function () {
+    const isbn = this.value;
+    const isbnError = document.getElementById("isbn-error");
+    const regex = /^[0-9]{3}-[0-9]{1}-[0-9]{2}-[0-9]{4}$/; // 13 dígitos numéricos
+
+    if (isbn === "") {
+        isbnError.textContent = "El ISBN es requerido.";
+    } else if (!regex.test(isbn)) {
+        isbnError.textContent = "El ISBN debe tener exactamente 13 dígitos.";
+    } else {
+        isbnError.textContent = ""; // Limpiar error
+    }
+});
+
+// Evento para filtrar la entrada de teclas: solo números
+document.getElementById("isbn").addEventListener("keypress", function (e) {
+    const key = e.key;
+    const regex = /^[0-9]{3}-[0-9]{1}-[0-9]{2}-[0-9]{4}$/;
+
+    if (!regex.test(key)) {
+        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+    }
+});
+*/

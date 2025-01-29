@@ -26,13 +26,19 @@ class Carrera extends Controller
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarEdi(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
+                <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarEdi(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-trash-o"></i>
+                </button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarEdi(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-success" type="button" title="Activar" onclick="btnReingresarEdi(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-reply-all"></i>
+                </button>
                 <div/>';
             }
         }

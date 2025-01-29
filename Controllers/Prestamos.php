@@ -26,13 +26,19 @@ class Prestamos extends Controller
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-secondary">Prestado</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEntregar(' . $data[$i]['id'] . ');"><i class="fa fa-hourglass-start"></i></button>
-                <a class="btn btn-danger" target="_blank" href="'.base_url.'Prestamos/ticked/'. $data[$i]['id'].'"><i class="fa fa-file-pdf-o"></i></a>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Entregar" onclick="btnEntregar(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-hourglass-start"></i>
+                </button>
+                <a class="btn btn-icon btn-sm btn btn-danger" target="_blank" title="Generar Ticket" href="'.base_url.'Prestamos/ticked/'. $data[$i]['id'].'">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-primary">Devuelto</span>';
                 $data[$i]['acciones'] = '<div>
-                <a class="btn btn-danger" target="_blank" href="'.base_url.'Prestamos/ticked/'. $data[$i]['id'].'"><i class="fa fa-file-pdf-o"></i></a>
+                <a class="btn btn-icon btn-sm btn btn-danger" target="_blank" title="Generar Ticket" href="'.base_url.'Prestamos/ticked/'. $data[$i]['id'].'">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a>
                 <div/>';
             }
         }
@@ -98,7 +104,7 @@ class Prestamos extends Controller
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
 
-        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 30, 30, 'PNG');
+        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
         $pdf->SetFont('Arial', '', 10);
@@ -117,17 +123,17 @@ class Prestamos extends Controller
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(196, 5, "Detalle de Prestamos", 1, 1, 'C', 1);
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->Cell(14, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
         $pdf->Cell(50, 5, utf8_decode('Estudiantes'), 1, 0, 'L');
-        $pdf->Cell(87, 5, 'Libros', 1, 0, 'L');
+        $pdf->Cell(89, 5, 'Libros', 1, 0, 'L');
         $pdf->Cell(30, 5, 'Fecha Prestamo', 1, 0, 'L');
         $pdf->Cell(15, 5, 'Cant.', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 10);
         $contador = 1;
         foreach ($prestamo as $row) {
-            $pdf->Cell(14, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
             $pdf->Cell(50, 5, $row['nombre'], 1, 0, 'L');
-            $pdf->Cell(87, 5, utf8_decode($row['titulo']), 1, 0, 'L');
+            $pdf->Cell(89, 5, utf8_decode($row['titulo']), 1, 0, 'L');
             $pdf->Cell(30, 5, $row['fecha_prestamo'], 1, 0, 'L');
             $pdf->Cell(15, 5, $row['cantidad'], 1, 1, 'L');
             $contador++;
@@ -188,5 +194,59 @@ class Prestamos extends Controller
         $pdf->Cell(72, 5, $prestamo['fecha_prestamo'], 0, 1, 'C');
         $pdf->Output("prestamos.pdf", "I");
     }
-    
+    public function pdf2()
+    {
+        $datos = $this->model->selectDatos();
+        $prestamo = $this->model->selectMayorPrestamo();
+        if (empty($prestamo)) {
+            header('Location: ' . base_url . 'Configuracion/vacio');
+        }
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Conteo de libros prestados");
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(196, 5, "Detalle de Prestamos", 1, 1, 'C', 1);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(19, 5, utf8_decode('Prestados'), 1, 0, 'L');
+        $pdf->Cell(60, 5, utf8_decode('Libro'), 1, 0, 'L');
+        $pdf->Cell(30, 5, 'ISBN', 1, 0, 'L');
+        $pdf->Cell(38, 5, 'Autor', 1, 0, 'L');
+        $pdf->Cell(25, 5, utf8_decode('Año'), 1, 0, 'L');
+        $pdf->Cell(12, 5, 'Cant.', 1, 1, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $contador = 1;
+        foreach ($prestamo as $row) {
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(19, 5, $row['total_prestamos'], 1, 0, 'L');
+            $pdf->Cell(60, 5, utf8_decode($row['libro']), 1, 0, 'L');
+            $pdf->Cell(30, 5, $row['isbn'], 1, 0, 'L');
+            $pdf->Cell(38, 5, utf8_decode($row['autor']), 1, 0, 'L');
+            $pdf->Cell(25, 5, $row['anio_edicion'], 1, 0, 'L');
+            $pdf->Cell(12, 5, $row['cantidad'], 1, 1, 'L');
+            $contador++;
+        }
+        $pdf->Output("prestamos.pdf", "I");
+    }
 }

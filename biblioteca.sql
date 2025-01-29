@@ -5,7 +5,9 @@
 -- Servidor: 127.0.0.1
 -- Tiempo de generación: 14-05-2021 a las 13:46:05
 -- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.9
+-- Versión de PHP: 7.4.9+
+
+-- RewriteBase /
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;

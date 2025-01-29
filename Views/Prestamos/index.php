@@ -40,44 +40,51 @@
                 <form id="frmPrestar" onsubmit="registroPrestamos(event)">
                     <div class="form-group">
                         <label id="cantidad" for="libro">Libro</label><br>
-                        <select id="libro" class="form-control libro" name="libro" onchange="verificarLibro()" required style="width: 100%;">
+                        <select id="libro" class="form-control libro" name="libro" onchange="verificarLibro()" required
+                            style="width: 100%;">
                         </select>
                         <strong id="msg_error"></strong>
                     </div>
                     <div class="form-group">
                         <label for="estudiante">Estudiante</label><br>
-                        <select name="estudiante" id="estudiante" class="form-control estudiante" required style="width: 100%;">
-                        <option value="">Seleccione un estudiante</option>
+                        <select name="estudiante" id="estudiante" class="form-control estudiante" required
+                            style="width: 100%;">
+                            <option value="">Seleccione un estudiante</option>
                         </select>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha_prestamo">Fecha de Prestamo</label>
-                                <input id="fecha_prestamo" name="fecha_prestamo" class="form-control" type="date" 
-                                value="<?php echo date('Y-m-d'); ?>" readonly>
+                                <input id="fecha_prestamo" name="fecha_prestamo" class="form-control" type="date"
+                                    value="<?php echo date('Y-m-d'); ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="fecha_devolucion">Fecha de Devolución</label>
-                            <input id="fecha_devolucion" name="fecha_devolucion" class="form-control" type="date" 
-                            value="<?php echo date('Y-m-d'); ?>" 
-                            min="<?php echo date('Y-m-d'); ?>" required>
+                            <div class="form-group">
+                                <label for="fecha_devolucion">Fecha de Devolución</label>
+                                <input id="fecha_devolucion" name="fecha_devolucion" class="form-control" type="date"
+                                    value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" required>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="observacion">Observación</label>
-                        <textarea id="observacion" class="form-control" placeholder="Observación" name="observacion" rows="3"></textarea>
-                    </div>
-                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-                    <button class="btn btn-primary" type="submit" id="btnAccion">
-                        <span class="material-icons">check</span>
-                    </button>
-                    <button class="btn btn-danger" type="button" data-dismiss="modal" id="btnCancelar">
-                        <span class="material-icons">close</span>
-                    </button>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="observacion">Observación</label>
+                                <textarea id="observacion" class="form-control" placeholder="Observación"
+                                    name="observacion" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group text-center">
+                                <button class="btn btn-primary" type="submit" id="btnAccion">
+                                    <i class="fa fa-check"></i>
+                                    Registrar</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Atras
+                                </button>
+                            </div>
+                        </div>
                 </form>
             </div>
         </div>

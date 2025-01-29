@@ -28,9 +28,15 @@ class Usuarios extends Controller{
                 if ($data[$i]['id'] != 1) {
                     $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                     $data[$i]['acciones'] = '<div>
-                    <button class="btn btn-dark" onclick="btnRolesUser(' . $data[$i]['id'] . ')"><i class="fa fa-key"></i></button>
-                    <button class="btn btn-primary" type="button" onclick="btnEditarUser(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                    <button class="btn btn-danger" type="button" onclick="btnEliminarUser(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-icon btn-sm btn btn-dark" title="Permisos" onclick="btnRolesUser(' . $data[$i]['id'] . ')">
+                        <i class="fa fa-key"></i>
+                    </button>
+                    <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarUser(' . $data[$i]['id'] . ');">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </button>
+                    <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarUser(' . $data[$i]['id'] . ');">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
                     <div/>';
                 }else{
                     $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
@@ -41,7 +47,9 @@ class Usuarios extends Controller{
             }else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarUser(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-success" type="button" title="Activar" onclick="btnReingresarUser(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-reply-all"></i>
+                </button>
                 <div/>';
             }
         }
@@ -172,7 +180,7 @@ class Usuarios extends Controller{
                 </div>';
         }
         echo '</div>
-        <button class="btn btn-primary mt-3 btn-block" type="button" onclick="registrarPermisos(event);">Actualizar</button>';
+        <button class="btn btn-primary mt-3 btn-block" type="button" onclick="registrarPermisos(event);">ActualizarRR</button>';
         die();
     }
     public function registrarPermisos()

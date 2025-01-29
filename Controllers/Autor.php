@@ -27,13 +27,19 @@ class Autor extends Controller
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarAutor(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarAutor(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarAutor(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
+                <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarAutor(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-trash-o"></i>
+                </button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarAutor(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-success" type="button" title="Activar" onclick="btnReingresarAutor(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-reply-all"></i>
+                </button>
                 <div/>';
             }
         }
@@ -108,11 +114,16 @@ class Autor extends Controller
     }
     public function eliminar($id)
     {
-        $data = $this->model->estadoAutor(0, $id);
-        if ($data == 1) {
-            $msg = array('msg' => 'Autor dado de baja', 'icono' => 'success');
+        $tienePrestamo = $this->model->verificarPrestamosPendientes($id);
+        if ($tienePrestamo['total'] > 0) {
+            $msg = array('msg' => 'Autor con libro activo', 'icono' => 'warning');
         } else {
-            $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            $data = $this->model->estadoAutor(0, $id);
+            if ($data == 1) {
+                $msg = array('msg' => 'Autor dado de baja', 'icono' => 'success');
+            } else {
+                $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            }
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();

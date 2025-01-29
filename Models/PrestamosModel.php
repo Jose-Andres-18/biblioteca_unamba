@@ -69,9 +69,26 @@ class PrestamosModel extends Query
         $res = $this->select($sql);
         return $res;
     }
+    //pdf1
     public function selectPrestamoDebe()
     {
-        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.estado = 1 ORDER BY e.nombre ASC";
+        $sql = "
+        select e.nombre, l.titulo, p.fecha_prestamo, p.cantidad from estudiante e inner join libro l inner join prestamo p on p.id_estudiante = e.id where p.id_libro = l.id and p.estado = 1 order by e.nombre ASC
+        ";
+        $res = $this->selectAll($sql);
+        return $res;
+    }
+    //pdf2
+    public function selectMayorPrestamo()
+    {
+        $sql = "
+        SELECT COUNT(p.id_libro) AS total_prestamos, l.titulo AS libro, l.isbn, a.autor, l.anio_edicion, l.cantidad
+        FROM prestamo p
+        INNER JOIN libro l ON p.id_libro = l.id
+        INNER JOIN autor a ON l.id_autor = a.id
+        GROUP BY l.titulo, a.autor
+        ORDER BY total_prestamos DESC;
+        ";
         $res = $this->selectAll($sql);
         return $res;
     }

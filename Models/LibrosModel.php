@@ -35,10 +35,10 @@ class LibrosModel extends Query
         $res = $this->select($sql);
         return $res;
     }
-    public function actualizarLibros($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $id)
+    public function actualizarLibros($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id)
     {
-        $query = "UPDATE libro SET titulo = ?, id_autor=?, id_editorial=?, id_materia=?, cantidad=?, num_pagina=?, anio_edicion=?, descripcion=?, imagen=? WHERE id = ?";
-        $datos = array($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $id);
+        $query = "UPDATE libro SET titulo = ?, id_autor=?, id_editorial=?, id_materia=?, cantidad=?, num_pagina=?, anio_edicion=?, descripcion=?, imagen=?, isbn=? WHERE id = ?";
+        $datos = array($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id);
         $data = $this->save($query, $datos);
         if ($data == 1) {
             $res = "modificado";
@@ -47,11 +47,24 @@ class LibrosModel extends Query
         }
         return $res;
     }
+    //Dar de baja temporal al libro
     public function estadoLibros($estado, $id)
     {
         $query = "UPDATE libro SET estado = ? WHERE id = ?";
         $datos = array($estado, $id);
         $data = $this->save($query, $datos);
+        return $data;
+    }
+    //Verificar si el libro tiene prestamos pendientes
+    public function verificarPrestamosPendientes($id)
+    {
+        $query = "SELECT COUNT(*) AS total
+            FROM prestamo
+            WHERE id_libro = ?
+            AND estado = 1
+            ";
+        $datos = array($id);
+        $data = $this->select($query, $datos);
         return $data;
     }
     public function buscarLibro($valor)

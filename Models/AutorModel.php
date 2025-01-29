@@ -54,6 +54,16 @@ class AutorModel extends Query
         $data = $this->save($query, $datos);
         return $data;
     }
+    public function verificarPrestamosPendientes($id)
+    {
+        $query = "SELECT COUNT(*) AS total
+            FROM libro
+            WHERE id_autor = ?
+            AND estado = 1";
+        $datos = array($id);
+        $data = $this->select($query, $datos);
+        return $data;
+    }
     public function verificarPermisos($id_user, $permiso)
     {
         $tiene = false;

@@ -26,13 +26,19 @@ class Estudiantes extends Controller
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarEst(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarEst(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarEst(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-pencil-square-o">
+                </i></button>
+                <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarEst(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-trash-o"></i>
+                </button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarEst(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-success" type="button" title="Activar" onclick="btnReingresarEst(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-reply-all"></i>
+                </button>
                 <div/>';
             }
         }
@@ -51,27 +57,6 @@ class Estudiantes extends Controller
         $direccion = strClean($_POST['direccion']);
         $telefono = strClean($_POST['telefono']);
         $id = strClean($_POST['id']);
-        
-        // Validar que el código sea numérico y tenga 6 dígitos
-        if (!preg_match('/^\d{6}$/', $codigo)) {
-            $msg = array('msg' => 'El código debe ser numérico y tener 6 dígitos', 'icono' => 'warning');
-            echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-            die();
-        }
-
-        // Validar que el DNI sea numérico y tenga 8 dígitos
-        if (!preg_match('/^\d{8}$/', $dni)) {
-            $msg = array('msg' => 'El DNI debe ser numérico y tener 8 dígitos', 'icono' => 'warning');
-            echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-            die();
-        }
-
-        // Validar que el número de celular sea numérico y tenga 9 dígitos
-        if (!preg_match('/^9\d{8}$/', $telefono)) {
-            $msg = array('msg' => 'El número de celular debe ser numérico y tener 9 dígitos', 'icono' => 'warning');
-            echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-            die();
-        }
         
         if (empty($codigo) || empty($dni) || empty($nombre) || empty($apellido_pa) || empty($apellido_ma) || empty($carrera)) {
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'warning');
@@ -105,11 +90,16 @@ class Estudiantes extends Controller
     }
     public function eliminar($id)
     {
-        $data = $this->model->estadoEstudiante(0, $id);
-        if ($data == 1) {
-            $msg = array('msg' => 'Estudiante dado de baja', 'icono' => 'success');
+        $tienePrestamo = $this->model->verificarPrestamosPendientes($id);
+        if ($tienePrestamo['total'] > 0) {
+            $msg = array('msg' => 'Estudiante con préstamo pendiente', 'icono' => 'warning');
         } else {
-            $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            $data = $this->model->estadoEstudiante(0, $id);
+            if ($data == 1) {
+                $msg = array('msg' => 'Estudiante dado de baja', 'icono' => 'success');
+            } else {
+                $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            }
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
@@ -139,7 +129,6 @@ class Estudiantes extends Controller
         if (isset($_GET['ca'])) {
             $valor = $_GET['ca'];
             $data = $this->model->buscarCarrera('free');
-            alert($data);
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
             die();
         }

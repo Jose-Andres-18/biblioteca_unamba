@@ -28,14 +28,22 @@ class Libros extends Controller
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $data[$i]['acciones'] = '<div class="d-flex">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-                <button class="btn btn-primary" type="button" onclick="btnEditarLibro(' . $data[$i]['id'] . ');"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btnEliminarLibro(' . $data[$i]['id'] . ');"><i class="fa fa-trash-o"></i></button>
-                <button class="btn btn-primary" type="button" onclick="btnEliminarLibro(' . $data[$i]['id'] . ');"><i class="fa fa-user-graduate"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarLibro(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Materia" onclick="btnRolesUser(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-user-graduate"></i>
+                </button>
+                <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarLibro(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-trash-o"></i>
+                </button>
                 <div/>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
                 $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button" onclick="btnReingresarLibro(' . $data[$i]['id'] . ');"><i class="fa fa-reply-all"></i></button>
+                <button class="btn btn-icon btn-sm btn btn-success" type="button" title="Activar" onclick="btnReingresarLibro(' . $data[$i]['id'] . ');">
+                    <i class="fa fa-reply-all"></i>
+                </button>
                 <div/>';
             }
         }
@@ -96,7 +104,7 @@ class Libros extends Controller
                         unlink("Assets/img/libros/" . $imgDelete['imagen']);
                     }
                 }
-                $data = $this->model->actualizarLibros($titulo, $autor, $editorial, $materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $id);
+                $data = $this->model->actualizarLibros($titulo, $autor, $editorial, $materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id);
                 if ($data == "modificado") {
                     if (!empty($name)) {
                         move_uploaded_file($tmpName, $destino);
@@ -118,11 +126,16 @@ class Libros extends Controller
     }
     public function eliminar($id)
     {
-        $data = $this->model->estadoLibros(0, $id);
-        if ($data == 1) {
-            $msg = array('msg' => 'Libro dado de baja', 'icono' => 'success');
+        $tienePrestamo = $this->model->verificarPrestamosPendientes($id);
+        if ($tienePrestamo['total'] > 0) {
+            $msg = array('msg' => 'Libro con préstamo pendiente', 'icono' => 'warning');
         } else {
-            $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            $data = $this->model->estadoLibros(0, $id);
+            if ($data == 1) {
+                $msg = array('msg' => 'Libro dado de baja', 'icono' => 'success');
+            } else {
+                $msg = array('msg' => 'Error al eliminar', 'icono' => 'error');
+            }
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();

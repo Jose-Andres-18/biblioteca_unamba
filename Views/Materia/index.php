@@ -4,7 +4,8 @@
         <h1><i class="fa fa-dashboard"></i> Materias</h1>
     </div>
 </div>
-<button class="btn btn-primary mb-2" type="button" onclick="frmMateria()"><i class="fa fa-plus"></i>Agregar Materia</button>
+<button class="btn btn-primary mb-2" type="button" onclick="frmMateria()"><i class="fa fa-plus"></i>Agregar
+    Materia</button>
 <div class="row">
     <div class="col-lg-12">
         <div class="tile">
@@ -27,7 +28,8 @@
         </div>
     </div>
 </div>
-<div id="nuevoMateria" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+<div id="nuevoMateria" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -37,23 +39,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmMateria">
+                <form id="frmMateria" onsubmit="registrarMateria(event)">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="materia">Nombre</label>
                                 <input type="hidden" id="id" name="id">
-                                <input id="materia" class="form-control" type="text" name="materia" required placeholder="Nombre de Materia">
+                                <input id="materia" class="form-control" type="text" name="materia" required
+                                    placeholder="Nombre de Materia">
                             </div>
                         </div>
-
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <button class="btn btn-primary" type="submit" onclick="registrarMateria(event)" id="btnAccion">Registrar</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">Atras</button>
+                            <div class="form-group text-center">
+                                <button class="btn btn-primary" type="submit" id="btnAccion">
+                                    <i class="fa fa-check"></i>
+                                    Registrar</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Atras
+                                </button>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>

@@ -54,6 +54,4 @@ class Query extends Conexion{
         return $res;
     }
 }
-
-
 ?>

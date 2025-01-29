@@ -4,7 +4,8 @@
         <h1><i class="fa fa-dashboard"></i> Autores</h1>
     </div>
 </div>
-<button class="btn btn-primary mb-2" type="button" onclick="frmAutor()"><i class="fa fa-plus fa-2x"></i> Agregar Autor</button>
+<button class="btn btn-primary mb-2" type="button" onclick="frmAutor()"><i class="fa fa-plus fa-2x"></i> Agregar
+    Autor</button>
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
@@ -44,7 +45,8 @@
                             <div class="form-group">
                                 <label for="autor">Nombre</label>
                                 <input type="hidden" id="id" name="id">
-                                <input id="autor" class="form-control" type="text" name="autor" required placeholder="Nombre de Autor" required>
+                                <input id="autor" class="form-control" type="text" name="autor" required
+                                    placeholder="Nombre de Autor" required>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -53,18 +55,25 @@
                                 <div class="card border-primary">
                                     <div class="card-body">
                                         <input type="hidden" id="foto_actual" name="foto_actual">
-                                        <label for="imagen" id="icon-image" class="btn btn-primary"><i class="fa fa-cloud-upload"></i></label>
+                                        <label for="imagen" id="icon-image" class="btn btn-primary"><i
+                                                class="fa fa-cloud-upload"></i></label>
                                         <span id="icon-cerrar"></span>
-                                        <input id="imagen" class="d-none" type="file" name="imagen" onchange="preview(event)">
+                                        <input id="imagen" class="d-none" type="file" name="imagen"
+                                            onchange="preview(event)">
                                         <img class="img-thumbnail" id="img-preview" width="150">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <button class="btn btn-primary" type="submit" id="btnAccion">Registrar</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">Atras</button>
+                            <div class="form-group text-center">
+                                <button class="btn btn-primary" type="submit" id="btnAccion">
+                                    <i class="fa fa-check"></i>
+                                    Registrar</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Atras
+                                </button>
                             </div>
                         </div>
                     </div>
