@@ -39,7 +39,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmEditorial">
+                <form id="frmEditorial" onsubmit="registrarEditorial(event)">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -47,12 +47,12 @@
                                 <input type="hidden" id="id" name="id">
                                 <input id="editorial" class="form-control" type="text" name="editorial" required
                                     placeholder="Nombre de Editorial">
+                                <span id="editorial-error" class="text-danger text-danger-tamaño"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group text-center">
                                 <button class="btn btn-primary" type="submit" id="btnAccion"
-                                    onclick="registrarEditorial(event)">
                                     <i class="fa fa-check"></i>
                                     Registrar</button>
                                 <button class="btn btn-danger" type="button" data-dismiss="modal">

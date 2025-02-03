@@ -31,7 +31,7 @@ class Libros extends Controller
                 <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Editar" onclick="btnEditarLibro(' . $data[$i]['id'] . ');">
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
-                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Materia" onclick="btnRolesUser(' . $data[$i]['id'] . ');">
+                <button class="btn btn-icon btn-sm btn btn-primary" type="button" title="Materia" onclick="btnRolesCarrera(' . $data[$i]['id'] . ');">
                     <i class="fa fa-user-graduate"></i>
                 </button>
                 <button class="btn btn-icon btn-sm btn btn-danger" type="button" title="Desactivar" onclick="btnEliminarLibro(' . $data[$i]['id'] . ');">
@@ -56,7 +56,7 @@ class Libros extends Controller
         $autor = strClean($_POST['autor']);
         $editorial = strClean($_POST['editorial']);
         $materia = strClean($_POST['materia']);
-        $isbn = strClean($_POST['isbn']);
+        $isbn = preg_replace('/-/', '', strClean($_POST['isbn'])); 
         $cantidad = strClean($_POST['cantidad']);
         $num_pagina = strClean($_POST['num_pagina']);
         $anio_edicion = strClean($_POST['anio_edicion']);
@@ -172,5 +172,49 @@ class Libros extends Controller
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
             die();
         }
+    }
+    public function carreras($id)
+    {
+        $data = $this->model->getCarreras();
+        $asignados = $this->model->getDetalleCarreras($id);
+        $datos = array();
+        foreach ($asignados as $asignado) {
+            $datos[$asignado['id_carrera']] = true;
+        }
+        echo '<div class="row">
+        <input type="hidden" name="id_libro" value="' . $id . '">';
+        foreach ($data as $row) {
+            echo '<div class="col-md-4 text-center mb-4">
+                    <hr>
+                    <label for="" class="font-weight-bold text-capitalize">' . $row['carrera'] . '</label>
+                    <div class="center">
+                        <input type="checkbox" name="carreras[]" value="' . $row['id'] . '" ';
+            if (isset($datos[$row['id']])) {
+                echo "checked";
+            }
+            echo '>
+                        <span class="span">On</span>
+                        <span class="span">Off</span>
+                    </div>
+                </div>';
+        }
+        echo '</div>
+            <button class="btn btn-primary mt-3 btn-block" type="button" onclick="registrarCarreras(event);">
+                <i class="fa fa-pencil-square-o"></i> Actualizar
+            </button>';
+        die();
+    }
+    public function registrarCarreras()
+    {
+        $id = strClean($_POST['id_libro']);
+        $carreras = $_POST['carreras'];
+        $this->model->deleteCarreras($id);
+        if ($carreras != "") {
+            foreach ($carreras as $carrera) {
+                $this->model->actualizarCarreras($id, $carrera);
+            }
+        }
+        echo json_encode("ok");
+        die();
     }
 }

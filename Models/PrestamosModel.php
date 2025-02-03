@@ -7,7 +7,12 @@ class PrestamosModel extends Query
     }
     public function getPrestamos()
     {
-        $sql = "SELECT e.id, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id";
+        $sql = "SELECT e.id, e.codigo, CONCAT(e.nombre, ' ', e.apellido_pa, ' ', e.apellido_ma) AS nombre, c.carrera, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.observacion, p.estado 
+            FROM estudiante e 
+            INNER JOIN libro l 
+            INNER JOIN prestamo p ON p.id_estudiante = e.id
+            inner join carrera c on e.id_carrera = c.id
+            WHERE p.id_libro = l.id";
         $res = $this->selectAll($sql);
         return $res;
     }
@@ -69,7 +74,6 @@ class PrestamosModel extends Query
         $res = $this->select($sql);
         return $res;
     }
-    //pdf1
     public function selectPrestamoDebe()
     {
         $sql = "
@@ -78,16 +82,25 @@ class PrestamosModel extends Query
         $res = $this->selectAll($sql);
         return $res;
     }
-    //pdf2
     public function selectMayorPrestamo()
     {
-        $sql = "
-        SELECT COUNT(p.id_libro) AS total_prestamos, l.titulo AS libro, l.isbn, a.autor, l.anio_edicion, l.cantidad
-        FROM prestamo p
-        INNER JOIN libro l ON p.id_libro = l.id
-        INNER JOIN autor a ON l.id_autor = a.id
-        GROUP BY l.titulo, a.autor
-        ORDER BY total_prestamos DESC;
+        $sql = "SELECT COUNT(p.id_libro) AS total_prestamos, l.titulo AS libro, l.isbn, a.autor, l.anio_edicion, l.cantidad
+            FROM prestamo p
+            INNER JOIN libro l ON p.id_libro = l.id
+            INNER JOIN autor a ON l.id_autor = a.id
+            GROUP BY l.titulo, a.autor
+            ORDER BY total_prestamos DESC;
+        ";
+        $res = $this->selectAll($sql);
+        return $res;
+    }
+    public function selectStockCritico()
+    {
+        $sql = "SELECT l.titulo, l.cantidad, e.editorial AS editorial, l.anio_edicion, l.isbn
+            FROM libro l
+            JOIN editorial e ON l.id_editorial = e.id
+            WHERE l.cantidad <= 5 AND l.estado = 1
+            ORDER BY l.cantidad ASC;
         ";
         $res = $this->selectAll($sql);
         return $res;

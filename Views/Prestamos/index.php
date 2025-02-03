@@ -13,7 +13,9 @@
                     <tr>
                         <th>Id</th>
                         <th>Libro</th>
+                        <th>Código</th>
                         <th>Estudiante</th>
+                        <th>Carrera</th>
                         <th>Fecha Prestamo</th>
                         <th>Fecha Devolución</th>
                         <th>Observación</th>

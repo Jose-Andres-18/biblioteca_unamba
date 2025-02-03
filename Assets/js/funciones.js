@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function(){
         document.querySelector('#frmCambiarPass').reset();
         $('#cambiarClave').modal('show');
     });
+    
     const language = {
         "decimal": "",
         "emptyTable": "No hay información",
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 text: '<button class="btn btn-info"><i class="fa fa-print"></i></button>'
             }
         ]
-    
+
     //TABLA USUARIOS
     tblUsuarios = $('#tblUsuarios').DataTable({
         ajax: {
@@ -168,27 +169,46 @@ document.addEventListener("DOMContentLoaded", function(){
     //Fin de la tabla editorial
     //TABLA LIBROS
     tblLibros = $('#tblLibros').DataTable({
-        ajax: {
-            url: base_url + "Libros/listar",
-            dataSrc: ''
+    ajax: {
+        url: base_url + "Libros/listar",
+        dataSrc: ''
+    },
+    columns: [
+        {'data': 'id'},
+        {'data': 'titulo'},
+        {'data': 'autor'},
+        {'data': 'editorial'},
+        {'data': 'materia'},
+        {'data': 'cantidad'},
+        {'data': 'isbn'},
+        {'data': 'foto'},
+        {'data': 'estado'},
+        {'data': 'acciones'}
+    ],
+    language,
+    dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    buttons,
+    columnDefs: [
+        {
+            targets: 6, // Índice de la columna 'isbn'
+            render: function (data) {
+                if (data && data.length === 13) {
+                    return data.replace(/^(\d{3})(\d{2})(\d{4})(\d{3})(\d{1})$/, '$1-$2-$3-$4-$5');
+                }
+                return data;
+            }
         },
-        columns: [{'data': 'id'},
-            {'data': 'titulo'},
-            {'data': 'autor'},            
-            {'data': 'editorial'},
-	        {'data': 'materia'},
-            {'data': 'foto'},
-            {'data': 'isbn'},
-            {'data': 'descripcion'},
-            {'data': 'estado'},
-            {'data': 'acciones'}
-        ],
-        language,
-        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons
-    });
+        {
+            targets: [5], // Índice de la columna 'cantidad'
+            width: '40px', // Tamaño de la columna
+            className: 'text-center' // Centra el texto
+        }
+    ],
+    order: [[0, 'asc']] // Ordena por la columna 'id' (cambiar a otro índice si es necesario)
+});
+
     //fin Libros
     //TABLA PRESTAR
     tblPrestar = $('#tblPrestar').DataTable({
@@ -198,7 +218,14 @@ document.addEventListener("DOMContentLoaded", function(){
         },
         columns: [{'data': 'id'},
             {'data': 'titulo'},
-            {'data': 'nombre'},
+            {'data': 'codigo'},
+            {
+                'data': null, 
+                'render': function(data, type, row) {
+                    return row.nombre;
+                }
+            },
+            {'data': 'carrera'},
             {'data': 'fecha_prestamo'},
             {'data': 'fecha_devolucion'},
             {'data': 'observacion'},
@@ -526,6 +553,403 @@ document.addEventListener("DOMContentLoaded", function(){
             console.error("Error al limpiar Select2 en Libro: ", error);
         }
     }*/
+    /*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
+    //DNI
+    const dniInput = document.getElementById("dni");
+    if (dniInput) {
+        dniInput.addEventListener("input", function () {
+            const dni = this.value;
+            const dniError = document.getElementById("dni-error");
+            const regex = /^[0-9]{8}$/; // 8 dígitos numéricos
+            const regex2 = /^(?!00000000)\d{8}$/;
+
+            if (dni === "") {
+                dniError.textContent = "El DNI es requerido.";
+            } else if (!regex.test(dni)) {
+                dniError.textContent = "El DNI debe tener exactamente 8 dígitos numéricos.";
+            } else if (!regex2.test(dni)) {
+                dniError.textContent = "El DNI no es válido.";
+            } else {
+                dniError.textContent = ""; // Limpiar error
+            }
+        });
+
+        // Evento para filtrar la entrada de teclas: solo números
+        dniInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[0-9]$/;
+
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+            }
+        });
+    }
+
+    //CODIGO
+    const codigoInput = document.getElementById("codigo");
+    if (codigoInput) {
+        codigoInput.addEventListener("input", function () {
+            const codigo = this.value;
+            const codigoError = document.getElementById("codigo-error");
+            const regex = /^[0-9]{6}$/; // Solo números y exactamente 6 dígitos
+    
+            if (codigo === "") {
+                codigoError.textContent = "El código es requerido.";
+            } else if (!regex.test(codigo)) {
+                codigoError.textContent = "El código debe ser de 6 dígitos numéricos.";
+            } else {
+                codigoError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para filtrar la entrada de teclas: solo números
+        codigoInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[0-9]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+            }
+        });
+    }
+
+    //NOMBRE 
+    const nombreInput = document.getElementById("nombre");
+    if(nombreInput){
+        nombreInput.addEventListener("input", function () {
+            const nombre = this.value;
+            const nombreError = document.getElementById("nombre-error");
+            const regex = /^[a-zA-Z\s]+$/; // Solo letras y espacios permitidos
+    
+            if (nombre === "") {
+                nombreError.textContent = "El nombre es requerido.";
+            } else if (!regex.test(nombre)) {
+                nombreError.textContent = "El nombre solo puede contener letras y espacios.";
+            } else {
+                nombreError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        nombreInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+    
+    //APELLIDO PATERNO 
+    // Validación para el apellido (solo letras permitidas)
+    const apellidopaInput = document.getElementById("apellido_pa");
+    if(apellidopaInput){
+        apellidopaInput.addEventListener("input", function () {
+            const apellido = this.value;
+            const apellidoError = document.getElementById("apellido-error");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+    
+            if (apellido === "") {
+                apellidoError.textContent = "El apellido es requerido.";
+            } else if (!regex.test(apellido)) {
+                apellidoError.textContent = "El apellido solo puede contener letras.";
+            } else {
+                apellidoError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras
+        apellidopaInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+            } 
+        });
+    }
+
+    // APELLIDO MATERNO 
+    // Validación para el apellido (solo letras permitidas)
+    const apellidomaInput = document.getElementById("apellido_ma");
+    if(apellidomaInput){
+        apellidomaInput.addEventListener("input", function () {
+            const apellido = this.value;
+            const apellidoError = document.getElementById("apellido-error2");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+    
+            if (apellido === "") {
+                apellidoError.textContent = "El apellido es requerido.";
+            } else if (!regex.test(apellido)) {
+                apellidoError.textContent = "El apellido solo puede contener letras.";
+            } else {
+                apellidoError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras
+        apellidomaInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+            }
+        });
+    }
+
+    //TELEFONO
+    const telefonoInput = document.getElementById("telefono")
+        if (telefonoInput) {
+            telefonoInput.addEventListener("input", function () {
+                const telefono = this.value;
+                const telefonoError = document.getElementById("telefono-error");
+                const regex = /^[1-9][0-9]{8}$/; // Solo números, exactamente 9 dígitos, no puede empezar con 0
+
+                if (telefono === "") {
+                    telefonoError.textContent = "El número de teléfono es requerido.";
+                }  else if (!regex.test(telefono)) {
+                    telefonoError.textContent = "El teléfono debe tener exactamente 9 dígitos.";
+                } else {
+                    telefonoError.textContent = ""; // Limpiar el mensaje de error
+                }
+            });
+            // Evento para filtrar la entrada de teclas: solo números
+            telefonoInput.addEventListener("keypress", function (e) {
+                const key = e.key;
+                const regex = /^[0-9]$/;
+
+                if (!regex.test(key)) {
+                    e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                }
+            });
+        }
+
+    //TITULO
+    const tituloInput = document.getElementById("titulo");
+    if(tituloInput){
+        tituloInput.addEventListener("input", function () {
+            const titulo = this.value;
+            const tituloError = document.getElementById("titulo-error");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+    
+            if (titulo === "") {
+                tituloError.textContent = "El título del libro es requerido.";
+            } else if (!regex.test(titulo)) {
+                tituloError.textContent = "El titulo del libro solo puede contener letras y espacios.";
+            } else {
+                tituloError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        tituloInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+
+    //ISBN
+    const isbnInput = document.getElementById('isbn');
+    if(isbnInput){
+        isbnInput.addEventListener('input', function (event) {
+            const input = event.target;
+            
+            // Eliminar caracteres no numéricos
+            let value = input.value.replace(/\D/g, '');
+            
+            // Aplicar formato: 123-12-1234-123-1
+            if (value.length > 3) {
+                value = value.replace(/^(\d{3})(\d{1,2})/, '$1-$2');
+            }
+            if (value.length > 6) {
+                value = value.replace(/^(\d{3})-(\d{2})(\d{1,4})/, '$1-$2-$3');
+            }
+            if (value.length > 10) {
+                value = value.replace(/^(\d{3})-(\d{2})-(\d{4})(\d{1,3})/, '$1-$2-$3-$4');
+            }
+            if (value.length > 13) {
+                value = value.replace(/^(\d{3})-(\d{2})-(\d{4})-(\d{3})(\d{1})/, '$1-$2-$3-$4-$5');
+            }
+            
+            input.value = value;
+
+            const isbn = this.value;
+            const isbnError = document.getElementById("isbn-error");
+            const regex = /^[0-9]{3}-[0-9]{2}-[0-9]{4}-[0-9]{3}-[0-9]{1}$/;
+    
+            if (isbn === "") {
+                isbnError.textContent = "El isbn del libro es requerido.";
+            } else if (!regex.test(isbn)) {
+                isbnError.textContent = "El isbn del libro debe ser de 13 dígitos.";
+            } else {
+                isbnError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        isbnInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[0-9]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+
+    //CANTIDAD
+    const cantidadInput = document.getElementById("cantidad");
+    if (cantidadInput) {
+        cantidadInput.addEventListener("input", function () {
+            const cantidad = this.value;
+            const cantidadError = document.getElementById("cantidad-error");
+    
+            if (cantidad === "") {
+                cantidadError.textContent = "La cantidad o Stock del libro es requerido.";
+            } else {
+                cantidadError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para filtrar la entrada de teclas: solo números
+        cantidadInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[0-9]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+            }
+        });
+    }
+
+    //CANTIDAD DE PAGINAS
+    const num_paginaInput = document.getElementById("num_pagina");
+    if (num_paginaInput) {
+        num_paginaInput.addEventListener("input", function () {
+            const num_pagina = this.value;
+            const num_paginaError = document.getElementById("num_pagina-error");
+    
+            if (num_pagina === "") {
+                num_paginaError.textContent = "El número de páginas del libro es requerido.";
+            } else {
+                num_paginaError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para filtrar la entrada de teclas: solo números
+        num_paginaInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[0-9]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+            }
+        });
+    }
+
+    //AUTOR 
+    const autorInput = document.getElementById("autor");
+    if(autorInput){
+        autorInput.addEventListener("input", function () {
+            const autor = this.value;
+            const autorError = document.getElementById("autor-error");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+    
+            if (autor === "") {
+                autorError.textContent = "El nombre del autor es requerido.";
+            } else if (!regex.test(autor)) {
+                autorError.textContent = "El nombre del autor solo puede contener letras y espacios.";
+            } else {
+                autorError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        autorInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+    //EDITORIAL
+    const editorialInput = document.getElementById("editorial");
+    if(editorialInput){
+        editorialInput.addEventListener("input", function () {
+            const editorial = this.value;
+            const editorialError = document.getElementById("editorial-error");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+    
+            if (editorial === "") {
+                editorialError.textContent = "El nombre de la editorial es requerido.";
+            } else if (!regex.test(editorial)) {
+                editorialError.textContent = "El nombre del editorial solo puede contener letras y espacios.";
+            } else {
+                editorialError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        editorialInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+    //MATERIA
+    const materiaInput = document.getElementById("materia");
+    if(materiaInput){
+        materiaInput.addEventListener("input", function () {
+            const materia = this.value;
+            const materiaError = document.getElementById("materia-error");
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+    
+            if (materia === "") {
+                materiaError.textContent = "El nombre de la materia es requerido.";
+            } else if (!regex.test(materia)) {
+                materiaError.textContent = "El nombre del materia solo puede contener letras y espacios.";
+            } else {
+                materiaError.textContent = ""; // Limpiar el mensaje de error
+            }
+        });
+        // Evento para permitir solo letras y espacios
+        materiaInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+    
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+    /*const isbnInput = document.getElementById("isbn");
+    if (isbnInput) {
+        isbnInput.addEventListener("input", function () {
+            const isbn = this.value;
+            const isbnError = document.getElementById("isbn-error");
+            const regex = /^...$/;
+
+            if (isbn === "") {
+                isbnError.textContent = "El ISBN es requerido.";
+            } else if (!regex.test(isbn)) {
+                isbnError.textContent = "El ISBN debe tener exactamente 13 dígitos.";
+            } else {
+                isbnError.textContent = "";
+            }
+        });
+        // Evento para filtrar la entrada de teclas: solo números
+        isbnInput.addEventListener("keypress", function (e) {
+            const key = e.key;
+            
+            if (!regex.test(key)) {
+                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                const regex = /^...$/;
+            }
+        });
+    }*/
+    /*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
+
 })
 //FUNCION USUARIO
 function frmUsuario() {
@@ -1359,8 +1783,8 @@ function btnRolesCarrera(id) {
     http.send();
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("frmPermisos").innerHTML = this.responseText;
-            $("#permisos").modal("show");
+            document.getElementById("frmCarreras").innerHTML = this.responseText;
+            $("#carreras").modal("show");
         }
     }
 }
@@ -1380,6 +1804,26 @@ function registrarPermisos(e) {
 				alertas('Permisos Asignado', 'success');
 			}else{
 				alertas('Error al asignar los permisos', 'error');
+			}
+        }
+    }
+}
+//FUNCION REGISTRAR CARRERAS
+function registrarCarreras(e) {
+    e.preventDefault();
+    const http = new XMLHttpRequest();
+    const frm = document.getElementById("frmCarreras");
+    const url = base_url + "Libros/registrarCarreras";
+    http.open("POST", url);
+    http.send(new FormData(frm));
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            $("#carreras").modal("hide");
+            if(res == 'ok'){
+				alertas('Carreras Asignado', 'success');
+			}else{
+				alertas('Error al asignar las carreras', 'error');
 			}
         }
     }
@@ -1476,188 +1920,3 @@ function verificarLibro(e) {
 }
 
 
-
-/*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
-//DNI
-/*document.getElementById("dni").addEventListener("input", function () {
-    const dni = this.value;
-    const dniError = document.getElementById("dni-error");
-    const regex = /^[0-9]{8}$/; // 8 dígitos numéricos
-
-    if (dni === "") {
-        dniError.textContent = "El DNI es requerido.";
-    } else if (!regex.test(dni)) {
-        dniError.textContent = "El DNI debe tener exactamente 8 dígitos numéricos.";
-    } else {
-        dniError.textContent = ""; // Limpiar error
-    }
-});
-
-// Evento para filtrar la entrada de teclas: solo números
-document.getElementById("dni").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[0-9]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
-    }
-});
-
-//CODIGO
-document.getElementById("codigo").addEventListener("input", function () {
-    const codigo = this.value;
-    const codigoError = document.getElementById("codigo-error");
-    const regex = /^[0-9]{6}$/; // Solo números y exactamente 6 dígitos
-
-    if (codigo === "") {
-        codigoError.textContent = "El código es requerido.";
-    } else if (!regex.test(codigo)) {
-        codigoError.textContent = "El código debe ser de 6 dígitos numéricos.";
-    } else {
-        codigoError.textContent = ""; // Limpiar el mensaje de error
-    }
-});
-
-// Evento para filtrar la entrada de teclas: solo números
-document.getElementById("codigo").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[0-9]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
-    }
-});
-*/
-
-//NOMBRE 
-/*
-document.getElementById("nombre").addEventListener("input", function () {
-    const nombre = this.value;
-    const nombreError = document.getElementById("nombre-error");
-    const regex = /^[a-zA-Z\s]+$/; // Solo letras y espacios permitidos
-
-    if (nombre === "") {
-        nombreError.textContent = "El nombre es requerido.";
-    } else if (!regex.test(nombre)) {
-        nombreError.textContent = "El nombre solo puede contener letras y espacios.";
-    } else {
-        nombreError.textContent = ""; // Limpiar el mensaje de error
-    }
-});
-
-// Evento para permitir solo letras y espacios
-document.getElementById("nombre").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[a-zA-Z\s]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
-    }
-});
- //APELLIDO PATERNO 
-
-// Validación para el apellido (solo letras permitidas)
-document.getElementById("apellido_pa").addEventListener("input", function () {
-    const apellido = this.value;
-    const apellidoError = document.getElementById("apellido-error");
-    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
-
-    if (apellido === "") {
-        apellidoError.textContent = "El apellido es requerido.";
-    } else if (!regex.test(apellido)) {
-        apellidoError.textContent = "El apellido solo puede contener letras.";
-    } else {
-        apellidoError.textContent = ""; // Limpiar el mensaje de error
-    }
-});
-
-// Evento para permitir solo letras
-document.getElementById("apellido_pa").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
-    }
-});
-
- // APELLIDO MATERNO 
-
-
- // Validación para el apellido (solo letras permitidas)
-document.getElementById("apellido_ma").addEventListener("input", function () {
-    const apellido = this.value;
-    const apellidoError = document.getElementById("apellido-error");
-    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
-
-    if (apellido === "") {
-        apellidoError.textContent = "El apellido es requerido.";
-    } else if (!regex.test(apellido)) {
-        apellidoError.textContent = "El apellido solo puede contener letras.";
-    } else {
-        apellidoError.textContent = ""; // Limpiar el mensaje de error
-    }
-});
-
-// Evento para permitir solo letras
-document.getElementById("apellido_ma").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
-    }
-});
-*/
-/*
-//TELEFONO
-document.getElementById("telefono").addEventListener("input", function () {
-    const telefono = this.value;
-    const telefonoError = document.getElementById("telefono-error");
-    const regex = /^[1-9][0-9]{8}$/; // Solo números, exactamente 9 dígitos, no puede empezar con 0
-
-    if (telefono === "") {
-        telefonoError.textContent = "El número de teléfono es requerido.";
-    } else if (!regex.test(telefono)) {
-        telefonoError.textContent = "El teléfono debe tener exactamente 9 dígitos.";
-    } else {
-        telefonoError.textContent = ""; // Limpiar el mensaje de error
-    }
-});
-
-// Evento para filtrar la entrada de teclas: solo números
-document.getElementById("telefono").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[0-9]$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
-    }
-});
-*/
-/*
-//ISBN
-document.getElementById("isbn").addEventListener("input", function () {
-    const isbn = this.value;
-    const isbnError = document.getElementById("isbn-error");
-    const regex = /^[0-9]{3}-[0-9]{1}-[0-9]{2}-[0-9]{4}$/; // 13 dígitos numéricos
-
-    if (isbn === "") {
-        isbnError.textContent = "El ISBN es requerido.";
-    } else if (!regex.test(isbn)) {
-        isbnError.textContent = "El ISBN debe tener exactamente 13 dígitos.";
-    } else {
-        isbnError.textContent = ""; // Limpiar error
-    }
-});
-
-// Evento para filtrar la entrada de teclas: solo números
-document.getElementById("isbn").addEventListener("keypress", function (e) {
-    const key = e.key;
-    const regex = /^[0-9]{3}-[0-9]{1}-[0-9]{2}-[0-9]{4}$/;
-
-    if (!regex.test(key)) {
-        e.preventDefault(); // Bloquear cualquier tecla que no sea un número
-    }
-});
-*/

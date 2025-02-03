@@ -83,4 +83,35 @@ class LibrosModel extends Query
         }
         return $tiene;
     }
+    public function getCarreras()
+    {
+        $sql = "SELECT * FROM carrera";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+    public function getDetalleCarreras($id)
+    {
+        $sql = "SELECT * FROM detalle_libroCarrera WHERE id_libro = $id";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+    public function deleteCarreras($id)
+    {
+        $sql = "DELETE FROM detalle_libroCarrera WHERE id_libro = ?";
+        $datos = array($id);
+        $data = $this->save($sql, $datos);
+        return $data;
+    }
+    public function actualizarCarreras($libro, $carrera)
+    {
+        $sql = "INSERT INTO detalle_libroCarrera(id_libro, id_carrera) VALUES (?,?)";
+            $datos = array($libro, $carrera);
+            $data = $this->save($sql, $datos);
+            if ($data == 1) {
+                $res = "ok";
+            } else {
+                $res = "error";
+            }
+        return $res;
+    }
 }

@@ -180,7 +180,10 @@ class Usuarios extends Controller{
                 </div>';
         }
         echo '</div>
-        <button class="btn btn-primary mt-3 btn-block" type="button" onclick="registrarPermisos(event);">ActualizarRR</button>';
+        <button class="btn btn-primary mt-3 btn-block" type="button" onclick="registrarPermisos(event);">
+            <i class="fa fa-pencil-square-o"></i>
+            Actualizar
+        </button>';
         die();
     }
     public function registrarPermisos()

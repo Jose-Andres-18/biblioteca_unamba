@@ -13,7 +13,7 @@ class EstudiantesModel extends Query{
     }
     public function insertarEstudiante($codigo, $dni, $nombre,$apellido_pa,$apellido_ma,$genero,$id_carrera, $direccion, $telefono)
     {
-        $verificar = "SELECT * FROM estudiante WHERE codigo = '$codigo' OR dni = '$dni'";
+        $verificar = "SELECT * FROM estudiante WHERE codigo = '$codigo' OR dni = '$dni' OR telefono = '$telefono'";
         $existe = $this->select($verificar);
         if (empty($existe)) {
             $query = "INSERT INTO estudiante(codigo,dni,nombre,apellido_pa, apellido_ma, genero, id_carrera,direccion,telefono) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -67,7 +67,10 @@ class EstudiantesModel extends Query{
     }
     public function buscarEstudiante($valor)
     {
-        $sql = "SELECT id, codigo, nombre AS text FROM estudiante WHERE codigo LIKE '%" . $valor . "%' AND estado = 1 OR nombre LIKE '%" . $valor . "%'  AND estado = 1 LIMIT 10";
+        $sql = "SELECT id, codigo, CONCAT(nombre, ' ', apellido_pa, ' ', apellido_ma) AS text FROM estudiante 
+            WHERE (codigo LIKE '%" . $valor . "%' OR nombre LIKE '%" . $valor . "%' OR dni LIKE '%" . $valor . "%' OR apellido_pa LIKE '%" . $valor . "%' OR apellido_ma LIKE '%" . $valor . "%') 
+            AND estado = 1 
+            LIMIT 10;";
         $data = $this->selectAll($sql);
         return $data;
     }

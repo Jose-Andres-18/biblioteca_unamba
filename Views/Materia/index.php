@@ -47,6 +47,7 @@
                                 <input type="hidden" id="id" name="id">
                                 <input id="materia" class="form-control" type="text" name="materia" required
                                     placeholder="Nombre de Materia">
+                                <span id="materia-error" class="text-danger text-danger-tamaño"></span>
                             </div>
                         </div>
                         <div class="col-md-12">

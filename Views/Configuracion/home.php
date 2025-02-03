@@ -68,6 +68,13 @@
             </a>
         </div>
     </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="widget-small secondary coloured-icon"><i class="icon fa fa-book fa-3x"></i>
+            <a class="info" href="<?php echo base_url; ?>Views/Catalogo/index.php">
+                <h6>CATALOGO</h6>
+            </a>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12">

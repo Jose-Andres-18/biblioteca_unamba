@@ -47,6 +47,7 @@
                                 <input type="hidden" id="id" name="id">
                                 <input id="autor" class="form-control" type="text" name="autor" required
                                     placeholder="Nombre de Autor" required>
+                                <span id="autor-error" class="text-danger text-danger-tamaño"></span>
                             </div>
                         </div>
                         <div class="col-md-12">

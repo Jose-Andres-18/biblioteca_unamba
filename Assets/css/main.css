@@ -10467,6 +10467,10 @@ a.text-warning:hover, a.text-warning:focus {
   color: #dc3545 !important;
 }
 
+.text-danger-tamaño {
+  font-size: 12px;
+}
+
 a.text-danger:hover, a.text-danger:focus {
   color: #a71d2a !important;
 }

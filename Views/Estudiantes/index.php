@@ -65,6 +65,7 @@
                             <label for="nombre">Nombre</label>
                             <input id="nombre" class="form-control" type="text" name="nombre" required
                                 placeholder="Nombre completo">
+                            <span id="nombre-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -72,6 +73,7 @@
                             <label for="apellido_pa">Apellido Paterno</label>
                             <input id="apellido_pa" class="form-control" type="text" name="apellido_pa" required
                                 placeholder="Apellido completo">
+                            <span id="apellido-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -79,6 +81,7 @@
                             <label for="apellido_ma">Apellido Materno</label>
                             <input id="apellido_ma" class="form-control" type="text" name="apellido_ma" required
                                 placeholder="Apellido completo">
+                            <span id="apellido-error2" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-6">

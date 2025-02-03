@@ -18,9 +18,9 @@
                                 <th>Autor</th>
                                 <th>Editorial</th>
                                 <th>Materia</th>
-                                <th>Foto</th>
+                                <th>Cant.</th>
                                 <th>ISBN</th>
-                                <th>Descripción</th>
+                                <th>Foto</th>
                                 <th>Estado</th>
                                 <th></th>
                             </tr>
@@ -51,6 +51,7 @@
                             <input type="hidden" id="id" name="id">
                             <input id="titulo" class="form-control" type="text" name="titulo"
                                 placeholder="Título del libro" required>
+                            <span id="titulo-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -82,6 +83,7 @@
                             <label for="isbn">ISBN</label><br>
                             <input id="isbn" class="form-control" type="text" name="isbn" placeholder="ISBN del libro"
                                 required>
+                            <span id="isbn-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -90,6 +92,7 @@
                             <input id="cantidad" class="form-control" type="number" name="cantidad" inputmode="numeric"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Cantidad" min="1"
                                 step="1" required>
+                            <span id="cantidad-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -99,6 +102,7 @@
                                 placeholder="Cantidad Página" required min="1" [(ngModel)]="numPagina"
                                 #num_pagina="ngModel" inputmode="numeric"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            <span id="num_pagina-error" class="text-danger text-danger-tamaño"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -124,12 +128,8 @@
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
-                            <div class="form-group">
-                                <label for="descripcion">Descripción</label>
-                                <textarea id="descripcion" class="form-control" name="descripcion" rows="7"
-                                    placeholder="Descripción">
-                                </textarea>
-                            </div>
+                            <label for="descripcion">Descripción</label>
+                            <textarea id="descripcion" class="form-control" name="descripcion" rows="7" placeholder="Descripción"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -143,6 +143,22 @@
                             </button>
                         </div>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="carreras" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">Asignar Carreras</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCarreras">
                 </form>
             </div>
         </div>

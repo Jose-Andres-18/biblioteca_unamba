@@ -249,4 +249,57 @@ class Prestamos extends Controller
         }
         $pdf->Output("prestamos.pdf", "I");
     }
+    public function pdf3()
+    {
+        $datos = $this->model->selectDatos();
+        $prestamo = $this->model->selectStockCritico();
+        if (empty($prestamo)) {
+            header('Location: ' . base_url . 'Configuracion/vacio');
+        }
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Libros con Stock crítico");
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(196, 5, "Detalle de Libros", 1, 1, 'C', 1);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(41, 5, utf8_decode('Libro'), 1, 0, 'L');
+        $pdf->Cell(20, 5, utf8_decode('Cantidad'), 1, 0, 'L');
+        $pdf->Cell(60, 5, 'Editorial', 1, 0, 'L');
+        $pdf->Cell(34, 5, 'Anio de edicion', 1, 0, 'L');
+        $pdf->Cell(29, 5, utf8_decode('ISBN'), 1, 1, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $contador = 1;
+        foreach ($prestamo as $row) {
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(41, 5, $row['titulo'], 1, 0, 'L');
+            $pdf->Cell(20, 5, utf8_decode($row['cantidad']), 1, 0, 'L');
+            $pdf->Cell(60, 5, $row['editorial'], 1, 0, 'L');
+            $pdf->Cell(34, 5, utf8_decode($row['anio_edicion']), 1, 0, 'L');
+            $pdf->Cell(29, 5, $row['isbn'], 1, 1, 'L');
+            $contador++;
+        }
+        $pdf->Output("prestamos.pdf", "I");
+    }
 }
