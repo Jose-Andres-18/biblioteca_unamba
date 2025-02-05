@@ -40,7 +40,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="frmUsuario">
+                <form method="post" id="frmUsuario" onsubmit="registrarUser(event)">
                     <div class="form-group">
                         <label for="usuario">Usuario</label>
                         <input type="hidden" id="id" name="id">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input id="nombre" class="form-control" type="text" name="nombre"
+                        <input id="nombre_usuario" class="form-control" type="text" name="nombre"
                             placeholder="Nombre del usuario">
                     </div>
                     <div class="row" id="claves">

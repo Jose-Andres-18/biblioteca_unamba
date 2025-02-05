@@ -963,7 +963,7 @@ function frmUsuario() {
 function registrarUser(e) {
     e.preventDefault();
     const usuario = document.getElementById("usuario");
-    const nombre = document.getElementById("nombre");
+    const nombre = document.getElementById("nombre_usuario");
     const clave = document.getElementById("clave");
     const confirmar = document.getElementById("confirmar");
     if (usuario.value == "" || nombre.value == "") {
@@ -977,10 +977,12 @@ function registrarUser(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevo_usuario").modal("hide");
-                frm.reset();
                 tblUsuarios.ajax.reload();
                 alertas(res.msg, res.icono);
+                if(res.icon == 'success'){
+                    $("#nuevo_usuario").modal("hide");
+                    frm.reset();
+                }
             }
         }
     }
@@ -998,7 +1000,7 @@ function btnEditarUser(id) {
             const res = JSON.parse(this.responseText);
             document.getElementById("id").value = res.id;
             document.getElementById("usuario").value = res.usuario;
-            document.getElementById("nombre").value = res.nombre;
+            document.getElementById("nombre_usuario").value = res.nombre;
             document.getElementById("claves").classList.add("d-none");
             $("#nuevo_usuario").modal("show");
         }
@@ -1091,10 +1093,12 @@ function registrarEstudiante(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevoEstudiante").modal("hide");
-                frm.reset();
                 tblEst.ajax.reload();
                 alertas(res.msg, res.icono);
+                if(res.icono == 'success'){
+                    $("#nuevoEstudiante").modal("hide");
+                    frm.reset();
+                }
             }
         }
     }
@@ -1232,10 +1236,12 @@ function registrarMateria(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevoMateria").modal("hide");
-                frm.reset();
                 tblMateria.ajax.reload();
                 alertas(res.msg, res.icono);
+                if(res.icon == 'success'){
+                    $("#nuevoMateria").modal("hide");
+                    frm.reset();
+                }
             }
         }
     }
@@ -1336,10 +1342,12 @@ function registrarAutor(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevoAutor").modal("hide");
-                frm.reset();
                 tblAutor.ajax.reload();
                 alertas(res.msg, res.icono);
+                if(res.icon == 'success'){
+                    $("#nuevoAutor").modal("hide");
+                    frm.reset();
+                }
             }
         }
     }
@@ -1445,9 +1453,11 @@ function registrarEditorial(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevoEditorial").modal("hide");
                 tblEditorial.ajax.reload();
                 alertas(res.msg, res.icono);
+                if(res.icon == 'success'){
+                    $("#nuevoEditorial").modal("hide");
+                }
             }
         }
     }
@@ -1556,10 +1566,12 @@ function registrarLibro(e) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
-                $("#nuevoLibro").modal("hide");
                 tblLibros.ajax.reload();
-                frm.reset();
                 alertas(res.msg, res.icono);
+                if(res.icon == 'success'){
+                    $("#nuevoLibro").modal("hide");
+                    frm.reset();
+                }
             }
         }
     }

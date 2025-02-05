@@ -91,20 +91,20 @@ class LibrosModel extends Query
     }
     public function getDetalleCarreras($id)
     {
-        $sql = "SELECT * FROM detalle_libroCarrera WHERE id_libro = $id";
+        $sql = "SELECT * FROM detalle_librocarrera WHERE id_libro = $id";
         $data = $this->selectAll($sql);
         return $data;
     }
     public function deleteCarreras($id)
     {
-        $sql = "DELETE FROM detalle_libroCarrera WHERE id_libro = ?";
+        $sql = "DELETE FROM detalle_librocarrera WHERE id_libro = ?";
         $datos = array($id);
         $data = $this->save($sql, $datos);
         return $data;
     }
     public function actualizarCarreras($libro, $carrera)
     {
-        $sql = "INSERT INTO detalle_libroCarrera(id_libro, id_carrera) VALUES (?,?)";
+        $sql = "INSERT INTO detalle_librocarrera(id_libro, id_carrera) VALUES (?,?)";
             $datos = array($libro, $carrera);
             $data = $this->save($sql, $datos);
             if ($data == 1) {
