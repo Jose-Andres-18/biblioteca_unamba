@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap');
+
 
 
 * {
@@ -9,27 +11,34 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    
     background-color: #141461;
     color: #f5eeee;
     line-height: 1.6;
+    font-family: 'Roboto', sans-serif;
 }
-table{
-    justify-self: center;
-}
+
+
 h1{
     font-size: 100px;
     color: #0e0977;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Montserrat', sans-serif;
 }
-h3{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
+
 h2{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+h3{
+    font-family: 'Montserrat', sans-serif;
+}
+
+h2{
+    font-family: 'Montserrat', sans-serif;
     color: #FFFFFF;
     font-size: 35px;
     margin-bottom: 45px;
+    
 }
 
 a {
@@ -43,32 +52,19 @@ a {
     margin: auto;
 }
 
-/* Header */
-.header {
-    background-image: url('images/a1.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 50px 20px;
-}
+/*Header*/
 
 .header h1 {
     font-size: 5rem;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     background-color:rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
+    
 }
 
 .header p.subtitle {
     font-size: 1.5rem;
     font-weight: 300;
 }
-p{
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-}
-
 
 nav ul {
     display: flex;
@@ -92,40 +88,12 @@ nav ul li a:hover {
     color: #1a3e5f;
 }
 
-/* Sidebar */
-.sidebar {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-    background-color: #112e84;
-    color: white;
-}
-
-.sidebar a {
-    display: block;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: white;
-}
-
-.sidebar img {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.sidebar img:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
 
 /* Books Section */
 #booksSection {
     margin: 40px auto;
     text-align: center;
+    display: none;
 }
 
 #booksSection h2 {
@@ -181,38 +149,27 @@ nav ul li a:hover {
     color: #555;
 }
 
-/* Footer */
-footer {
-    background-color: #1a3e5f;
-    color: white;
-    text-align: center;
-    padding: 20px 0;
-}
 
-footer p {
-    margin-bottom: 10px;
-}
+    
+    .footer-bg {
+        background-color: #0f3554; /* Color de fondo */
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
 
-footer nav ul {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
+    .footer-info {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        max-width: 1500px;
+        margin: 0 auto;
+    }
 
-footer nav ul li {
-    text-align: center;
-}
-
-footer nav ul li a {
-    color: white;
-    font-weight: 500;
-}
-
-footer nav ul li a:hover {
-    text-decoration: underline;
-}
+    .footer-info div {
+        flex: 1;
+        padding: 10px;
+    }
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -222,129 +179,10 @@ footer nav ul li a:hover {
 
     .sidebar {
         flex-direction: column;
+        
     }
 
     #searchInput {
         width: 90%;
     }
 }
-.footer-info {
-    display: flex; /* Usa flexbox */
-    flex-direction: row; /* Organiza en una fila */
-    justify-content: space-around; /* Espacio uniforme entre los elementos */
-    align-items: flex-start; /* Alinea los elementos al inicio verticalmente */
-    gap: 20px; /* Espaciado opcional entre elementos */
-}
-
-.footer-info div {
-    text-align: center; /* Opcional: centra el texto dentro de cada bloque */
-    width: 30%; /* Ajusta el ancho de cada bloque según sea necesario */
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    list-style: none;
-}
-
-
-img {
-    max-width: 100%;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-
-
-h3 {
-    font-size: 20px;
-    color: #1f11b4;
-    margin-bottom: 20px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-
-.btn-9 {
-    padding: 5px 25px;
-    background-color: #2a83ba;
-    margin-right: 0;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-}
-
-@media (max-width: 991px) {
-    .product-content {
-        grid-template-columns: repeat(1, 1fr);
-        gap: 30px;
-    }
-
-    .product-1 img {
-        width: 100%;
-    }
-}
-
-  .product-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Se ajusta según el tamaño de pantalla */
-    gap: 20px; /* Espaciado entre los libros */
-    padding: 20px;
-  }
-  
-  .product-item {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Evita que el contenido se salga */
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .product-item:hover {
-    transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
-}
-.product-image img {
-    width: 100%; /* La imagen ocupa todo el ancho disponible */
-    height: 200px; /* Altura fija para mantener uniformidad */
-    object-fit: cover; /* Ajusta la imagen sin deformarla */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-  .product-info {
-    padding: 15px;
-  }
-  
-  .product-info h3 {
-    color: #001F5B;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .product-info p {
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 10px;
-  }
-  
-  .btn-more {
-    display: inline-block;
-    background: #007bff;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .btn-more:hover {
-    background: #0056b3;
-  }

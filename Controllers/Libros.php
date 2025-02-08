@@ -72,12 +72,12 @@ class Libros extends Controller
         } else {
             if (!empty($name)) {
                 $extension = pathinfo($name, PATHINFO_EXTENSION);
-                $formatos_permitidos =  array('png', 'jpeg', 'jpg');
+                $formatos_permitidos =  array('png', 'jpeg', 'jpg', 'webp');
                 $extension = pathinfo($name, PATHINFO_EXTENSION);
                 if (!in_array($extension, $formatos_permitidos)) {
                     $msg = array('msg' => 'Archivo no permitido', 'icono' => 'warning');
                 } else {
-                    $imgNombre = $fecha . ".jpg";
+                    $imgNombre = $fecha . ".webp";
                     $destino = "Assets/img/libros/" . $imgNombre;
                 }
             } else if (!empty($_POST['foto_actual']) && empty($name)) {

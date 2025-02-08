@@ -113,28 +113,22 @@
                             <i class="icon fa fa-file-pdf-o"></i> Libros Prestados
                         </a>
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf2">
-                            <i class="icon fa fa-file-pdf-o"></i> Libros más Prestados
+                            <i class="icon fa fa-file-pdf-o"></i> Conteo de libros más prestados
                         </a>
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf3">
                             <i class="icon fa fa-file-pdf-o"></i> Libros con stock criticos
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf4">
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/LibroPorPeriodo">
                             <i class="icon fa fa-file-pdf-o"></i> Libros más consultados por periodo
                         </a>
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf5">
                             <i class="icon fa fa-file-pdf-o"></i> Estudiantes con más prestamos
                         </a>
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf6">
-                            <i class="icon fa fa-file-pdf-o"></i> Materia más solicitados
+                            <i class="icon fa fa-file-pdf-o"></i> Materia con mayor demanda de prestamos
                         </a>
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf7">
-                            <i class="icon fa fa-file-pdf-o"></i> Carrera Profesional más solicitada
-                        </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf8">
-                            <i class="icon fa fa-file-pdf-o"></i> Tiempo promedio de devolución
-                        </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf8">
-                            <i class="icon fa fa-file-pdf-o"></i> Cantidad de libros prestado por usuario
+                            <i class="icon fa fa-file-pdf-o"></i> Carrera con mayor demanda de prestamos
                         </a>
                     </li>
                 </ul>

@@ -44,12 +44,15 @@
                     <div class="form-group">
                         <label for="usuario">Usuario</label>
                         <input type="hidden" id="id" name="id">
-                        <input id="usuario" class="form-control" type="text" name="usuario" placeholder="Usuario">
+                        <input id="usuario" class="form-control" type="text" name="usuario" 
+                            placeholder="Usuario">
+                        <span id="usuario-error" class="text-danger text-danger-tamaño"></span>
                     </div>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
                         <input id="nombre_usuario" class="form-control" type="text" name="nombre"
                             placeholder="Nombre del usuario">
+                        <span id="nombre_usuario-error" class="text-danger text-danger-tamaño"></span>
                     </div>
                     <div class="row" id="claves">
                         <div class="col-md-6">
@@ -57,6 +60,7 @@
                                 <label for="clave">Contraseña</label>
                                 <input id="clave" class="form-control" type="password" name="clave"
                                     placeholder="Contraseña">
+                                <span id="clave-error" class="text-danger text-danger-tamaño"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -64,6 +68,7 @@
                                 <label for="confirmar">Confirmar Contraseña</label>
                                 <input id="confirmar" class="form-control" type="password" name="confirmar"
                                     placeholder="Confirmar contraseña">
+                                <span id="confirmar-error" class="text-danger text-danger-tamaño"></span>
                             </div>
                         </div>
                     </div>

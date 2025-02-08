@@ -302,4 +302,7 @@ class Prestamos extends Controller
         }
         $pdf->Output("prestamos.pdf", "I");
     }
+    public function LibroPorPeriodo(){
+        $this->views->getView($this, "index");
+    }
 }

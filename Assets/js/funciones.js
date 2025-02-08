@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
             "previous": "Anterior"
         }
     }
-    const  buttons = [{
+    const buttons = [{
                 //Botón para Excel
                 extend: 'excel',
                 footer: true,
@@ -728,23 +728,11 @@ document.addEventListener("DOMContentLoaded", function(){
         tituloInput.addEventListener("input", function () {
             const titulo = this.value;
             const tituloError = document.getElementById("titulo-error");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
     
             if (titulo === "") {
                 tituloError.textContent = "El título del libro es requerido.";
-            } else if (!regex.test(titulo)) {
-                tituloError.textContent = "El titulo del libro solo puede contener letras y espacios.";
             } else {
                 tituloError.textContent = ""; // Limpiar el mensaje de error
-            }
-        });
-        // Evento para permitir solo letras y espacios
-        tituloInput.addEventListener("keypress", function (e) {
-            const key = e.key;
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
-    
-            if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
             }
         });
     }
@@ -920,6 +908,65 @@ document.addEventListener("DOMContentLoaded", function(){
     
             if (!regex.test(key)) {
                 e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+            }
+        });
+    }
+    //USUARIO
+    const usuarioInput = document.getElementById("usuario");
+    if(usuarioInput){
+        usuarioInput.addEventListener("input", function () {
+            const usuario = this.value;
+            const usuarioError = document.getElementById("usuario-error");
+    
+            if (usuario === "") {
+                usuarioError.textContent = "El usuario es requerido.";
+            } else {
+                usuarioError.textContent = "";
+            }
+        });
+    }
+    //NOMBRE DE USUARIOS
+    const nombre_usuarioInput = document.getElementById("nombre_usuario");
+    if(nombre_usuarioInput){
+        nombre_usuarioInput.addEventListener("input", function () {
+            const nombre_usuario = this.value;
+            const nombre_usuarioError = document.getElementById("nombre_usuario-error");
+    
+            if (nombre_usuario === "") {
+                nombre_usuarioError.textContent = "El nombre del usuario es requerido.";
+            } else {
+                nombre_usuarioError.textContent = "";
+            }
+        });
+    }
+    //CLAVE O CONTRASEÑA
+    const claveInput = document.getElementById("clave");
+    if(claveInput){
+        claveInput.addEventListener("input", function () {
+            const clave = this.value;
+            const claveError = document.getElementById("clave-error");
+    
+            if (clave === "") {
+                claveError.textContent = "La contraseña es requerida.";
+            } else {
+                claveError.textContent = "";
+            }
+        });
+    }
+    //CONFIRMAR CONTRASEÑA
+    const confirmarInput = document.getElementById("confirmar");
+    if(confirmarInput){
+        confirmarInput.addEventListener("input", function () {
+            const confirmar = this.value;
+            const confirmarError = document.getElementById("confirmar-error");
+            const clave = claveInput.value;
+    
+            if (confirmar === "") {
+                confirmarError.textContent = "Confirmar contraseña es requerido.";
+            } else if (confirmar !== clave) {
+                confirmarError.textContent = "Las contraseñas no coincie.";
+            } else {
+                confirmarError.textContent = "";
             }
         });
     }
@@ -1667,7 +1714,7 @@ function btnReingresarLibro(id) {
 function preview(e) {
     var input = document.getElementById('imagen');
     var filePath = input.value;
-    var extension = /(\.png|\.jpeg|\.jpg)$/i;
+    var extension = /(\.png|\.jpeg|\.jpg|\.webp)$/i;
     if (!extension.exec(filePath)) {
         alertas('Seleccione un archivo valido', 'warning');
         deleteImg();
