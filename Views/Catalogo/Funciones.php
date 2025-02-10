@@ -42,7 +42,7 @@ $query1 = "SELECT
             A.autor, 
             E.editorial, 
             L.isbn, 
-            L.descripcion,  -- 👈 Aquí faltaba la coma
+            L.descripcion, 
             COUNT(P.id_libro) AS total_prestamos
         FROM libro L
         INNER JOIN autor A ON L.id_autor = A.id

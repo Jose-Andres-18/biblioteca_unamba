@@ -48,7 +48,7 @@ include 'Funciones.php';
                             <div class="libro-card">
                                 <img src="' . base_url . 'Assets/img/libros/' . $libro['imagen'] . '" 
                                     alt="Portada del libro" class="img-thumbnail">
-                                <h3>' . htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') . '</h3>
+                                <h3>' . htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8') . '</h3>
                                 <p><strong>Autor:</strong> ' . htmlspecialchars($libro['autor'], ENT_QUOTES, 'UTF-8') . '</p>
                                 <button class="btn-mas" data-libro=\'' . json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT) . '\'>
                                     Más...
@@ -83,7 +83,7 @@ include 'Funciones.php';
                                     <div class="libro-card">
                                         <img src="<?php echo base_url . 'Assets/img/libros/' . $libro['imagen']; ?>" 
                                             alt="Portada del libro" class="img-thumbnail">
-                                        <h3><?php echo htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                                        <h3><?php echo htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8'); ?></h3>
                                         <button class="btn-mas" data-libro='<?php echo json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT); ?>'>
                                             Más...
                                         </button>
@@ -121,7 +121,7 @@ include 'Funciones.php';
                             <div class="libro-card">
                                 <img src="<?php echo base_url . 'Assets/img/libros/' . $libro['imagen']; ?>" 
                                     alt="Portada del libro" class="img-thumbnail">
-                                <h3><?php echo htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                                <h3><?php echo htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8'); ?></h3>
                                 <button class="btn-mas" data-libro='<?php echo json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT); ?>'>
                                     Más...
                                 </button>
