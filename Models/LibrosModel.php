@@ -37,14 +37,19 @@ class LibrosModel extends Query
     }
     public function actualizarLibros($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id)
     {
-        $query = "UPDATE libro SET titulo = ?, id_autor=?, id_editorial=?, id_materia=?, cantidad=?, num_pagina=?, anio_edicion=?, descripcion=?, imagen=?, isbn=? WHERE id = ?";
-        $datos = array($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id);
-        $data = $this->save($query, $datos);
-        if ($data == 1) {
-            $res = "modificado";
+        $verificar = "SELECT * FROM libro WHERE (titulo = ? OR isbn = ?) AND id != ?";
+        $datosVerificacion = array($titulo, $isbn, $id);
+        $existe = $this->select($verificar, $datosVerificacion);
+
+        if (empty($existe)) {
+            $query = "UPDATE libro SET titulo = ?, id_autor = ?, id_editorial = ?, id_materia = ?, cantidad = ?, num_pagina = ?, anio_edicion = ?, descripcion = ?, imagen = ?, isbn = ? WHERE id = ?";
+            $datos = array($titulo, $id_autor, $id_editorial, $id_materia, $cantidad, $num_pagina, $anio_edicion, $descripcion, $imgNombre, $isbn, $id);
+            $data = $this->save($query, $datos);
+            $res = $data == 1 ? "modificado" : "error";
         } else {
-            $res = "error";
+            $res = "existe";
         }
+
         return $res;
     }
     //Dar de baja temporal al libro

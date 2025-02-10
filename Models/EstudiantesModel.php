@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 0);
+error_reporting(0);
 class EstudiantesModel extends Query{
     public function __construct()
     {
@@ -35,16 +37,21 @@ class EstudiantesModel extends Query{
         $res = $this->select($sql);
         return $res;
     }
-    public function actualizarEstudiante($codigo, $dni, $nombre,$apellido_pa, $apellido_ma, $genero, $id_carrera, $direccion, $telefono, $id)
+    public function actualizarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $id_carrera, $direccion, $telefono, $id)
     {
-        $query = "UPDATE estudiante SET codigo = ?, dni = ?, nombre = ?, apellido_pa = ?, apellido_ma = ?, genero = ?, id_carrera = ?, direccion = ?, telefono = ?  WHERE id = ?";
-        $datos = array($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $id_carrera, $direccion, $telefono, $id);
-        $data = $this->save($query, $datos);
-        if ($data == 1) {
-            $res = "modificado";
+        $verificar = "SELECT * FROM estudiante WHERE (codigo = ? OR dni = ? OR telefono = ?) AND id != ?";
+        $datosVerificacion = array($codigo, $dni, $telefono, $id);
+        $existe = $this->select($verificar, $datosVerificacion);
+
+        if (empty($existe)) {
+            $query = "UPDATE estudiante SET codigo = ?, dni = ?, nombre = ?, apellido_pa = ?, apellido_ma = ?, genero = ?, id_carrera = ?, direccion = ?, telefono = ? WHERE id = ?";
+            $datos = array($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $id_carrera, $direccion, $telefono, $id);
+            $data = $this->save($query, $datos);
+            $res = $data == 1 ? "modificado" : "error";
         } else {
-            $res = "error";
+            $res = "existe";
         }
+        
         return $res;
     }
     public function estadoEstudiante($estado, $id)

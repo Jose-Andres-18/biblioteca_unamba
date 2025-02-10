@@ -18,7 +18,7 @@
                                 <th>Autor</th>
                                 <th>Editorial</th>
                                 <th>Materia</th>
-                                <th>Cant.</th>
+                                <th>Disponibilidad</th>
                                 <th>ISBN</th>
                                 <th>Foto</th>
                                 <th>Estado</th>
@@ -137,7 +137,7 @@
                             <button class="btn btn-primary" type="submit" id="btnAccion">
                                 <i class="fa fa-check"></i>
                                 Registrar</button>
-                            <button class="btn btn-danger" type="button" data-dismiss="modal">
+                            <button class="btn btn-danger" type="button" data-dismiss="modal" onclick="limpiarCamposLibro()">
                                 <i class="fa fa-arrow-left"></i>
                                 Atras
                             </button>

@@ -194,7 +194,7 @@ class Prestamos extends Controller
         $pdf->Cell(72, 5, $prestamo['fecha_prestamo'], 0, 1, 'C');
         $pdf->Output("prestamos.pdf", "I");
     }
-    public function pdf2()
+    public function LibrosMasPrestado()
     {
         $datos = $this->model->selectDatos();
         $prestamo = $this->model->selectMayorPrestamo();
@@ -249,7 +249,7 @@ class Prestamos extends Controller
         }
         $pdf->Output("prestamos.pdf", "I");
     }
-    public function pdf3()
+    public function LibrosStockCritico()
     {
         $datos = $this->model->selectDatos();
         $prestamo = $this->model->selectStockCritico();
@@ -283,26 +283,244 @@ class Prestamos extends Controller
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(196, 5, "Detalle de Libros", 1, 1, 'C', 1);
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(12, 5, 'N°', 1, 0, 'L');
         $pdf->Cell(41, 5, utf8_decode('Libro'), 1, 0, 'L');
-        $pdf->Cell(20, 5, utf8_decode('Cantidad'), 1, 0, 'L');
-        $pdf->Cell(60, 5, 'Editorial', 1, 0, 'L');
+        $pdf->Cell(20, 5, 'Cantidad', 1, 0, 'L');
+        $pdf->Cell(60, 5, utf8_decode('Editorial'), 1, 0, 'L');
         $pdf->Cell(34, 5, 'Anio de edicion', 1, 0, 'L');
-        $pdf->Cell(29, 5, utf8_decode('ISBN'), 1, 1, 'L');
+        $pdf->Cell(29, 5, 'ISBN', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 10);
         $contador = 1;
         foreach ($prestamo as $row) {
             $pdf->Cell(12, 5, $contador, 1, 0, 'L');
-            $pdf->Cell(41, 5, $row['titulo'], 1, 0, 'L');
-            $pdf->Cell(20, 5, utf8_decode($row['cantidad']), 1, 0, 'L');
-            $pdf->Cell(60, 5, $row['editorial'], 1, 0, 'L');
-            $pdf->Cell(34, 5, utf8_decode($row['anio_edicion']), 1, 0, 'L');
+            $pdf->Cell(41, 5, utf8_decode($row['titulo']), 1, 0, 'L');
+            $pdf->Cell(20, 5, $row['cantidad'], 1, 0, 'L');
+            $pdf->Cell(60, 5, utf8_decode($row['editorial']), 1, 0, 'L');
+            $pdf->Cell(34, 5, $row['anio_edicion'], 1, 0, 'L');
             $pdf->Cell(29, 5, $row['isbn'], 1, 1, 'L');
             $contador++;
         }
         $pdf->Output("prestamos.pdf", "I");
     }
-    public function LibroPorPeriodo(){
-        $this->views->getView($this, "index");
+    public function LibrosPorPeriodo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
+            $fechaInicio = $_REQUEST['FechaInicio'] ?? null;
+            $fechaFin = $_REQUEST['FechaFin'] ?? null;
+
+            if ($fechaInicio && $fechaFin) {
+                $datos = $this->model->selectDatos();
+                $prestamo = $this->model->selectPrestamosPorPeriodo($fechaInicio, $fechaFin);
+
+                if (empty($prestamo)) {
+                    header('Location: ' . base_url . 'Configuracion/vacio');
+                }
+                require_once 'Libraries/pdf/fpdf.php';
+                $pdf = new FPDF('P', 'mm', 'letter');
+                $pdf->AddPage();
+                $pdf->SetMargins(10, 10, 10);
+                $pdf->SetTitle("Libros consultados por periodo");
+                $pdf->SetFont('Arial', 'B', 12);
+                $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+                $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+                $pdf->Ln();
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->SetFillColor(0, 0, 0);
+                $pdf->SetTextColor(255, 255, 255);
+                $pdf->Cell(196, 5, utf8_decode(sprintf("Detalle de Libros del [%s] al [%s]", $fechaInicio, $fechaFin)), 1, 1, 'C', 1);
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+                $pdf->Cell(29, 5, 'ISBN', 1, 0, 'L');
+                $pdf->Cell(85, 5, utf8_decode('Libro'), 1, 0, 'L');
+                $pdf->Cell(35, 5, utf8_decode('Fecha Préstamo'), 1, 0, 'L');
+                $pdf->Cell(35, 5, utf8_decode('Fecha Devolución'), 1, 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $contador = 1;
+                foreach ($prestamo as $row) {
+                    $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+                    $pdf->Cell(29, 5, $row['isbn'], 1, 0, 'L');
+                    $pdf->Cell(85, 5, utf8_decode($row['titulo']), 1, 0, 'L');
+                    $pdf->Cell(35, 5, utf8_decode($row['fecha_prestamo']), 1, 0, 'L');
+                    $pdf->Cell(35, 5, utf8_decode($row['fecha_devolucion']), 1, 1, 'L');
+                    $contador++;
+                }
+                $pdf->Output("prestamos.pdf", "I");
+            } else {
+                echo json_encode(["msg" => "Fechas no proporcionadas", "icono" => "error"]);
+            }
+        } else {
+            http_response_code(405);
+        }
+    }
+    public function EstudianteMayorDemanda()
+    {
+        $datos = $this->model->selectDatos();
+        $prestamos = $this->model->selectEstudianteMasPrestamo();
+
+        if (empty($prestamos)) {
+            header('Location: ' . base_url . 'Configuracion/vacio');
+            return;
+        }
+
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Estudiantes con Mas Prestamos");
+
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Conteo de libros prestados");
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+        // Información del encabezado
+        $pdf->Image(base_url . "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+        
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(196, 5, "Estudiantes con Mas Prestamos", 1, 1, 'C', 1);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(20, 5, utf8_decode('Código'), 1, 0, 'L');
+        $pdf->Cell(50, 5, utf8_decode('Nombre'), 1, 0, 'L');
+        $pdf->Cell(100, 5, 'Carrera', 1, 0, 'L');
+        $pdf->Cell(14, 5, 'Total', 1, 1, 'L');
+
+        $pdf->SetFont('Arial', '', 10);
+        $contador = 1;
+        
+        foreach ($prestamos as $row) {
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(20, 5, utf8_decode($row['codigo']), 1, 0, 'L');
+            $pdf->Cell(50, 5, utf8_decode($row['nombre']), 1, 0, 'L');
+            $pdf->Cell(100, 5, utf8_decode($row['carrera']), 1, 0, 'L');
+            $pdf->Cell(14, 5, $row['total_prestamos'], 1, 1, 'L');
+            $contador++;
+        }
+        $pdf->Output("prestamos.pdf", "I");
+    }
+    public function MateriaMayorDemanda()
+    {
+        $datos = $this->model->selectDatos();
+        $prestamo = $this->model->selectMayorMateria();
+        if (empty($prestamo)) {
+            header('Location: ' . base_url . 'Configuracion/vacio');
+        }
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Conteo de libros prestados");
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(196, 5, "Detalle de Prestamos", 1, 1, 'C', 1);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(50, 5, utf8_decode('Cant. de libros prestados'), 1, 0, 'L');
+        $pdf->Cell(134, 5, utf8_decode('Materia'), 1, 1, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $contador = 1;
+        foreach ($prestamo as $row) {
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(50, 5, $row['total_prestamos'], 1, 0, 'L');
+            $pdf->Cell(134, 5, utf8_decode($row['materia']), 1, 1, 'L');
+            $contador++;
+        }
+        $pdf->Output("prestamos.pdf", "I");
+    }
+    public function CarreraMayorDemanda()
+    {
+        $datos = $this->model->selectDatos();
+        $prestamo = $this->model->selectMayorCarrera();
+        if (empty($prestamo)) {
+            header('Location: ' . base_url . 'Configuracion/vacio');
+        }
+        require_once 'Libraries/pdf/fpdf.php';
+        $pdf = new FPDF('P', 'mm', 'letter');
+        $pdf->AddPage();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetTitle("Conteo de libros prestados");
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
+
+        $pdf->Image(base_url. "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, $datos['telefono'], 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, utf8_decode("Dirección: "), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(20, 5, utf8_decode($datos['direccion']), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(20, 5, "Correo: ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(12, 5, utf8_decode($datos['correo']), 0, 1, 'L');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(196, 5, "Detalle de Prestamos", 1, 1, 'C', 1);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(50, 5, utf8_decode('Cant. de libros prestados'), 1, 0, 'L');
+        $pdf->Cell(134, 5, utf8_decode('Carrera Profesional'), 1, 1, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $contador = 1;
+        foreach ($prestamo as $row) {
+            $pdf->Cell(12, 5, $contador, 1, 0, 'L');
+            $pdf->Cell(50, 5, $row['total_prestamos'], 1, 0, 'L');
+            $pdf->Cell(134, 5, utf8_decode($row['carrera']), 1, 1, 'L');
+            $contador++;
+        }
+        $pdf->Output("prestamos.pdf", "I");
     }
 }

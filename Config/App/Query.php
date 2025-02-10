@@ -32,10 +32,11 @@ class Query extends Conexion{
         $this->sql = $sql;
         $this->datos = $datos;
         $insert = $this->con->prepare($this->sql);
-        $data = $insert->execute($this->datos);
-        if ($data) {
-            $res = 1;
-        }else{
+        try {
+            $data = $insert->execute($this->datos);
+            $res = $data ? 1 : 0;
+        } catch (PDOException $e) {
+            echo "Error en la ejecución: " . $e->getMessage();
             $res = 0;
         }
         return $res;
@@ -52,6 +53,13 @@ class Query extends Conexion{
             $res = 0;
         }
         return $res;
+    }
+    public function selectWithParams(string $sql, array $datos)
+    {
+        $stmt = $this->con->prepare($sql);
+        $stmt->execute($datos);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 }
 ?>

@@ -131,7 +131,7 @@
                                 <button class="btn btn-primary" type="submit" id="btnAccion">
                                     <i class="fa fa-check"></i>
                                     Registrar</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                <button class="btn btn-danger" type="button" data-dismiss="modal" onclick="limpiarCamposEstudiante()">
                                     <i class="fa fa-arrow-left"></i>
                                     Atras
                                 </button>

@@ -108,7 +108,7 @@ class Configuracion extends Controller
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(195, 5, utf8_decode($datos['nombre']), 0, 1, 'C');
 
-        $pdf->Image(base_url . "Assets/img/logo.png", 180, 10, 30, 30, 'PNG');
+        $pdf->Image(base_url . "Assets/img/logo.png", 180, 10, 23, 23, 'PNG');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, utf8_decode("Teléfono: "), 0, 0, 'L');
         $pdf->SetFont('Arial', '', 10);

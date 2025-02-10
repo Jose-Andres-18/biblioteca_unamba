@@ -65,6 +65,8 @@ class Materia extends Controller
                 $data = $this->model->actualizarMateria($materia, $id);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Materia modificado', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'La materia ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');
                 }

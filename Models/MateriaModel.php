@@ -37,13 +37,19 @@ class MateriaModel extends Query
     }
     public function actualizarMateria($materia, $id)
     {
-        $query = "UPDATE materia SET materia = ? WHERE id = ?";
-        $datos = array($materia, $id);
-        $data = $this->save($query, $datos);
-        if ($data == 1) {
-            $res = "modificado";
+        $verificar = "SELECT * FROM materia WHERE materia = '$materia'";
+        $existe = $this->select($verificar);
+        if(empty($existe)){
+            $query = "UPDATE materia SET materia = ? WHERE id = ?";
+            $datos = array($materia, $id);
+            $data = $this->save($query, $datos);
+            if ($data == 1) {
+                $res = "modificado";
+            } else {
+                $res = "error";
+            }
         } else {
-            $res = "error";
+            $res = "existe";
         }
         return $res;
     }

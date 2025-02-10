@@ -105,6 +105,55 @@ class PrestamosModel extends Query
         $res = $this->selectAll($sql);
         return $res;
     }
+    public function selectPrestamosPorPeriodo($fechaInicio, $fechaFin)
+    {
+        $sql = "SELECT l.isbn, l.titulo, p.fecha_prestamo, p.fecha_devolucion
+            FROM prestamo p
+            INNER JOIN libro l ON l.id = p.id_libro
+            WHERE p.fecha_prestamo BETWEEN ? AND ?;
+        ";
+        $datos = array($fechaInicio, $fechaFin);
+        $res = $this->selectWithParams($sql, $datos);
+        return $res;
+    }
+    public function selectEstudianteMasPrestamo()
+    {
+        $sql = "SELECT e.codigo, e.nombre, c.carrera AS carrera, COUNT(p.id) AS total_prestamos 
+            FROM estudiante e 
+            JOIN prestamo p ON e.id = p.id_estudiante 
+            JOIN carrera c ON e.id_carrera = c.id 
+            WHERE p.fecha_prestamo BETWEEN '2025-01-01' AND '2025-02-26' 
+            GROUP BY e.id, e.codigo, e.nombre, c.carrera 
+            ORDER BY total_prestamos DESC 
+            LIMIT 10";
+    
+        $res = $this->selectAll($sql);
+        return $res;
+    }
+    public function selectMayorMateria()
+    {
+        $sql = "SELECT COUNT(l.id_materia) AS total_prestamos, m.materia
+            FROM prestamo p
+            INNER JOIN libro l ON p.id_libro = l.id
+            INNER JOIN materia m ON l.id_materia = m.id
+            GROUP BY m.materia
+            ORDER BY total_prestamos DESC;
+        ";
+        $res = $this->selectAll($sql);
+        return $res;
+    }
+    public function selectMayorCarrera()
+    {
+        $sql = "SELECT COUNT(e.id_carrera) AS total_prestamos, c.carrera
+            FROM prestamo p
+            inner join estudiante e on p.id_estudiante = e.id
+            inner join carrera c on e.id_carrera = c.id
+            GROUP BY c.carrera
+            ORDER BY total_prestamos DESC;
+        ";
+        $res = $this->selectAll($sql);
+        return $res;
+    }
     public function verificarPermisos($id_user, $permiso)
     {
         $tiene = false;

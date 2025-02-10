@@ -269,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function(){
     //SPRING O SELECT
     //ESTUDIANTE
     $('.estudiante').select2({
+        dropdownParent: $('#prestar'),
         placeholder: 'Buscar Estudiante',
         minimumInputLength: 2,
         ajax: {
@@ -290,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     //LIBRO
     $('.libro').select2({
+        dropdownParent: $('#prestar'),
         placeholder: 'Buscar Libro',
             minimumInputLength: 2,
             ajax: {
@@ -311,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     //AUTOR
     $('.autor').select2({
+        dropdownParent: $('#nuevoLibro'),
         placeholder: 'Buscar Autor',
         minimumInputLength: 2,
         ajax: {
@@ -332,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     //CARRERA
     $('.carrera').select2({
+        dropdownParent: $('#nuevoEstudiante'),
         placeholder: 'Buscar Carrera',
         minimumInputLength: 2,
         ajax: {
@@ -353,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     //EDITORIAL
     $('.editorial').select2({
+        dropdownParent: $('#nuevoLibro'),
         placeholder: 'Buscar Editorial',
         minimumInputLength: 2,
         ajax: {
@@ -374,6 +379,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     //MATERIA
     $('.materia').select2({
+        dropdownParent: $('#nuevoLibro'),
         placeholder: 'Buscar Materia',
         minimumInputLength: 2,
         ajax: {
@@ -429,130 +435,6 @@ document.addEventListener("DOMContentLoaded", function(){
             //limpiarCamposLibro();
         });
     }
-    // FUNCIONES LIMPIAR CAMPOS
-    // Función para limpiar los campos del módulo Prestamo
-    /*function limpiarCamposPrestamo() {
-        try {
-            if ($('.libro').data('select2')) {
-                $('.libro').select2('destroy');
-            }
-            if ($('.estudiante').data('select2')) {
-                $('.estudiante').select2('destroy');
-            }
-            $('.libro').val(null).select2({
-                placeholder: 'Buscar Libro',
-                    minimumInputLength: 2,
-                    ajax: {
-                        url: base_url + 'Libros/buscarLibro',
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {lb: params.term};
-                        },
-                        processResults: function (data) {
-                            return {results: data};
-                        },
-                        cache: true
-                    }
-            });
-            $('.estudiante').val(null).select2({
-                placeholder: 'Buscar Estudiante',
-                minimumInputLength: 2,
-                ajax: {
-                    url: base_url + 'Estudiantes/buscarEstudiante',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return { est: params.term };
-                    },
-                    processResults: function (data) {
-                        return { results: data };
-                    },
-                    cache: true
-                }
-            });
-            document.getElementById("msg_error").textContent = "";
-        } catch (error) {
-            console.log("Error al limpiar Select2 en Prestamo: "+error);
-        }
-    }*/
-    // Función para limpiar los campos del Módulo Libro
-    /*function limpiarCamposLibro() {
-        try {
-            if ($('.autor').data('select2')) {
-                $('.autor').select2('destroy');
-            }
-            if ($('.editorial').data('select2')) {
-                $('.editorial').select2('destroy');
-            }
-            if ($('.materia').data('select2')) {
-                $('.materia').select2('destroy');
-            }
-            $('.autor').val(null).trigger('change').select2({
-                placeholder: 'Buscar Autor',
-                minimumInputLength: 2,
-                ajax: {
-                    url: base_url + 'Autor/buscarAutor',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                }
-            });
-            $('.editorial').val(null).select2({
-                placeholder: 'Buscar Editorial',
-                minimumInputLength: 2,
-                ajax: {
-                    url: base_url + 'Editorial/buscarEditorial',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                }
-            });
-            $('.materia').val(null).select2({
-                placeholder: 'Buscar Materia',
-                minimumInputLength: 2,
-                ajax: {
-                    url: base_url + 'Materia/buscarMateria',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                }
-            });
-            document.getElementById("msg_error").textContent = "";
-        } catch (error) {
-            console.error("Error al limpiar Select2 en Libro: ", error);
-        }
-    }*/
     /*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
     //DNI
     const dniInput = document.getElementById("dni");
@@ -560,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function(){
         dniInput.addEventListener("input", function () {
             const dni = this.value;
             const dniError = document.getElementById("dni-error");
-            const regex = /^[0-9]{8}$/; // 8 dígitos numéricos
+            const regex = /^[0-9]{8}$/;
             const regex2 = /^(?!00000000)\d{8}$/;
 
             if (dni === "") {
@@ -570,17 +452,16 @@ document.addEventListener("DOMContentLoaded", function(){
             } else if (!regex2.test(dni)) {
                 dniError.textContent = "El DNI no es válido.";
             } else {
-                dniError.textContent = ""; // Limpiar error
+                dniError.textContent = "";
             }
         });
-
         // Evento para filtrar la entrada de teclas: solo números
         dniInput.addEventListener("keypress", function (e) {
             const key = e.key;
             const regex = /^[0-9]$/;
 
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                e.preventDefault();
             }
         });
     }
@@ -591,14 +472,14 @@ document.addEventListener("DOMContentLoaded", function(){
         codigoInput.addEventListener("input", function () {
             const codigo = this.value;
             const codigoError = document.getElementById("codigo-error");
-            const regex = /^[0-9]{6}$/; // Solo números y exactamente 6 dígitos
+            const regex = /^[0-9]{6}$/;
     
             if (codigo === "") {
                 codigoError.textContent = "El código es requerido.";
             } else if (!regex.test(codigo)) {
                 codigoError.textContent = "El código debe ser de 6 dígitos numéricos.";
             } else {
-                codigoError.textContent = ""; // Limpiar el mensaje de error
+                codigoError.textContent = "";
             }
         });
         // Evento para filtrar la entrada de teclas: solo números
@@ -607,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[0-9]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                e.preventDefault();
             }
         });
     }
@@ -618,14 +499,14 @@ document.addEventListener("DOMContentLoaded", function(){
         nombreInput.addEventListener("input", function () {
             const nombre = this.value;
             const nombreError = document.getElementById("nombre-error");
-            const regex = /^[a-zA-Z\s]+$/; // Solo letras y espacios permitidos
+            const regex = /^[a-zA-Z\s]+$/;
     
             if (nombre === "") {
                 nombreError.textContent = "El nombre es requerido.";
             } else if (!regex.test(nombre)) {
                 nombreError.textContent = "El nombre solo puede contener letras y espacios.";
             } else {
-                nombreError.textContent = ""; // Limpiar el mensaje de error
+                nombreError.textContent = "";
             }
         });
         // Evento para permitir solo letras y espacios
@@ -634,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+                e.preventDefault();
             }
         });
     }
@@ -646,14 +527,14 @@ document.addEventListener("DOMContentLoaded", function(){
         apellidopaInput.addEventListener("input", function () {
             const apellido = this.value;
             const apellidoError = document.getElementById("apellido-error");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/;
     
             if (apellido === "") {
                 apellidoError.textContent = "El apellido es requerido.";
             } else if (!regex.test(apellido)) {
                 apellidoError.textContent = "El apellido solo puede contener letras.";
             } else {
-                apellidoError.textContent = ""; // Limpiar el mensaje de error
+                apellidoError.textContent = "";
             }
         });
         // Evento para permitir solo letras
@@ -662,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+                e.preventDefault();
             } 
         });
     }
@@ -674,14 +555,14 @@ document.addEventListener("DOMContentLoaded", function(){
         apellidomaInput.addEventListener("input", function () {
             const apellido = this.value;
             const apellidoError = document.getElementById("apellido-error2");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/; // Solo letras (incluye tildes y ñ)
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]+$/;
     
             if (apellido === "") {
                 apellidoError.textContent = "El apellido es requerido.";
             } else if (!regex.test(apellido)) {
                 apellidoError.textContent = "El apellido solo puede contener letras.";
             } else {
-                apellidoError.textContent = ""; // Limpiar el mensaje de error
+                apellidoError.textContent = "";
             }
         });
         // Evento para permitir solo letras
@@ -690,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea una letra
+                e.preventDefault();
             }
         });
     }
@@ -701,14 +582,14 @@ document.addEventListener("DOMContentLoaded", function(){
             telefonoInput.addEventListener("input", function () {
                 const telefono = this.value;
                 const telefonoError = document.getElementById("telefono-error");
-                const regex = /^[1-9][0-9]{8}$/; // Solo números, exactamente 9 dígitos, no puede empezar con 0
+                const regex = /^[9][0-9]{8}$/;
 
                 if (telefono === "") {
                     telefonoError.textContent = "El número de teléfono es requerido.";
                 }  else if (!regex.test(telefono)) {
                     telefonoError.textContent = "El teléfono debe tener exactamente 9 dígitos.";
                 } else {
-                    telefonoError.textContent = ""; // Limpiar el mensaje de error
+                    telefonoError.textContent = "";
                 }
             });
             // Evento para filtrar la entrada de teclas: solo números
@@ -717,7 +598,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 const regex = /^[0-9]$/;
 
                 if (!regex.test(key)) {
-                    e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                    e.preventDefault();
                 }
             });
         }
@@ -732,7 +613,7 @@ document.addEventListener("DOMContentLoaded", function(){
             if (titulo === "") {
                 tituloError.textContent = "El título del libro es requerido.";
             } else {
-                tituloError.textContent = ""; // Limpiar el mensaje de error
+                tituloError.textContent = "";
             }
         });
     }
@@ -771,7 +652,7 @@ document.addEventListener("DOMContentLoaded", function(){
             } else if (!regex.test(isbn)) {
                 isbnError.textContent = "El isbn del libro debe ser de 13 dígitos.";
             } else {
-                isbnError.textContent = ""; // Limpiar el mensaje de error
+                isbnError.textContent = "";
             }
         });
         // Evento para permitir solo letras y espacios
@@ -780,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[0-9]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+                e.preventDefault();
             }
         });
     }
@@ -795,7 +676,7 @@ document.addEventListener("DOMContentLoaded", function(){
             if (cantidad === "") {
                 cantidadError.textContent = "La cantidad o Stock del libro es requerido.";
             } else {
-                cantidadError.textContent = ""; // Limpiar el mensaje de error
+                cantidadError.textContent = "";
             }
         });
         // Evento para filtrar la entrada de teclas: solo números
@@ -804,7 +685,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[0-9]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                e.preventDefault();
             }
         });
     }
@@ -819,7 +700,7 @@ document.addEventListener("DOMContentLoaded", function(){
             if (num_pagina === "") {
                 num_paginaError.textContent = "El número de páginas del libro es requerido.";
             } else {
-                num_paginaError.textContent = ""; // Limpiar el mensaje de error
+                num_paginaError.textContent = "";
             }
         });
         // Evento para filtrar la entrada de teclas: solo números
@@ -828,7 +709,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[0-9]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
+                e.preventDefault();
             }
         });
     }
@@ -839,14 +720,14 @@ document.addEventListener("DOMContentLoaded", function(){
         autorInput.addEventListener("input", function () {
             const autor = this.value;
             const autorError = document.getElementById("autor-error");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/;
     
             if (autor === "") {
                 autorError.textContent = "El nombre del autor es requerido.";
             } else if (!regex.test(autor)) {
                 autorError.textContent = "El nombre del autor solo puede contener letras y espacios.";
             } else {
-                autorError.textContent = ""; // Limpiar el mensaje de error
+                autorError.textContent = "";
             }
         });
         // Evento para permitir solo letras y espacios
@@ -855,7 +736,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+                e.preventDefault();
             }
         });
     }
@@ -865,14 +746,14 @@ document.addEventListener("DOMContentLoaded", function(){
         editorialInput.addEventListener("input", function () {
             const editorial = this.value;
             const editorialError = document.getElementById("editorial-error");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/;
     
             if (editorial === "") {
                 editorialError.textContent = "El nombre de la editorial es requerido.";
             } else if (!regex.test(editorial)) {
                 editorialError.textContent = "El nombre del editorial solo puede contener letras y espacios.";
             } else {
-                editorialError.textContent = ""; // Limpiar el mensaje de error
+                editorialError.textContent = "";
             }
         });
         // Evento para permitir solo letras y espacios
@@ -881,7 +762,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+                e.preventDefault();
             }
         });
     }
@@ -891,14 +772,14 @@ document.addEventListener("DOMContentLoaded", function(){
         materiaInput.addEventListener("input", function () {
             const materia = this.value;
             const materiaError = document.getElementById("materia-error");
-            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/; // Solo letras y espacios permitidos
+            const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/;
     
             if (materia === "") {
                 materiaError.textContent = "El nombre de la materia es requerido.";
             } else if (!regex.test(materia)) {
                 materiaError.textContent = "El nombre del materia solo puede contener letras y espacios.";
             } else {
-                materiaError.textContent = ""; // Limpiar el mensaje de error
+                materiaError.textContent = "";
             }
         });
         // Evento para permitir solo letras y espacios
@@ -907,7 +788,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
     
             if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea letra o espacio
+                e.preventDefault();
             }
         });
     }
@@ -970,33 +851,8 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         });
     }
-    /*const isbnInput = document.getElementById("isbn");
-    if (isbnInput) {
-        isbnInput.addEventListener("input", function () {
-            const isbn = this.value;
-            const isbnError = document.getElementById("isbn-error");
-            const regex = /^...$/;
 
-            if (isbn === "") {
-                isbnError.textContent = "El ISBN es requerido.";
-            } else if (!regex.test(isbn)) {
-                isbnError.textContent = "El ISBN debe tener exactamente 13 dígitos.";
-            } else {
-                isbnError.textContent = "";
-            }
-        });
-        // Evento para filtrar la entrada de teclas: solo números
-        isbnInput.addEventListener("keypress", function (e) {
-            const key = e.key;
-            
-            if (!regex.test(key)) {
-                e.preventDefault(); // Bloquear cualquier tecla que no sea un número
-                const regex = /^...$/;
-            }
-        });
-    }*/
-    /*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
-
+/*------------------------------- Validaciones para Modulo Estudiantes --------------------------------------*/
 })
 //FUNCION USUARIO
 function frmUsuario() {
@@ -1117,6 +973,7 @@ function frmEstudiante() {
     $("#nuevoEstudiante").modal("show");
 }
 //FUNCION REGISTRAR ESTUDIANTE
+//FUNCION REGISTRAR ESTUDIANTE
 function registrarEstudiante(e) {
     e.preventDefault();
     const codigo = document.getElementById("codigo");
@@ -1128,47 +985,59 @@ function registrarEstudiante(e) {
     const carrera = document.getElementById("carrera");
     const telefono = document.getElementById("telefono");
     const direccion = document.getElementById("direccion");
-    if (codigo.value == "" || dni.value == "" || nombre.value == ""
-    || telefono.value == "" || direccion.value == "" || carrera.value == "" || apellido_pa .value == "" || apellido_ma.value == "" || !genero) {
-        alertas('Todo los campos son requeridos', 'warning');
+
+    if (codigo.value == "" || dni.value == "" || nombre.value == "" || 
+        telefono.value == "" || direccion.value == "" || carrera.value == "" || 
+        apellido_pa.value == "" || apellido_ma.value == "" || !genero) {
+        alertas('Todos los campos son requeridos', 'warning');
     } else {
         const url = base_url + "Estudiantes/registrar";
         const frm = document.getElementById("frmEstudiante");
         const http = new XMLHttpRequest();
         http.open("POST", url, true);
         http.send(new FormData(frm));
+
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                const res = JSON.parse(this.responseText);
-                tblEst.ajax.reload();
-                alertas(res.msg, res.icono);
-                if(res.icono == 'success'){
-                    $("#nuevoEstudiante").modal("hide");
-                    frm.reset();
+                let res;
+                try {
+                    res = JSON.parse(this.responseText);
+                    tblEst.ajax.reload();
+                    alertas(res.msg, res.icono);
+                    if (res.icono == 'success') {
+                        $("#nuevoEstudiante").modal("hide");
+                        frm.reset();
+                        limpiarCamposEstudiante();
+                    }
+                } catch (error) {
+                    //console.error("Error al parsear JSON: ", error);
+                    //console.error("Respuesta recibida: ", this.responseText);
+                    alertas('Error al procesar la respuesta del servidor.', 'error');
                 }
             }
-        }
+        };
     }
 }
+
 //FUNCION EDITAR ESTUDIANTE
 function btnEditarEst(id) {
     document.getElementById("title").textContent = "Actualizar estudiante";
     document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Estudiantes/editar/" + id;
-    const urlCarreras = base_url + "Carrra/listar";
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
     http.send();
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
+            
             document.getElementById("id").value = res.id;
             document.getElementById("codigo").value = res.codigo;
             document.getElementById("dni").value = res.dni;
             document.getElementById("nombre").value = res.nombre;
             document.getElementById("apellido_pa").value = res.apellido_pa;
             document.getElementById("apellido_ma").value = res.apellido_ma;
-           // document.getElementById("carrera").value = res.carrera;
+            document.getElementById("carrera").value = res.carrera;
             document.getElementById("telefono").value = res.telefono;
             document.getElementById("direccion").value = res.direccion;
             if (res.genero == "1") {
@@ -1176,31 +1045,6 @@ function btnEditarEst(id) {
             } else if (res.genero == "0") {
                 document.getElementById("genero_femenino").checked = true;
             }
-            const httpCarreras = new XMLHttpRequest();
-            httpCarreras.open("GET", urlCarreras, true);
-            httpCarreras.send();
-
-            httpCarreras.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    const carreras = JSON.parse(this.responseText);
-                    const carreraSelect = document.getElementById("carrera");
-                    console.log(carreras);
-
-                    // Limpiar opciones previas
-                    carreraSelect.innerHTML = "";
-
-                    // Agregar opciones de carreras
-                    carreras.forEach((carrera) => {
-                        const option = document.createElement("option");
-                        option.value = carrera.id;
-                        option.textContent = carrera.carrera; // Asume que el backend envía 'nombre_carrera'
-                        if (carrera.id == res.id_carrera) {
-                            option.selected = true; // Marcar la carrera del estudiante como seleccionada
-                        }
-                        carreraSelect.appendChild(option);
-                    });
-                }
-            };
             $("#nuevoEstudiante").modal("show");
         }
     }
@@ -1618,6 +1462,7 @@ function registrarLibro(e) {
                 if(res.icon == 'success'){
                     $("#nuevoLibro").modal("hide");
                     frm.reset();
+                    limpiarCamposLibro();
                 }
             }
         }
@@ -1634,17 +1479,21 @@ function btnEditarLibro(id) {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
-              document.getElementById("id").value = res.id;
-              document.getElementById("titulo").value = res.titulo;
-              document.getElementById("autor").value = res.id_autor;
-              document.getElementById("editorial").value = res.id_editorial;
-              document.getElementById("materia").value = res.id_materia;
-              document.getElementById("isbn").value = res.isbn;
-              document.getElementById("cantidad").value = res.cantidad;
-              document.getElementById("num_pagina").value = res.num_pagina;
-              document.getElementById("anio_edicion").value = res.anio_edicion;
-              document.getElementById("descripcion").value = res.descripcion;
-            document.getElementById("img-preview").src = base_url + 'Assets/img/libros/'+ res.imagen;
+            document.getElementById("id").value = res.id;
+            document.getElementById("titulo").value = res.titulo;
+            document.getElementById("autor").value = res.id_autor;
+            document.getElementById("editorial").value = res.id_editorial;
+            document.getElementById("materia").value = res.id_materia;
+            
+            // Formatear el ISBN
+            const formattedIsbn = formatIsbn(res.isbn);
+            document.getElementById("isbn").value = formattedIsbn;
+
+            document.getElementById("cantidad").value = res.cantidad;
+            document.getElementById("num_pagina").value = res.num_pagina;
+            document.getElementById("anio_edicion").value = res.anio_edicion;
+            document.getElementById("descripcion").value = res.descripcion;
+            document.getElementById("img-preview").src = base_url + 'Assets/img/libros/' + res.imagen;
             document.getElementById("icon-cerrar").innerHTML = `
             <button class="btn btn-danger" onclick="deleteImg()">
             <i class="fa fa-times-circle"></i></button>`;
@@ -1654,6 +1503,24 @@ function btnEditarLibro(id) {
         }
     }
 }
+
+function formatIsbn(value) {
+    value = value.replace(/\D/g, ''); // Elimina cualquier caracter no numérico
+    if (value.length > 3) {
+        value = value.replace(/^(\d{3})(\d{1,2})/, '$1-$2');
+    }
+    if (value.length > 6) {
+        value = value.replace(/^(\d{3})-(\d{2})(\d{1,4})/, '$1-$2-$3');
+    }
+    if (value.length > 10) {
+        value = value.replace(/^(\d{3})-(\d{2})-(\d{4})(\d{1,3})/, '$1-$2-$3-$4');
+    }
+    if (value.length > 13) {
+        value = value.replace(/^(\d{3})-(\d{2})-(\d{4})-(\d{3})(\d{1})/, '$1-$2-$3-$4-$5');
+    }
+    return value;
+}
+
 //FUNCION ELIMINAR LIBRO
 function btnEliminarLibro(id) {
     Swal.fire({
@@ -1714,7 +1581,7 @@ function btnReingresarLibro(id) {
 function preview(e) {
     var input = document.getElementById('imagen');
     var filePath = input.value;
-    var extension = /(\.png|\.jpeg|\.jpg|\.webp)$/i;
+    var extension = /(\.png|\.jpeg|\.jpg)$/i;
     if (!extension.exec(filePath)) {
         alertas('Seleccione un archivo valido', 'warning');
         deleteImg();
@@ -1766,6 +1633,11 @@ function frmPrestar() {
     document.getElementById("frmPrestar").reset();
     $("#prestar").modal("show");
 }
+//FUNCION REPORTE
+function formReporte() {
+    document.getElementById("formReporte").reset();
+    $("#reporteModal").modal("show");
+}
 //FUNCION ENTREGAR
 function btnEntregar(id) {
     Swal.fire({
@@ -1815,12 +1687,36 @@ function registroPrestamos(e){
                 alertas(res.msg, res.icono);
                 if (res.icono == 'success') {
                     $("#prestar").modal("hide");
-                    //limpiarCamposPrestamo();
+                    limpiarCamposPrestamo();
                 }
             }
         }
     }
 }
+//FUNCION REPORTE POR PERIODO
+function reportePeriodo(e) {
+    e.preventDefault();
+
+    const FechaInicio = document.getElementById("fechaInicio").value;
+    const FechaFin = document.getElementById("fechaFin").value;
+
+    if (FechaInicio === '' || FechaFin === '') {
+        alertas('Todos los campos son requeridos', 'warning');
+    } else {
+        const frm = document.getElementById("formReporte");
+        if (frm instanceof HTMLFormElement) { 
+            const url = base_url + "Prestamos/LibrosPorPeriodo";
+            const http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.send(new FormData(frm));
+            window.open(url + "?FechaInicio=" + FechaInicio + "&FechaFin=" + FechaFin, "_blank");
+                $("#reporteModal").modal("hide");
+        } else {
+            console.error("El elemento con id 'formReporte' no es un formulario válido.");
+        }
+    }
+}
+
 //FUNCIONES DE ROLES DE USUARIO
 function btnRolesUser(id) {
     const http = new XMLHttpRequest();
@@ -1958,9 +1854,14 @@ function alertas(msg, icono) {
     })
 }
 //FUNCION VERIFICAR LIBRO
-function verificarLibro(e) {
+function verificarLibro() {
     const libro = document.getElementById('libro').value;
-    const cant = document.getElementById('cantidad').value;
+    if (!libro) { 
+        // Si el libro está vacío, no realiza la verificación
+        document.getElementById('msg_error').innerHTML = '';
+        return;
+    }
+    
     const http = new XMLHttpRequest();
     const url = base_url + 'Libros/verificar/' + libro;
     http.open("GET", url);
@@ -1970,12 +1871,45 @@ function verificarLibro(e) {
             const res = JSON.parse(this.responseText);
             if (res.icono == 'success') {
                 document.getElementById('msg_error').innerHTML = `<span class="badge badge-primary">Disponible: ${res.cantidad}</span>`;
-            }else{
+            } else {
                 alertas(res.msg, res.icono);
-                return false;
             }
         }
-    }
+    };
+}
+
+/*------------------------------- LIMPIAR CAMPOS SELECTS --------------------------------------*/
+function limpiarCamposPrestamo() {
+    // Limpia los selects
+    $('#libro').val(null).trigger('change').empty().select2({
+        placeholder: 'Buscar Libro',
+        minimumInputLength: 2,
+        ajax: {
+            url: base_url + 'Libros/buscarLibro',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { lb: params.term };
+            },
+            processResults: function (data) {
+                return { results: data };
+            },
+            cache: true
+        }
+    });
+
+    $('#estudiante').val(null).trigger('change');
+    
+    // Limpia los mensajes de error si existen
+    $('#msg_error').text('');
+}
+
+function limpiarCamposEstudiante(){
+    $('#carrera').val(null).trigger('change');
+}
+
+function limpiarCamposLibro(){
+    $('#materia').val(null).trigger('change');
 }
 
 

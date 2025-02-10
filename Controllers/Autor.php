@@ -98,6 +98,8 @@ class Autor extends Controller
                         move_uploaded_file($tmpName, $destino);
                     }
                     $msg = array('msg' => 'Autor modificado', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'El autor ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');
                 }

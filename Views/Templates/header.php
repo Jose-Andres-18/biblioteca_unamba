@@ -112,27 +112,62 @@
                         <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf">
                             <i class="icon fa fa-file-pdf-o"></i> Libros Prestados
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf2">
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/LibrosMasPrestado">
                             <i class="icon fa fa-file-pdf-o"></i> Conteo de libros más prestados
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf3">
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/LibrosStockCritico">
                             <i class="icon fa fa-file-pdf-o"></i> Libros con stock criticos
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/LibroPorPeriodo">
-                            <i class="icon fa fa-file-pdf-o"></i> Libros más consultados por periodo
+                        <a class="treeview-item" href="#" onclick="formReporte()">
+                            <i class="fa fa-external-link"></i> Libros consultados por periodo
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf5">
-                            <i class="icon fa fa-file-pdf-o"></i> Estudiantes con más prestamos
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/EstudianteMayorDemanda">
+                            <i class="icon fa fa-file-pdf-o"></i> Estudiantes con mayor demanda de préstamos
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf6">
-                            <i class="icon fa fa-file-pdf-o"></i> Materia con mayor demanda de prestamos
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/MateriaMayorDemanda">
+                            <i class="icon fa fa-file-pdf-o"></i> Materia con mayor demanda de préstamos
                         </a>
-                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/pdf7">
-                            <i class="icon fa fa-file-pdf-o"></i> Carrera con mayor demanda de prestamos
+                        <a class="treeview-item" target="_blank" href="<?php echo base_url; ?>Prestamos/CarreraMayorDemanda">
+                            <i class="icon fa fa-file-pdf-o"></i> Carrera con mayor demanda de préstamos
                         </a>
                     </li>
                 </ul>
             </li>
         </ul>
     </aside>
-    <main class="app-content">
+<main class="app-content">
+
+<!-- Modal -->
+<div id="reporteModal" class="modal fade" role="dialog" aria-labelledby="reporteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="reporteModalLabel">Seleccionar Fechas para el Reporte</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formReporte" onsubmit="reportePeriodo(event)">
+          <div class="form-group">
+            <label for="fechaInicio">Fecha de Inicio</label>
+            <input type="date" class="form-control" id="fechaInicio" name="FechaInicio" required>
+          </div>
+          <div class="form-group">
+            <label for="fechaFin">Fecha de Fin</label>
+            <input type="date" class="form-control" id="fechaFin" name="FechaFin" required>
+          </div>
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-check"></i> Generar Reporte
+            </button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              <i class="fa fa-arrow-left"></i> Atrás
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -72,12 +72,12 @@ class Libros extends Controller
         } else {
             if (!empty($name)) {
                 $extension = pathinfo($name, PATHINFO_EXTENSION);
-                $formatos_permitidos =  array('png', 'jpeg', 'jpg', 'webp');
+                $formatos_permitidos =  array('png', 'jpeg', 'jpg', 'jpg');
                 $extension = pathinfo($name, PATHINFO_EXTENSION);
                 if (!in_array($extension, $formatos_permitidos)) {
                     $msg = array('msg' => 'Archivo no permitido', 'icono' => 'warning');
                 } else {
-                    $imgNombre = $fecha . ".webp";
+                    $imgNombre = $fecha . ".jpg";
                     $destino = "Assets/img/libros/" . $imgNombre;
                 }
             } else if (!empty($_POST['foto_actual']) && empty($name)) {
@@ -110,6 +110,8 @@ class Libros extends Controller
                         move_uploaded_file($tmpName, $destino);
                     }
                     $msg = array('msg' => 'Libro modificado', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'El libro ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');
                 }

@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 0);
+error_reporting(0);
 class Estudiantes extends Controller
 {
     public function __construct()
@@ -74,6 +76,8 @@ class Estudiantes extends Controller
                 $data = $this->model->actualizarEstudiante($codigo, $dni, $nombre, $apellido_pa, $apellido_ma, $genero, $carrera, $direccion, $telefono, $id);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Estudiante modificado', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'El estudiante ya existe', 'icono' => 'warning');
                 } else {
                     $msg = array('msg' => 'Error al modificar', 'icono' => 'error');
                 }

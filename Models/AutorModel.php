@@ -37,13 +37,19 @@ class AutorModel extends Query
     }
     public function actualizarAutor($autor, $img, $id)
     {
-        $query = "UPDATE autor SET autor = ?, imagen = ? WHERE id = ?";
-        $datos = array($autor, $img ,$id);
-        $data = $this->save($query, $datos);
-        if ($data == 1) {
-            $res = "modificado";
+        $verificar = "SELECT * FROM autor WHERE autor = '$autor'";
+        $existe = $this->select($verificar);
+        if (empty($existe)) {
+            $query = "UPDATE autor SET autor = ?, imagen = ? WHERE id = ?";
+            $datos = array($autor, $img ,$id);
+            $data = $this->save($query, $datos);
+            if ($data == 1) {
+                $res = "modificado";
+            } else {
+                $res = "error";
+            }
         } else {
-            $res = "error";
+            $res = "existe";
         }
         return $res;
     }
