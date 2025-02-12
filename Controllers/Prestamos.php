@@ -283,20 +283,18 @@ class Prestamos extends Controller
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(196, 5, "Detalle de Libros", 1, 1, 'C', 1);
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->Cell(12, 5, 'N°', 1, 0, 'L');
-        $pdf->Cell(41, 5, utf8_decode('Libro'), 1, 0, 'L');
+        $pdf->Cell(12, 5, utf8_decode('N°'), 1, 0, 'L');
+        $pdf->Cell(75, 5, utf8_decode('Libro'), 1, 0, 'L');
         $pdf->Cell(20, 5, 'Cantidad', 1, 0, 'L');
         $pdf->Cell(60, 5, utf8_decode('Editorial'), 1, 0, 'L');
-        $pdf->Cell(34, 5, 'Anio de edicion', 1, 0, 'L');
         $pdf->Cell(29, 5, 'ISBN', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 10);
         $contador = 1;
         foreach ($prestamo as $row) {
             $pdf->Cell(12, 5, $contador, 1, 0, 'L');
-            $pdf->Cell(41, 5, utf8_decode($row['titulo']), 1, 0, 'L');
+            $pdf->Cell(75, 5, utf8_decode($row['titulo']), 1, 0, 'L');
             $pdf->Cell(20, 5, $row['cantidad'], 1, 0, 'L');
             $pdf->Cell(60, 5, utf8_decode($row['editorial']), 1, 0, 'L');
-            $pdf->Cell(34, 5, $row['anio_edicion'], 1, 0, 'L');
             $pdf->Cell(29, 5, $row['isbn'], 1, 1, 'L');
             $contador++;
         }

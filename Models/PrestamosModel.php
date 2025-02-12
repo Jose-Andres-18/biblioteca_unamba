@@ -96,7 +96,7 @@ class PrestamosModel extends Query
     }
     public function selectStockCritico()
     {
-        $sql = "SELECT l.titulo, l.cantidad, e.editorial AS editorial, l.anio_edicion, l.isbn
+        $sql = "SELECT l.titulo, l.cantidad, e.editorial AS editorial, l.isbn
             FROM libro l
             JOIN editorial e ON l.id_editorial = e.id
             WHERE l.cantidad <= 5 AND l.estado = 1
@@ -121,8 +121,7 @@ class PrestamosModel extends Query
         $sql = "SELECT e.codigo, e.nombre, c.carrera AS carrera, COUNT(p.id) AS total_prestamos 
             FROM estudiante e 
             JOIN prestamo p ON e.id = p.id_estudiante 
-            JOIN carrera c ON e.id_carrera = c.id 
-            WHERE p.fecha_prestamo BETWEEN '2025-01-01' AND '2025-02-26' 
+            JOIN carrera c ON e.id_carrera = c.id
             GROUP BY e.id, e.codigo, e.nombre, c.carrera 
             ORDER BY total_prestamos DESC 
             LIMIT 10";
