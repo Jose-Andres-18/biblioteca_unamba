@@ -2,6 +2,7 @@
 ini_set('display_errors', 0);
 error_reporting(0);
 class EstudiantesModel extends Query{
+    private $apiUrl = "https://api.consultasperu.com/api/v1/query";
     public function __construct()
     {
         parent::__construct();
@@ -91,5 +92,16 @@ class EstudiantesModel extends Query{
             $tiene = true;
         }
         return $tiene;
+    }
+
+    public function buscarPorDNI($dni) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl . "?dni=" . urlencode($dni));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($response, true);
     }
 }

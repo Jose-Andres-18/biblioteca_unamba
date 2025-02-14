@@ -56,7 +56,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="dni">Dni</label>
-                            <input id="dni" class="form-control" type="text" name="dni" required placeholder="Dni">
+                            <div class="input-group">
+                                <input id="dni" class="form-control" type="text" name="dni" required placeholder="DNI">
+                                <button id="buscar-dni" class="btn btn-primary" type="button">🔍</button>
+                            </div>
                             <small id="dni-error" class="text-danger"></small>
                         </div>
                     </div>

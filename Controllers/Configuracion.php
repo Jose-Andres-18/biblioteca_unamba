@@ -130,16 +130,16 @@ class Configuracion extends Controller
         $pdf->Cell(14, 5, utf8_decode('N°'), 1, 0, 'L');
         $pdf->Cell(50, 5, utf8_decode('Estudiantes'), 1, 0, 'L');
         $pdf->Cell(87, 5, 'Libros', 1, 0, 'L');
-        $pdf->Cell(30, 5, 'Fecha Prestamo', 1, 0, 'L');
-        $pdf->Cell(15, 5, 'Cant.', 1, 1, 'L');
+        $pdf->Cell(30, 5, 'Fecha Devolucion', 1, 0, 'L');
+        $pdf->Cell(15, 5, 'Dias morosos.', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 10);
         $contador = 1;
         foreach ($prestamo as $row) {
             $pdf->Cell(14, 5, $contador, 1, 0, 'L');
             $pdf->Cell(50, 5, $row['nombre'], 1, 0, 'L');
             $pdf->Cell(87, 5, utf8_decode($row['titulo']), 1, 0, 'L');
-            $pdf->Cell(30, 5, $row['fecha_prestamo'], 1, 0, 'L');
-            $pdf->Cell(15, 5, $row['cantidad'], 1, 1, 'L');
+            $pdf->Cell(30, 5, $row['fecha_devolucion'], 1, 0, 'L');
+            $pdf->Cell(15, 5, $row['dias_morosos'], 1, 1, 'L');
             $contador++;
         }
         $pdf->Output("prestamos.pdf", "I");

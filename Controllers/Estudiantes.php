@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 0);
-error_reporting(0);
 class Estudiantes extends Controller
 {
     public function __construct()
@@ -137,4 +135,15 @@ class Estudiantes extends Controller
             die();
         }
     }
+    /*
+    public function buscarPersona() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $dni = $_POST['dni'] ?? '';
+
+            $dniModel = new PersonaModel();
+            $resultado = $dniModel->buscarPorNombres($dni);
+
+            echo json_encode($resultado);
+        }
+    }*/
 }

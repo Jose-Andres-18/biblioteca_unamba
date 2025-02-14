@@ -5,12 +5,20 @@ include 'Funciones.php';
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual UNAMBA</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Contenido principal -->
+    <div class="top-bar">
+        <div class="logo">
+            </div>
+            <div class="admin-login">
+            <img src="<?php echo base_url . 'Assets/img/inicio-sesion.png' ?>" alt="Logo Biblioteca" />
+            <a href="login-bibliotecario.php" class="login-button">Iniciar de Sesión</a>
+        </div>
+    </div>
     <div class="main-content">
         <header class="header">
             <div class="header-content container">
@@ -27,19 +35,41 @@ include 'Funciones.php';
             <button id="searchButton" type="submit">Buscar</button>
         </form>
         <?php
+        $librosPorPagina = 8;
+        $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+        $offset = ($paginaActual - 1) * $librosPorPagina;
+        
         if (!empty($_GET['searchInput'])) {
             $searchInput = '%' . $_GET['searchInput'] . '%';
 
-            $query = "SELECT L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion
+            $query = "SELECT L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion,  
+                    COUNT(P.id_libro) AS total_prestamos
                     FROM libro L
                     INNER JOIN autor A ON L.id_autor = A.id
                     INNER JOIN editorial E ON L.id_editorial = E.id
-                    WHERE LOWER(L.titulo) LIKE LOWER(?) OR LOWER(A.autor) LIKE LOWER(?)";
-            
+                    LEFT JOIN prestamo P ON L.id = P.id_libro
+                    WHERE LOWER(L.titulo) LIKE LOWER(?) OR LOWER(A.autor) LIKE LOWER(?)
+                    GROUP BY L.id, L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion
+                    ORDER BY total_prestamos DESC
+                    LIMIT ? OFFSET ?;";
+
             $stmt = $conexion->prepare($query);
-            $stmt->bind_param("ss", $searchInput, $searchInput);
+            $stmt->bind_param("ssii", $searchInput, $searchInput, $librosPorPagina, $offset);
             $stmt->execute();
             $result = $stmt->get_result();
+
+            $totalQuery = "SELECT COUNT(*) as total FROM libro L 
+                        INNER JOIN autor A ON L.id_autor = A.id
+                        WHERE LOWER(L.titulo) LIKE LOWER(?) OR LOWER(A.autor) LIKE LOWER(?)";
+                
+            $stmtTotal = $conexion->prepare($totalQuery);
+            $stmtTotal->bind_param("ss", $searchInput, $searchInput);
+            $stmtTotal->execute();
+            $totalResult = $stmtTotal->get_result();
+            $totalRow = $totalResult->fetch_assoc();
+            $totalLibros = $totalRow['total'];
+
+            $totalPaginas = ceil($totalLibros / $librosPorPagina);
 
             echo '<ul class="book-list">';
             if ($result->num_rows > 0) {
@@ -49,7 +79,7 @@ include 'Funciones.php';
                                 <img src="' . base_url . 'Assets/img/libros/' . $libro['imagen'] . '" 
                                     alt="Portada del libro" class="img-thumbnail">
                                 <h3>' . htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8') . '</h3>
-                                <p><strong>Autor:</strong> ' . htmlspecialchars($libro['autor'], ENT_QUOTES, 'UTF-8') . '</p>
+                                <p><strong>Autor:</strong> ' . htmlspecialchars(utf8_decode($libro['autor']), ENT_QUOTES, 'UTF-8') . '</p>
                                 <button class="btn-mas" data-libro=\'' . json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT) . '\'>
                                     Más...
                                 </button>
@@ -57,9 +87,34 @@ include 'Funciones.php';
                         </li>';
                 }
             } else {
-                echo '<p>No se encontraron resultados para la búsqueda.</p>';
+                echo '<p style="color: white;">No se encontraron resultados para la búsqueda.</p>';
             }
             echo '</ul>';
+            if ($totalPaginas > 1) {
+                echo '<ul class="pagination">';
+                
+                // Botón "Anterior"
+                if ($paginaActual > 1) {
+                    echo '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual - 1) . '">&lt;</a></li>';
+                } else {
+                    echo '<li class="page-item disabled"><span class="page-link">&lt;</span></li>';
+                }
+            
+                // Números de página
+                for ($i = 1; $i <= $totalPaginas; $i++) {
+                    $activeClass = ($i == $paginaActual) ? 'active' : '';
+                    echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . $i . '">' . $i . '</a></li>';
+                }
+            
+                // Botón "Siguiente"
+                if ($paginaActual < $totalPaginas) {
+                    echo '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual + 1) . '">&gt;</a></li>';
+                } else {
+                    echo '<li class="page-item disabled"><span class="page-link">&gt;</span></li>';
+                }
+            
+                echo '</ul>';
+            }            
         }
         ?>
 
@@ -74,28 +129,60 @@ include 'Funciones.php';
             </div>
         </div>
         <!-- Libros por Carrera -->
-            <?php foreach ($carreras as $nombre => $datos): ?>
-                <div id="libros-<?php echo $datos['id']; ?>" class="libros-container">
-                    <?php if ($librosPorCarrera[$datos['id']]->num_rows > 0): ?>
-                        <ul class="book-list">
-                            <?php while ($libro = $librosPorCarrera[$datos['id']]->fetch_assoc()): ?>
-                                <li class="product-item">
-                                    <div class="libro-card">
-                                        <img src="<?php echo base_url . 'Assets/img/libros/' . $libro['imagen']; ?>" 
-                                            alt="Portada del libro" class="img-thumbnail">
-                                        <h3><?php echo htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8'); ?></h3>
-                                        <button class="btn-mas" data-libro='<?php echo json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT); ?>'>
-                                            Más...
-                                        </button>
-                                    </div>
-                                </li>
-                            <?php endwhile; ?>
-                        </ul>
-                    <?php else: ?>
-                        <p class="p2">No hay libros disponibles para esta carrera.</p>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+        <?php
+        $librosPorPagina = 8;
+
+        foreach ($carreras as $nombre => $datos):
+            $idCarrera = $datos['id'];
+            $totalLibros = $librosPorCarrera[$idCarrera]->num_rows;
+            $totalPaginas = ceil($totalLibros / $librosPorPagina);
+        ?>
+            <div id="libros-<?php echo $idCarrera; ?>" class="libros-container">
+                <?php if ($totalLibros > 0): ?>
+                    <ul class="book-list" id="book-list-<?php echo $idCarrera; ?>" data-total="<?php echo $totalLibros; ?>">
+                        <?php 
+                        $contador = 0;
+                        while ($libro = $librosPorCarrera[$idCarrera]->fetch_assoc()): 
+                            if ($contador >= $librosPorPagina) break;
+                        ?>
+                            <li class="product-item">
+                                <div class="libro-card">
+                                    <img src="<?php echo base_url . 'Assets/img/libros/' . $libro['imagen']; ?>" 
+                                        alt="Portada del libro" class="img-thumbnail">
+                                    <h3><?php echo htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8'); ?></h3>
+                                    <button class="btn-mas" data-libro='<?php echo json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT); ?>'>
+                                        Más...
+                                    </button>
+                                </div>
+                            </li>
+                        <?php 
+                            $contador++;
+                        endwhile; 
+                        ?>
+                    </ul>
+                    <!-- Paginador -->
+                    <ul class="pagination" id="pagination-<?php echo $idCarrera; ?>" data-carrera="<?php echo $idCarrera; ?>">
+                        <!-- Flecha izquierda -->
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'prev')"><</a>
+                        </li>
+
+                        <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                            <li class="page-item <?php echo ($i === 1) ? 'active' : ''; ?>">
+                                <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', <?php echo $i; ?>)"><?php echo $i; ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <!-- Flecha derecha -->
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'next')">></a>
+                        </li>
+                    </ul>
+                <?php else: ?>
+                    <p class="p2">No hay libros disponibles para esta carrera.</p>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
 
             <!-- Modal (compartido para todas las listas de libros) -->
             <div id="modalLibro" class="modal" style="display:none;">
@@ -103,13 +190,15 @@ include 'Funciones.php';
                     <span class="close" onclick="cerrarModal()">&times;</span>
                     <h3 id="modalTitulo"></h3>
                     <img id="modalImagen" class="img-thumbnail" alt="Portada del libro">
-                    <p><strong>Cantidad:</strong> <span id="modalCantidad"></span></p>
-                    <p><strong>Páginas:</strong> <span id="modalPaginas"></span></p>
-                    <p><strong>Autor:</strong> <span id="modalAutor"></span></p>
-                    <p><strong>Editorial:</strong> <span id="modalEditorial"></span></p>
-                    <p><strong>ISBN:</strong> <span id="modalISBN"></span></p>
-                    <p><strong>Total Préstamos:</strong> <span id="modalPrestamos"></span></p>
-                    <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+                    <div class="modal-info">
+                        <p><strong>Disponible:</strong> <span id="modalCantidad"></span></p>
+                        <p><strong>Páginas:</strong> <span id="modalPaginas"></span></p>
+                        <p><strong>Autor:</strong> <span id="modalAutor"></span></p>
+                        <p><strong>Editorial:</strong> <span id="modalEditorial"></span></p>
+                        <p><strong>ISBN:</strong> <span id="modalISBN"></span></p>
+                        <p><strong>Total Préstamos:</strong> <span id="modalPrestamos"></span></p>
+                        <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+                    </div>
                 </div>
             </div>
 
@@ -129,21 +218,6 @@ include 'Funciones.php';
                         </li>
                     <?php } ?>
                 </ul>
-            </div>
-            <!-- Modal -->
-            <div id="modalLibro" class="modal" style="display:none;">
-                <div class="modal-content">
-                    <span class="close" onclick="cerrarModal()">&times;</span>
-                    <h3 id="modalTitulo"></h3>
-                    <img id="modalImagen" class="img-thumbnail" alt="Portada del libro">
-                    <p><strong>Cantidad:</strong> <span id="modalCantidad"></span></p>
-                    <p><strong>Páginas:</strong> <span id="modalPaginas"></span></p>
-                    <p><strong>Autor:</strong> <span id="modalAutor"></span></p>
-                    <p><strong>Editorial:</strong> <span id="modalEditorial"></span></p>
-                    <p><strong>ISBN:</strong> <span id="modalISBN"></span></p>
-                    <p><strong>Total Préstamos:</strong> <span id="modalPrestamos"></span></p>
-                    <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
-                </div>
             </div>
     </div>
 
@@ -167,7 +241,7 @@ include 'Funciones.php';
         </div>
     </footer>
     <script>
-        const BASE_URL = "<?php echo base_url . 'Assets/img/libros/'; ?>";
+        const BASE_URL = "<?php echo base_url; ?>";
     </script>
     <script src="../../Assets/js/catalogo.js"></script>
 </body>

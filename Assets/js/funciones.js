@@ -465,6 +465,55 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         });
     }
+    // Función para encontrar nombres completos de personas por DNI en ConsultasPeru
+    const buscarDniBtn = document.getElementById("buscar-dni");
+    if (buscarDniBtn) {
+        buscarDniBtn.addEventListener("click", function () {
+            const dni = dniInput.value.trim();
+            if (dni.length !== 8 || isNaN(dni)) {
+                alert("Ingrese un DNI válido de 8 dígitos.");
+                return;
+            }
+
+            fetch("https://api.consultasperu.com/api/v1/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "token": "79ccb10768a82c614f001110a60008d5855954c357a1da6b7fe10e7ef27d26db",
+                    "type_document": "dni",
+                    "document_number": dni
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('nombre').value = data.data.name;
+                    document.getElementById('apellido_pa').value = data.data.surname.split(" ")[0] || "";
+                    document.getElementById('apellido_ma').value = data.data.surname.split(" ")[1] || "";
+
+                    document.getElementById('nombre').readOnly = true;
+                    document.getElementById('apellido_pa').readOnly = true;
+                    document.getElementById('apellido_ma').readOnly = true;
+                } else {
+                    document.getElementById('nombre').value = "";
+                    document.getElementById('apellido_pa').value = "";
+                    document.getElementById('apellido_ma').value = "";
+
+                    document.getElementById('nombre').readOnly = false;
+                    document.getElementById('apellido_pa').readOnly = false;
+                    document.getElementById('apellido_ma').readOnly = false;
+
+                    alert("DNI no encontrado. Ingrese los datos manualmente.");
+                }
+            })
+            .catch(error => {
+                console.error("Error en la API:", error);
+                alert("Hubo un problema al consultar la API.");
+            });
+        });
+    }
 
     //CODIGO
     const codigoInput = document.getElementById("codigo");
@@ -1010,8 +1059,6 @@ function registrarEstudiante(e) {
                         limpiarCamposEstudiante();
                     }
                 } catch (error) {
-                    //console.error("Error al parsear JSON: ", error);
-                    //console.error("Respuesta recibida: ", this.responseText);
                     alertas('Error al procesar la respuesta del servidor.', 'error');
                 }
             }
@@ -1879,8 +1926,8 @@ function verificarLibro() {
 }
 
 /*------------------------------- LIMPIAR CAMPOS SELECTS --------------------------------------*/
+//PRESTAMOS
 function limpiarCamposPrestamo() {
-    // Limpia los selects
     $('#libro').val(null).trigger('change').empty().select2({
         placeholder: 'Buscar Libro',
         minimumInputLength: 2,
@@ -1900,12 +1947,18 @@ function limpiarCamposPrestamo() {
 
     $('#estudiante').val(null).trigger('change');
     
-    // Limpia los mensajes de error si existen
     $('#msg_error').text('');
 }
 
 function limpiarCamposEstudiante(){
     $('#carrera').val(null).trigger('change');
+    document.getElementById('nombre').value = "";
+    document.getElementById('apellido_pa').value = "";
+    document.getElementById('apellido_ma').value = "";
+
+    document.getElementById('nombre').readOnly = false;
+    document.getElementById('apellido_pa').readOnly = false;
+    document.getElementById('apellido_ma').readOnly = false;
 }
 
 function limpiarCamposLibro(){
