@@ -1071,6 +1071,7 @@ function btnEditarEst(id) {
     document.getElementById("title").textContent = "Actualizar estudiante";
     document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Estudiantes/editar/" + id;
+    const urlCarreras = base_url + "Carrera/listar";
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
     http.send();
@@ -1092,6 +1093,30 @@ function btnEditarEst(id) {
             } else if (res.genero == "0") {
                 document.getElementById("genero_femenino").checked = true;
             }
+
+            // Agregar opciones de carrera
+            const httpCarreras = new XMLHttpRequest();
+            httpCarreras.open("GET", urlCarreras, true);
+            httpCarreras.send();
+
+            httpCarreras.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const carreras = JSON.parse(this.responseText);
+                    const carrerasSelect = document.getElementById("carrera");
+                    carrerasSelect.innerHTML = "";
+
+                    // Agregar opciones de carrera
+                    carreras.forEach((carrera) => {
+                        const option = document.createElement("option");
+                        option.value = carrera.id;
+                        option.textContent = carrera.carrera; 
+                        if (carrera.id == res.id_carrera) {
+                            option.selected = true;
+                        }
+                        carrerasSelect.appendChild(option);
+                    });
+                }
+            };
             $("#nuevoEstudiante").modal("show");
         }
     }
@@ -1520,6 +1545,9 @@ function btnEditarLibro(id) {
     document.getElementById("title").textContent = "Actualizar Libro";
     document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
     const url = base_url + "Libros/editar/" + id;
+    const urlAutor = base_url + "Autor/listar";
+    const urlEditorial = base_url + "Editorial/listar";
+    const urlMateria = base_url + "Materia/listar";
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
     http.send();
@@ -1546,6 +1574,76 @@ function btnEditarLibro(id) {
             <i class="fa fa-times-circle"></i></button>`;
             document.getElementById("icon-image").classList.add("d-none");
             document.getElementById("foto_actual").value = res.imagen;
+            // Agregar opciones de autor
+            const httpAutor = new XMLHttpRequest();
+            httpAutor.open("GET", urlAutor, true);
+            httpAutor.send();
+
+            httpAutor.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const autores = JSON.parse(this.responseText);
+                    const carrerasSelect = document.getElementById("autor");
+                    carrerasSelect.innerHTML = "";
+
+                    // Agregar opciones de autor
+                    autores.forEach((autor) => {
+                        const option = document.createElement("option");
+                        option.value = autor.id;
+                        option.textContent = autor.autor; 
+                        if (autor.id == res.id_autor) {
+                            option.selected = true;
+                        }
+                        carrerasSelect.appendChild(option);
+                    });
+                }
+            };
+            // Agregar opciones de editorial
+            const httpEditorial = new XMLHttpRequest();
+            httpEditorial.open("GET", urlEditorial, true);
+            httpEditorial.send();
+
+            httpEditorial.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const editoriales = JSON.parse(this.responseText);
+                    const editorialSelect = document.getElementById("editorial");
+                    editorialSelect.innerHTML = "";
+
+                    // Agregar opciones de editorial
+                    editoriales.forEach((editorial) => {
+                        const option = document.createElement("option");
+                        option.value = editorial.id;
+                        option.textContent = editorial.editorial; 
+                        if (editorial.id == res.id_editorial) {
+                            option.selected = true;
+                        }
+                        editorialSelect.appendChild(option);
+                    });
+                }
+            };
+            // Agregar opciones de materia
+            const httpMaterias = new XMLHttpRequest();
+            httpMaterias.open("GET", urlMateria, true);
+            httpMaterias.send();
+
+            httpMaterias.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const materias = JSON.parse(this.responseText);
+                    const materiasSelect = document.getElementById("materia");
+                    materiasSelect.innerHTML = "";
+
+                    // Agregar opciones de materia
+                    materias.forEach((materia) => {
+                        const option = document.createElement("option");
+                        option.value = materia.id;
+                        option.textContent = materia.materia; 
+                        if (materia.id == res.id_carrera) {
+                            option.selected = true;
+                        }
+                        materiasSelect.appendChild(option);
+                    });
+                }
+            };
+
             $("#nuevoLibro").modal("show");
         }
     }
@@ -1712,31 +1810,116 @@ function btnEntregar(id) {
         }
     })
 }
-//FUNCION REGISTRAR PRESTAMOS
-function registroPrestamos(e){
+// FUNCIÓN REGISTRAR PRÉSTAMOS
+function registroPrestamos(e) {
     e.preventDefault();
     const libro = document.getElementById("libro").value;
     const estudiante = document.getElementById("estudiante").value;
     const fecha_prestamo = document.getElementById("fecha_prestamo").value;
     const fecha_devolucion = document.getElementById("fecha_devolucion").value;
+
     if (libro == '' || estudiante == '' || fecha_prestamo == '' || fecha_devolucion == '') {
-        alertas('Todo los campos son requeridos', 'warning');
-    } else {
-        const frm = document.getElementById("frmPrestar");
-        const url = base_url + "Prestamos/registrar";
-        const http = new XMLHttpRequest();
-        http.open("POST", url, true);
-        http.send(new FormData(frm));
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                const res = JSON.parse(this.responseText);
-                tblPrestar.ajax.reload();
-                alertas(res.msg, res.icono);
-                if (res.icono == 'success') {
-                    $("#prestar").modal("hide");
-                    limpiarCamposPrestamo();
-                }
+        alertas('Todos los campos son requeridos', 'warning');
+        return; // Detiene la ejecución si hay campos vacíos
+    }
+
+    // Convertir a objetos Date para comparar
+    const fechaPrestamo = new Date(fecha_prestamo);
+    const fechaDevolucion = new Date(fecha_devolucion);
+
+    if (fechaDevolucion < fechaPrestamo) {
+        alertas('La fecha de devolución no puede ser menor que la fecha de préstamo', 'error');
+        return; // Detiene la ejecución si la fecha es incorrecta
+    }
+
+    // Si las validaciones pasan, procede con el registro
+    const frm = document.getElementById("frmPrestar");
+    const url = base_url + "Prestamos/registrar";
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            tblPrestar.ajax.reload();
+            alertas(res.msg, res.icono);
+            if (res.icono == 'success') {
+                $("#prestar").modal("hide");
+                limpiarCamposPrestamo();
             }
+        }
+    }
+}
+
+//FUNCION MOSTRAR EL MODAL DEL PRESTAMO
+function btnEditarPrestamo(id) {
+    document.getElementById("title").textContent = "Actualizar Préstamo";
+    document.getElementById("btnAccion").innerHTML = '<i class="fa fa-pencil-square-o"></i> Modificar';
+    const url = base_url + "Prestamos/editar/" + id;
+    console.log("Llamando a: ", url);
+    const urlLibros = base_url + "Libros/listar";
+    const urlEstudiantes = base_url + "Estudiantes/listar";
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            document.getElementById("id").value = res.id;
+            document.getElementById("fecha_prestamo").value = res.fecha_prestamo;
+            document.getElementById("fecha_devolucion").value = res.fecha_devolucion;
+            document.getElementById("observacion").value = res.observacion;
+
+            const httpLibros = new XMLHttpRequest();
+            httpLibros.open("GET", urlLibros, true);
+            httpLibros.send();
+
+            httpLibros.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const libros = JSON.parse(this.responseText);
+                    const librosSelect = document.getElementById("libro");
+                    librosSelect.innerHTML = "";
+
+                    // Agregar opciones de libro
+                    libros.forEach((libro) => {
+                        const option = document.createElement("option");
+                        option.value = libro.id;
+                        option.textContent = libro.titulo; 
+                        if (libro.id == res.id_libro) {
+                            option.selected = true;
+                        }
+                        librosSelect.appendChild(option);
+                    });
+                }
+            };
+
+            const httpEstudiantes = new XMLHttpRequest();
+            httpEstudiantes.open("GET", urlEstudiantes, true);
+            httpEstudiantes.send();
+
+            httpEstudiantes.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const estudiantes = JSON.parse(this.responseText);
+                    const estudiantesSelect = document.getElementById("estudiante");
+                    estudiantesSelect.innerHTML = "";
+
+                    // Agregar opciones de estudiante
+                    estudiantes.forEach((estudiante) => {
+                        const option = document.createElement("option");
+                        option.value = estudiante.id;
+                        option.textContent = `${estudiante.nombre} ${estudiante.apellido_pa} ${estudiante.apellido_ma}`; 
+                        if (estudiante.id == res.id_estudiante) {
+                            option.selected = true;
+                        }
+                        estudiantesSelect.appendChild(option);
+                    });
+                }
+            };
+            $("#prestar").modal("show");
+
+        } else if (this.readyState == 4) {
+            console.error("Error en la solicitud: " + this.status);
         }
     }
 }

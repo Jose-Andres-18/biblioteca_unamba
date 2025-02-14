@@ -22,16 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
       
 });
 
-function cambiarPagina(carreraId, pagina) {
+function cambiarPagina(carreraId, pagina, event) {
+    if (event) event.preventDefault(); // Evita la recarga y el salto al inicio
+    
     const listaLibros = document.getElementById(`book-list-${carreraId}`);
     const paginador = document.getElementById(`pagination-${carreraId}`);
-    const librosPorPagina = 5;
-
-    // Obtener la página actual
+    
     let paginaActual = parseInt(paginador.getAttribute("data-pagina")) || 1;
     let totalPaginas = parseInt(paginador.getAttribute("data-total")) || 1;
 
-    // Determinar la nueva página
     if (pagina === "prev") {
         pagina = paginaActual > 1 ? paginaActual - 1 : 1;
     } else if (pagina === "next") {
@@ -40,14 +39,12 @@ function cambiarPagina(carreraId, pagina) {
         pagina = parseInt(pagina);
     }
 
-    // Evitar recargas innecesarias
     if (pagina === paginaActual) return;
 
-    // Obtener libros dinámicamente con AJAX
     fetch(`obtener_libros.php?id=${carreraId}&pagina=${pagina}`)
         .then(response => response.json())
         .then(data => {
-            listaLibros.innerHTML = ""; // Limpiar lista
+            listaLibros.innerHTML = "";
 
             data.libros.forEach(libro => {
                 let li = document.createElement("li");
@@ -62,12 +59,15 @@ function cambiarPagina(carreraId, pagina) {
                 listaLibros.appendChild(li);
             });
 
-            // Actualizar el paginador
             paginador.setAttribute("data-pagina", pagina);
             paginador.setAttribute("data-total", data.totalPaginas);
             actualizarPaginador(paginador, pagina, data.totalPaginas);
+
+            // Mantener la vista en el catálogo sin desplazarse al inicio
+            listaLibros.scrollIntoView({ behavior: "smooth", block: "nearest" });
         });
 }
+
 
 function actualizarPaginador(paginador, pagina, totalPaginas) {
     let paginas = paginador.querySelectorAll('.page-item');

@@ -3,7 +3,7 @@ include 'conexion.php';
 
 $id_carrera = $_GET['id'];
 $pagina = $_GET['pagina'];
-$librosPorPagina = 5;
+$librosPorPagina = 8;
 $offset = ($pagina - 1) * $librosPorPagina;
 
 $query = "SELECT L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion, COUNT(P.id_libro) AS total_prestamos

@@ -34,6 +34,31 @@ class PrestamosModel extends Query
         }
         return $res;
     }
+
+    public function editPrestamo($id)
+    {
+        $sql = "SELECT * FROM  prestamo  WHERE id = $id";
+        $res = $this->select($sql);
+        return $res;
+    }
+
+    public function actualizarPrestamo2($id_estudiante, $id_libro, $fecha_prestamo, $fecha_devolucion, $observacion, $id)
+    {
+        $query = "UPDATE prestamo SET 
+                    id_estudiante = ?, 
+                    id_libro = ?, 
+                    fecha_prestamo = ?,
+                    fecha_devolucion = ?, 
+                    observacion = ? 
+                    WHERE id = ?";
+    
+        $datos = array($id_estudiante, $id_libro, $fecha_prestamo, $fecha_devolucion, $observacion, $id);
+        
+        $data = $this->save($query, $datos);
+        
+        return $data == 1 ? "modificado" : "error";
+    }
+
     public function actualizarPrestamo($estado, $id)
     {
         $sql = "UPDATE prestamo SET estado = ? WHERE id = ?";
@@ -77,7 +102,8 @@ class PrestamosModel extends Query
     public function selectPrestamoDebe()
     {
         $sql = "
-        select e.nombre, l.titulo, p.fecha_prestamo, p.cantidad from estudiante e inner join libro l inner join prestamo p on p.id_estudiante = e.id where p.id_libro = l.id and p.estado = 1 order by e.nombre ASC
+        select e.dni, e.codigo,l.titulo, p.fecha_prestamo, 
+        p.fecha_devolucion from estudiante e inner join libro l inner join prestamo p on p.id_estudiante = e.id where p.id_libro = l.id and p.estado = 1 order by e.nombre ASC
         ";
         $res = $this->selectAll($sql);
         return $res;
@@ -96,7 +122,7 @@ class PrestamosModel extends Query
     }
     public function selectStockCritico()
     {
-        $sql = "SELECT l.titulo, l.cantidad, e.editorial AS editorial, l.isbn
+        $sql = "SELECT l.titulo, l.cantidad, e.editorial AS editorial, l.anio_edicion, l.isbn
             FROM libro l
             JOIN editorial e ON l.id_editorial = e.id
             WHERE l.cantidad <= 5 AND l.estado = 1
@@ -106,22 +132,23 @@ class PrestamosModel extends Query
         return $res;
     }
     public function selectPrestamosPorPeriodo($fechaInicio, $fechaFin)
-    {
-        $sql = "SELECT l.isbn, l.titulo, p.fecha_prestamo, p.fecha_devolucion
-            FROM prestamo p
-            INNER JOIN libro l ON l.id = p.id_libro
-            WHERE p.fecha_prestamo BETWEEN ? AND ?;
-        ";
-        $datos = array($fechaInicio, $fechaFin);
-        $res = $this->selectWithParams($sql, $datos);
-        return $res;
-    }
+{
+    $sql = "SELECT l.isbn, l.titulo, p.fecha_prestamo, p.fecha_devolucion
+        FROM prestamo p
+        INNER JOIN libro l ON l.id = p.id_libro
+        WHERE p.fecha_prestamo BETWEEN ? AND ?;";
+        
+    $datos = array($fechaInicio, $fechaFin);
+    return $this->selectWithParams($sql, $datos);
+}
+
     public function selectEstudianteMasPrestamo()
     {
-        $sql = "SELECT e.codigo, e.nombre, c.carrera AS carrera, COUNT(p.id) AS total_prestamos 
+        $sql = "SELECT e.codigo, CONCAT(e.nombre, ' ', e.apellido_pa, ' ', e.apellido_ma) AS nombre, c.carrera AS carrera, COUNT(p.id) AS total_prestamos 
             FROM estudiante e 
             JOIN prestamo p ON e.id = p.id_estudiante 
-            JOIN carrera c ON e.id_carrera = c.id
+            JOIN carrera c ON e.id_carrera = c.id 
+            WHERE p.fecha_prestamo BETWEEN '2025-01-01' AND '2025-02-26' 
             GROUP BY e.id, e.codigo, e.nombre, c.carrera 
             ORDER BY total_prestamos DESC 
             LIMIT 10";
@@ -165,7 +192,8 @@ class PrestamosModel extends Query
     }
     public function getPrestamoLibro($id_prestamo)
     {
-        $sql = "SELECT e.id, e.codigo, e.nombre, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.id = $id_prestamo";
+        $sql = "SELECT e.id,p.observacion,e.dni, e.codigo,CONCAT(e.nombre, ' ', e.apellido_pa, ' ', e.apellido_ma) AS nombre_estudiante, l.id, l.titulo, p.id, p.id_estudiante, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.cantidad, p.observacion, p.estado
+         FROM estudiante e INNER JOIN libro l INNER JOIN prestamo p ON p.id_estudiante = e.id WHERE p.id_libro = l.id AND p.id = $id_prestamo";
         $res = $this->select($sql);
         return $res;
     }

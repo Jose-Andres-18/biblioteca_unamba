@@ -125,21 +125,23 @@ class Configuracion extends Controller
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(0, 0, 0);
         $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(196, 5, "Detalle de Prestamos", 1, 1, 'C', 1);
+        $pdf->Cell(196, 5, utf8_decode("Resumen de Préstamos Pendientes"), 1, 1, 'C', 1);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->Cell(14, 5, utf8_decode('N°'), 1, 0, 'L');
-        $pdf->Cell(50, 5, utf8_decode('Estudiantes'), 1, 0, 'L');
-        $pdf->Cell(87, 5, 'Libros', 1, 0, 'L');
-        $pdf->Cell(30, 5, 'Fecha Devolucion', 1, 0, 'L');
-        $pdf->Cell(15, 5, 'Dias morosos.', 1, 1, 'L');
+        $pdf->Cell(30, 5, utf8_decode('Código Est.'), 1, 0, 'L');
+        $pdf->Cell(85, 5, 'Libros', 1, 0, 'L');
+        $pdf->Cell(22, 5, utf8_decode('F_Préstamo'), 1, 0, 'L');
+        $pdf->Cell(25, 5, utf8_decode('F_Devolución'), 1, 0, 'L');
+        $pdf->Cell(20, 5, 'Dias Mora', 1, 1, 'L');
         $pdf->SetFont('Arial', '', 10);
         $contador = 1;
         foreach ($prestamo as $row) {
             $pdf->Cell(14, 5, $contador, 1, 0, 'L');
-            $pdf->Cell(50, 5, $row['nombre'], 1, 0, 'L');
-            $pdf->Cell(87, 5, utf8_decode($row['titulo']), 1, 0, 'L');
-            $pdf->Cell(30, 5, $row['fecha_devolucion'], 1, 0, 'L');
-            $pdf->Cell(15, 5, $row['dias_morosos'], 1, 1, 'L');
+            $pdf->Cell(30, 5, $row['codigo'], 1, 0, 'L');
+            $pdf->Cell(85, 5, utf8_decode($row['titulo']), 1, 0, 'L');
+            $pdf->Cell(22,5,$row['fecha_prestamo'],1,0,'L');
+            $pdf->Cell(25, 5, $row['fecha_devolucion'], 1, 0, 'L');
+            $pdf->Cell(20, 5, $row['dias_morosos'], 1, 1, 'L');
             $contador++;
         }
         $pdf->Output("prestamos.pdf", "I");

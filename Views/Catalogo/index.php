@@ -16,7 +16,7 @@ include 'Funciones.php';
             </div>
             <div class="admin-login">
             <img src="<?php echo base_url . 'Assets/img/inicio-sesion.png' ?>" alt="Logo Biblioteca" />
-            <a href="login-bibliotecario.php" class="login-button">Iniciar de Sesión</a>
+            <a href="<?php echo base_url; ?>usuarios/salir" class="login-button">Iniciar Sesión</a>
         </div>
     </div>
     <div class="main-content">
@@ -38,18 +38,21 @@ include 'Funciones.php';
         $librosPorPagina = 8;
         $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
         $offset = ($paginaActual - 1) * $librosPorPagina;
-        
-        if (!empty($_GET['searchInput'])) {
-            $searchInput = '%' . $_GET['searchInput'] . '%';
 
-            $query = "SELECT L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion,  
-                    COUNT(P.id_libro) AS total_prestamos
+        if (!empty($_GET['searchInput'])) {
+            // Sanitizar entrada
+            $searchInput = trim($_GET['searchInput']);
+            $searchInput = '%' . filter_var($searchInput, FILTER_SANITIZE_STRING) . '%';
+
+            // Consulta principal con paginación
+            $query = "SELECT L.id, L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, 
+                            L.isbn, L.descripcion, COUNT(P.id_libro) AS total_prestamos
                     FROM libro L
                     INNER JOIN autor A ON L.id_autor = A.id
                     INNER JOIN editorial E ON L.id_editorial = E.id
                     LEFT JOIN prestamo P ON L.id = P.id_libro
                     WHERE LOWER(L.titulo) LIKE LOWER(?) OR LOWER(A.autor) LIKE LOWER(?)
-                    GROUP BY L.id, L.imagen, L.titulo, L.cantidad, L.num_pagina, A.autor, E.editorial, L.isbn, L.descripcion
+                    GROUP BY L.id
                     ORDER BY total_prestamos DESC
                     LIMIT ? OFFSET ?;";
 
@@ -58,29 +61,30 @@ include 'Funciones.php';
             $stmt->execute();
             $result = $stmt->get_result();
 
+            // Contar total de resultados sin paginación
             $totalQuery = "SELECT COUNT(*) as total FROM libro L 
                         INNER JOIN autor A ON L.id_autor = A.id
                         WHERE LOWER(L.titulo) LIKE LOWER(?) OR LOWER(A.autor) LIKE LOWER(?)";
-                
+
             $stmtTotal = $conexion->prepare($totalQuery);
             $stmtTotal->bind_param("ss", $searchInput, $searchInput);
             $stmtTotal->execute();
             $totalResult = $stmtTotal->get_result();
             $totalRow = $totalResult->fetch_assoc();
             $totalLibros = $totalRow['total'];
-
             $totalPaginas = ceil($totalLibros / $librosPorPagina);
 
+            // Generar lista de libros
             echo '<ul class="book-list">';
             if ($result->num_rows > 0) {
                 while ($libro = $result->fetch_assoc()) {
                     echo '<li class="product-item">
                             <div class="libro-card">
-                                <img src="' . base_url . 'Assets/img/libros/' . $libro['imagen'] . '" 
+                                <img src="' . base_url . 'Assets/img/libros/' . htmlspecialchars($libro['imagen'], ENT_QUOTES, 'UTF-8') . '" 
                                     alt="Portada del libro" class="img-thumbnail">
-                                <h3>' . htmlspecialchars(utf8_decode($libro['titulo']), ENT_QUOTES, 'UTF-8') . '</h3>
-                                <p><strong>Autor:</strong> ' . htmlspecialchars(utf8_decode($libro['autor']), ENT_QUOTES, 'UTF-8') . '</p>
-                                <button class="btn-mas" data-libro=\'' . json_encode($libro, JSON_HEX_APOS | JSON_HEX_QUOT) . '\'>
+                                <h3>' . htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') . '</h3>
+                                <p><strong>Autor:</strong> ' . htmlspecialchars($libro['autor'], ENT_QUOTES, 'UTF-8') . '</p>
+                                <button class="btn-mas" data-libro=\'' . htmlspecialchars(json_encode($libro), ENT_QUOTES, 'UTF-8') . '\'>
                                     Más...
                                 </button>
                             </div>
@@ -90,31 +94,29 @@ include 'Funciones.php';
                 echo '<p style="color: white;">No se encontraron resultados para la búsqueda.</p>';
             }
             echo '</ul>';
+
+            // Generar paginación
             if ($totalPaginas > 1) {
                 echo '<ul class="pagination">';
                 
                 // Botón "Anterior"
-                if ($paginaActual > 1) {
-                    echo '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual - 1) . '">&lt;</a></li>';
-                } else {
-                    echo '<li class="page-item disabled"><span class="page-link">&lt;</span></li>';
-                }
-            
+                echo ($paginaActual > 1) 
+                    ? '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual - 1) . '">&lt;</a></li>'
+                    : '<li class="page-item disabled"><span class="page-link">&lt;</span></li>';
+                
                 // Números de página
                 for ($i = 1; $i <= $totalPaginas; $i++) {
                     $activeClass = ($i == $paginaActual) ? 'active' : '';
                     echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . $i . '">' . $i . '</a></li>';
                 }
-            
+                
                 // Botón "Siguiente"
-                if ($paginaActual < $totalPaginas) {
-                    echo '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual + 1) . '">&gt;</a></li>';
-                } else {
-                    echo '<li class="page-item disabled"><span class="page-link">&gt;</span></li>';
-                }
-            
+                echo ($paginaActual < $totalPaginas) 
+                    ? '<li class="page-item"><a class="page-link" href="?searchInput=' . urlencode($_GET['searchInput']) . '&pagina=' . ($paginaActual + 1) . '">&gt;</a></li>'
+                    : '<li class="page-item disabled"><span class="page-link">&gt;</span></li>';
+                
                 echo '</ul>';
-            }            
+            }
         }
         ?>
 
@@ -164,18 +166,18 @@ include 'Funciones.php';
                     <ul class="pagination" id="pagination-<?php echo $idCarrera; ?>" data-carrera="<?php echo $idCarrera; ?>">
                         <!-- Flecha izquierda -->
                         <li class="page-item">
-                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'prev')"><</a>
+                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'prev', event)"><</a>
                         </li>
 
                         <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                             <li class="page-item <?php echo ($i === 1) ? 'active' : ''; ?>">
-                                <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', <?php echo $i; ?>)"><?php echo $i; ?></a>
+                                <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', <?php echo $i; ?>, event)"><?php echo $i; ?></a>
                             </li>
                         <?php endfor; ?>
 
                         <!-- Flecha derecha -->
                         <li class="page-item">
-                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'next')">></a>
+                            <a class="page-link" href="#" onclick="cambiarPagina('<?php echo $idCarrera; ?>', 'next', event)">></a>
                         </li>
                     </ul>
                 <?php else: ?>

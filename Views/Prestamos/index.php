@@ -5,6 +5,8 @@
     </div>
 </div>
 <button class="btn btn-primary mb-2" onclick="frmPrestar()"><i class="fa fa-plus"></i> Agregar Préstamo</button>
+<div class="row">
+<div class="col-lg-12">
 <div class="tile">
     <div class="tile-body">
         <div class="table-responsive">
@@ -30,7 +32,7 @@
     </div>
 </div>
 <div id="prestar" class="modal fade" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="title">Prestar Libro</h5>
@@ -49,6 +51,7 @@
                     </div>
                     <div class="form-group">
                         <label for="estudiante">Estudiante</label><br>
+                        <input type="hidden" id="id" name="id">
                         <select name="estudiante" id="estudiante" class="form-control estudiante" required
                             style="width: 100%;">
                             <option value="">Seleccione un estudiante</option>
@@ -66,7 +69,7 @@
                             <div class="form-group">
                                 <label for="fecha_devolucion">Fecha de Devolución</label>
                                 <input id="fecha_devolucion" name="fecha_devolucion" class="form-control" type="date"
-                                    value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" required>
+                                required>
                             </div>
                         </div>
                         <div class="col-md-12">
