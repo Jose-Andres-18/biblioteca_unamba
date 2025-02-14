@@ -44,21 +44,27 @@ class ConfiguracionModel extends Query{
     public function getVerificarPrestamos($date)
     {
         $sql = "SELECT 
-            p.id, e.dni,
+            p.id, 
+            e.dni,
             p.id_estudiante, 
             p.fecha_prestamo, 
             p.fecha_devolucion, 
-            p.cantidad, e.codigo,
+            p.cantidad, 
+            e.codigo,
             p.estado, 
             e.id AS id_estudiante, 
             e.nombre, 
+            e.apellido_pa,  -- Asegúrate de incluir apellido_pa
+            e.apellido_ma,  -- Asegúrate de incluir apellido_ma
             l.id AS id_libro, 
             l.titulo,
             DATEDIFF(CURDATE(), p.fecha_devolucion) AS dias_morosos
         FROM prestamo p
         INNER JOIN estudiante e ON p.id_estudiante = e.id
         INNER JOIN libro l ON p.id_libro = l.id
-        WHERE p.fecha_devolucion < CURDATE() AND p.estado = 1";
+        WHERE p.fecha_devolucion < CURDATE() 
+        AND p.estado = 1";
+        
         $res = $this->selectAll($sql);
         return $res;
     }

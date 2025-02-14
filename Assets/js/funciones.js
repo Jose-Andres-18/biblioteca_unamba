@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function(){
             cache: true
         }
     });
-    //ENCONTRAR POR ID
+    // ENCONTRAR POR ID
     if (document.getElementById('nombre_estudiante')) {
         const http = new XMLHttpRequest();
         const url = base_url + 'Configuracion/verificar';
@@ -411,15 +411,21 @@ document.addEventListener("DOMContentLoaded", function(){
                 let html = '';
                 res.forEach(row => {
                     html += `
-                    <a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-user-o fa-stack-1x fa-inverse"></i></span></span>
+                    <a class="app-notification__item" href="javascript:;">
+                        <span class="app-notification__icon">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                                <i class="fa fa-user-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </span>
                         <div>
-                            <p class="app-notification__message" id="nombre_estudiante">${row.nombre}</p>
-                            <p class="app-notification__meta" id="fecha_entrega">${row.fecha_devolucion}</p>
+                            <p class="app-notification__message">${row.nombre} ${row.apellido_pa} ${row.apellido_ma}</p>
+                            <p class="app-notification__meta">${row.fecha_devolucion}</p>
                         </div>
                     </a>
                     `;
                 });
-                document.getElementById('nombre_estudiante').innerHTML = html;
+                document.getElementById('nombre_estudiante').innerHTML = html; // Asegúrate de que este ID es un contenedor válido.
             }
         }
     }
